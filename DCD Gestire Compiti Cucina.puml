@@ -4,7 +4,9 @@ skinparam classAttributeIconSize 0
 
 namespace KitchenTaskManagement {
     ' GRASP Controller
-    class KitchenTaskManager
+    class KitchenTaskManager {
+        + createSummarySheet(event: Event, service: Service)
+    }
 
     ' Compito
     class Task
@@ -13,6 +15,9 @@ namespace KitchenTaskManagement {
     class SummarySheet {
         + create(menu: Menu)
     }
+
+    SummarySheet -> "1..n" Task: tasks
+    SummarySheet -> "0..n" RecipeManagement.KitchenDuty: additionalDuties
 
     ' Incarico
     class Job
@@ -34,15 +39,22 @@ namespace RecipeManagement {
         - constantConcreteActivityTime: Duration
         - variableConcreteActivityTime: Duration
         {abstract} List<KitchenDuty> getSubDuties()
-        
     }
-    KitchenDuty --> "1" UserManagement.User: author
+    KitchenDuty -> "1" UserManagement.User: author
 
     class Recipe {
 
     }
 
-    Recipe -|>KitchenDuty
+    Recipe -|> KitchenDuty
+
+    class Preparation {
+
+    }
+
+    Preparation -|> KitchenDuty
+
+    Recipe -> "0..n" Preparation: subDuties
 }
 
 namespace EventManagement {
@@ -55,7 +67,7 @@ namespace EventManagement {
         - active: boolean
         --
         + isActive(): boolean
-        + containsService(s:Service): boolean 
+        + containsService(s:Service): boolean
     }
     Event -> "1..n" Service: "services"
 
@@ -67,7 +79,7 @@ namespace UserManagement {
     }
 
     class UserManager {
-        
+
         --<b>event sender methods</b>--
         --<b>operation methods</b>--
         +getCurrentUser(): User
@@ -78,12 +90,20 @@ namespace UserManagement {
 
 namespace MenuManagement {
     class Menu
+    class Section
+    class MenuItem
+
+    Menu -> "0..n" Section: sections
+    Menu -> "0..n" MenuItem: freeItems
+    Section -> "0..n" MenuItem: sectionItems
+
+    MenuItem -> RecipeManagement.Recipe: itemRecipe
 }
 
 namespace GeneralModule {
     UseCaseLogicException -right|> Exception
     EventException -down|> Exception
-    
+
 }
 
 @enduml
