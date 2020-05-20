@@ -1,0 +1,34 @@
+@startuml Operazione 1
+skinparam Style strictuml
+
+collections UI
+
+participant "taskManager: TaskManager" as tm
+UI -> tm: createSummarySheet(event, service)
+activate tm
+
+participant "userMgr: UserManager" as um
+tm -> um: getCurrentUser()
+activate um
+tm <<-- um: user
+deactivate um
+
+alt !user.isChef()
+    UI <<-- tm: throw UseCaseLogicException
+else !event.isActive() || !event.containsService(service)
+    UI <<-- tm: throw EventException
+else
+    participant "sheet: SummarySheet" as ss
+    tm -->> ss **: create(service.getMenu())
+    activate ss
+
+    
+
+    tm <<-- ss: sheet
+    deactivate ss
+
+    UI <<-- tm: sheet
+    deactivate tm
+end
+
+@enduml

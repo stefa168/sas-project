@@ -1,0 +1,86 @@
+@startuml Gestire Compiti Cucina
+skinparam Style strictuml
+skinparam classAttributeIconSize 0
+
+namespace KitchenTaskManagement {
+    ' GRASP Controller
+    class KitchenTaskManager
+
+    ' Compito
+    class Task
+
+    ' Foglio Riepilogativo
+    class SummarySheet {
+        + create(menu: Menu)
+    }
+
+    ' Incarico
+    class Job
+}
+
+namespace TurnManagement {
+    class Cook
+
+    class Turn
+}
+
+namespace RecipeManagement {
+    class KitchenDuty {
+        - name: String
+        - instructions: String
+        - resultingAmount: int
+        - constantConcreteActivityTime: Duration
+        - variableConcreteActivityTime: Duration
+        {abstract} List<KitchenDuty> getSubDuties()
+    }
+    KitchenDuty --> "1" UserManagement.User: author
+
+    class Recipe {
+
+    }
+
+    Recipe -|>KitchenDuty
+}
+
+namespace EventManagement {
+    class Service {
+        + getMenu(): Menu
+    }
+    Service -> "0..1" MenuManagement.Menu: menu
+
+    class Event {
+        - active: boolean
+        --
+        + isActive(): boolean
+        + containsService(s:Service): boolean 
+    }
+    Event -> "1..n" Service: "services"
+
+}
+
+namespace UserManagement {
+    class User {
+        + isChef(): boolean
+    }
+
+    class UserManager {
+        
+        --<b>event sender methods</b>--
+        --<b>operation methods</b>--
+        +getCurrentUser(): User
+    }
+
+    UserManager -> "0..1" User: currentUser
+}
+
+namespace MenuManagement {
+    class Menu
+}
+
+namespace GeneralModule {
+    UseCaseLogicException -right|> Exception
+    EventException -down|> Exception
+    
+}
+
+@enduml
