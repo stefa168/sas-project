@@ -31,7 +31,7 @@ namespace KitchenTaskManagement {
     }
 
     SummarySheet -> "1..n" Task: tasks
-    KitchenTaskManagement -> "0..1": sheet
+    KitchenTaskManager -> "0..1" SummarySheet: sheet
     SummarySheet -> "0..n" RecipeManagement.KitchenDuty: additionDuties
     Task -> "1..n" Job: jobs
     KitchenTaskManager ->"0..n" KitchenTaskReceiver: eventReceivers
