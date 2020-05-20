@@ -120,6 +120,7 @@ namespace GeneralModule {
     UseCaseLogicException -right|> Exception
     EventException -down|> Exception
 
+
 }
 
 @enduml
