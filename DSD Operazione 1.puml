@@ -22,7 +22,63 @@ else
     tm -->> ss **: create(service.getMenu())
     activate ss
 
+    participant "kitchenDuties: ArrayList<KitchenDuty>" as kdList
+    ss -->> kdList**: create()
+    activate kdList
+    return kitchenDuties
+    deactivate kdList
     
+    loop for all section in menu.sections
+        loop for all menuItem in section.sectionItems
+            ss -> kdList: add(menuItem.itemRecipe)
+            activate kdList
+            deactivate kdList
+            
+            participant "menuItem.itemRecipe: Recipe" as recipe
+            ss -> recipe: getSubDuties()
+            activate recipe
+            ss <<-- recipe: subRecipes
+            deactivate recipe
+
+            ss -> kdList: addAll(subRecipes)
+            activate kdList
+            deactivate kdList
+
+        end
+    end
+
+    loop for all freeItem in menu.freeItems
+        ss -> kdList: add(freeItem.itemRecipe)
+        activate kdList
+        deactivate kdList
+
+        participant "freeItem.itemRecipe: Recipe" as recipe
+            ss -> recipe: getSubDuties()
+            activate recipe
+            ss <<-- recipe: subRecipes
+            deactivate recipe
+
+            ss -> kdList: addAll(subRecipes)
+            activate kdList
+            deactivate kdList
+    end
+
+    participant "tasks: ArrayList<Task>" as tasks
+    ss -->> tasks**: create()
+
+    loop for all kitchenDuty in kitchenDuties
+        participant "task : Task" as t
+        ss -->> t **: create(kitchenDuty)
+        activate t
+        ' ss <<-- t :task
+        return task
+        deactivate t
+        ss -->>tasks: add(task)
+        activate tasks
+        deactivate tasks
+    end
+
+    ss -> ss: this.tasks = tasks
 
     tm <<-- ss: sheet
     deactivate ss
