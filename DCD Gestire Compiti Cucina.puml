@@ -4,12 +4,26 @@ skinparam classAttributeIconSize 0
 
 namespace KitchenTaskManagement {
     ' GRASP Controller
-    class KitchenTaskManager {
+    class KitchenTaskManager{
+        --<b>event sender methods</b>--
+        +addReceiver(er: kitchenTaskReceiver)
+        +removeReceiver(er: kitchenTaskReceiver)
+        +notifySheetCreate(s: SummarySheet)
+        +notifyTaskCreate(t: Task)
+        --<b>operation methods</b>--
         + createSummarySheet(event: Event, service: Service)
     }
 
+    class KitchenTaskReceiver{
+        --
+        +<i>updateSheetCreate(s: SummarySheet)</i>
+        +<i>updateTaskCreate(t: Task)</i>
+    }
+
     ' Compito
-    class Task
+    class Task{
+        + create(kitchenDuty: KitchenDuty)
+    }
 
     ' Foglio Riepilogativo
     class SummarySheet {
@@ -17,7 +31,11 @@ namespace KitchenTaskManagement {
     }
 
     SummarySheet -> "1..n" Task: tasks
+    KitchenTaskManager -> "0..1" SummarySheet: sheet
     SummarySheet -> "0..n" RecipeManagement.KitchenDuty: additionalDuties
+    Task -> "1..n" Job: jobs
+    KitchenTaskManager -> "0..n" KitchenTaskReceiver: eventReceivers
+
 
     ' Incarico
     class Job
@@ -46,14 +64,12 @@ namespace RecipeManagement {
 
     }
 
-    Recipe -|> KitchenDuty
-
-    class Preparation {
+    class Preparation{
 
     }
 
+    Recipe -|> KitchenDuty
     Preparation -|> KitchenDuty
-
     Recipe -> "0..n" Preparation: subDuties
 }
 
