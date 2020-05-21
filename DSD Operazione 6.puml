@@ -28,7 +28,7 @@ else
     job -> job: this.turn = turn
     
 
-    participant "cook.availability" as ca
+    participant "cook.availabilities: HashMap<Turn, Duration>" as ca
     job -> ca: get(turn)
     activate ca
     job <- ca: occupiedTime
