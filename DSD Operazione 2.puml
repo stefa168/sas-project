@@ -1,0 +1,42 @@
+@startuml Operazione 2
+skinparam Style strictuml
+
+collections UI
+
+participant "kitchenTMgr: KitchenTaskManager" as ktm
+UI -> ktm: addExtraDuty(kitchenDuty)
+activate ktm
+
+alt currentSheet==null
+    UI <<-- ktm: throw UseCaseLogicException
+else
+    participant "kitchenTMgr.currentSheet: SummarySheet" as ss
+    activate ss
+    ktm -> ss: addExtraDuty(kitchenDuty)
+
+    participant "currentSheet.extraDuties: ArrayList<KitchenDuty>" as kdList
+    ss -> kdList: add(kitchenDuty)
+    activate kdList
+    deactivate kdList
+
+    participant "task: Task" as t
+    ss -> t**: create(kitchenDuty)
+    activate t
+    ss <-- t:task
+    deactivate t
+    
+    participant "currentSheet.tasks: ArrayList<Task>" as tasks
+    ss -> tasks: add(task)
+    activate tasks
+    deactivate tasks
+
+    ktm <<-- ss: task
+    deactivate ss
+
+    UI <<-- ktm : task
+    deactivate ktm
+
+    
+end
+
+@enduml
