@@ -1,0 +1,47 @@
+@startuml Operazione 2a.1
+skinparam Style strictuml
+
+collections UI
+
+participant "kitchenTMgr: KitchenTaskManager" as ktm
+UI -> ktm: deleteExtraDuty(kitchenDuty)
+activate ktm
+
+alt currentSheet==null
+    UI <<-- ktm: throw UseCaseLogicException
+else
+    participant "kitchenTMgr.currentSheet: SummarySheet" as ss
+    activate ss
+    ktm -> ss: deleteExtraDuty(kitchenDuty)
+
+    loop for all task in currentSheet.tasks
+        alt (task.optionalDuty.isPresent()) && (task.optionalDuty.orElseThrow() == kitchenDuty)
+            loop for all job in task.jobs
+                participant "task.jobs: ArrayList<Job>" as j
+                ss -> j: remove(job)
+                activate j
+                deactivate j
+            end
+
+            participant "currentSheet.tasks: ArrayList<Task>" as tasks
+            ss -> tasks: remove(task)
+            activate tasks
+            deactivate tasks
+        end
+    end
+    
+    participant "currentSheet.extraDuties: ArrayList<KitchenDuty>" as kdList
+    ss -> kdList: remove(kitchenDuty)
+    activate kdList
+    deactivate kdList
+    
+    ktm <<-- ss: currentSheet
+    deactivate ss
+
+    UI <<-- ktm : currentSheet
+    deactivate ktm
+
+    
+end
+
+@enduml
