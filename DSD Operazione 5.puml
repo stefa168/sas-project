@@ -1,0 +1,36 @@
+@startuml Operazione 5
+skinparam Style strictuml
+
+collections UI
+
+participant "taskManager: KitchenTaskManager" as tm
+UI -> tm: editTask(task, amount?, estimatedDuration?)
+activate tm
+
+participant "task: Task" as task
+
+alt currentSheet==null
+    UI <<-- tm: throw UseCaseLogicException
+else
+    tm -> task: editDetails(newAmount?, newDuration?)
+    activate task
+
+    alt newAmount != null
+        task -> task: this.amount = newAmount
+    end
+
+    alt newDuration != null
+        task -> task: this.duration = Duration.ofSeconds(newDuration)
+    end
+
+    tm <<--task: task
+    deactivate task
+
+    UI <<-- tm: task
+    deactivate tm
+
+end
+
+deactivate tm
+
+@enduml
