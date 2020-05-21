@@ -16,7 +16,7 @@ else
     activate ss
     participant "currentSheet.tasks: ArrayList<task>" as t
     
-    alt currentSheet.tasks.contains(task)
+    alt currentSheet.tasks.contains(task) && position >= 0
         ss -> t: remove(task)
         activate t
         deactivate t
