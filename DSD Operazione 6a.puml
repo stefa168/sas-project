@@ -1,0 +1,41 @@
+@startuml Operazione 6a
+skinparam Style strictuml
+
+collections UI
+
+participant "taskManager: KitchenTaskManager" as tm
+UI -> tm: deleteJob(task, job)
+activate tm
+
+alt !task.jobs.contains(job)
+    UI <<-- tm: throw TaskException
+else 
+    participant "task: Task" as task
+    tm -> task: deleteJob(job)
+    activate task
+
+    participant "job.cook.availabilities: HashMap<Turn, Duration>" as ca
+    task -> ca: get(job.turn)
+    activate ca
+    return oldDuration
+
+    task -> ca: put(job.turn, oldDuration - job.estimatedDuration)
+    activate ca
+    deactivate ca
+
+    participant "task.jobs: ArrayList<Job>" as jl
+    task -> jl: remove(job)
+    activate jl
+    deactivate jl
+
+    tm <- task: task
+    deactivate task
+
+    UI <- tm: task
+    deactivate tm
+
+end
+
+deactivate tm
+
+@enduml

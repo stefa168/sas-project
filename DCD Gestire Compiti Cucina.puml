@@ -18,6 +18,8 @@ namespace KitchenTaskManagement {
         + sortTask(task: Task, position: int)
         + addExtraDuty(kd: KitchenDuty)
         + deleteExtraDuty(kd: KitchenDuty)
+        + createJob(cook: Cook, task: Task, turn: Turn, amount: int, estimatedDuration: Duration)
+        + deleteJob(task: Task, job: Job)
     }
 
     class KitchenTaskReceiver{
@@ -35,6 +37,8 @@ namespace KitchenTaskManagement {
         --
         + create(kitchenDuty: KitchenDuty)
         + editDetails(newAmount: int, newDuration: int)
+        + addJob(cook: Cook, turn: Turn, amount: int, estimatedDuration: Duration)
+        + deleteJob(job: Job)
     }
 
     ' Foglio Riepilogativo
@@ -56,6 +60,8 @@ namespace KitchenTaskManagement {
     class Job {
         - amount: int
         - estimatedDuration: Duration
+        --
+        + create(cook: Cook, turn: Turn, amount: int, estimatedDuration: Duration)
     }
 
     Job -> "1"  TurnManagement.Cook: cook
