@@ -22,19 +22,26 @@ namespace KitchenTaskManagement {
 
     ' Compito
     class Task{
+        - amount: int
+        - estimatedDuration: Duration
+        --
         + create(kitchenDuty: KitchenDuty)
+        + editDetails(newAmount: int, newDuration: int)
     }
 
     ' Foglio Riepilogativo
     class SummarySheet {
         + create(menu: Menu)
+        + addExtraDuty(kd: KitchenDuty)
+        + deleteExtraDuty(kd: KitchenDuty)        
     }
 
-    SummarySheet -> "1..n" Task: tasks
-    KitchenTaskManager -> "0..1" SummarySheet: sheet
-    SummarySheet -> "0..n" RecipeManagement.KitchenDuty: additionalDuties
-    Task -> "1..n" Job: jobs
+    KitchenTaskManager -> "0..1" SummarySheet: currentSheet
     KitchenTaskManager -> "0..n" KitchenTaskReceiver: eventReceivers
+    SummarySheet -> "1..n" Task: tasks
+    SummarySheet -> "0..n" RecipeManagement.KitchenDuty: extraDuties
+    Task -> "1..n" Job: jobs
+    Task -> "0..1" RecipeManagement.KitchenDuty: optionalDuty: Optional<KitchenDuty>
 
 
     ' Incarico
@@ -86,6 +93,7 @@ namespace EventManagement {
         + containsService(s:Service): boolean
     }
     Event -> "1..n" Service: "services"
+    Event -> "1" UserManagement.User: "assignedChef"
 
 }
 
