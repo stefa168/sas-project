@@ -11,8 +11,8 @@ alt currentSheet==null
     UI <<-- ktm: throw UseCaseLogicException
 else
     participant "kitchenTMgr.currentSheet: SummarySheet" as ss
-    activate ss
     ktm -> ss: addExtraDuty(kitchenDuty)
+    activate ss
 
     participant "currentSheet.extraDuties: ArrayList<KitchenDuty>" as kdList
     ss -> kdList: add(kitchenDuty)
@@ -20,9 +20,9 @@ else
     deactivate kdList
 
     participant "task: Task" as t
-    ss -> t**: create(kitchenDuty)
+    ss -->> t**: create(kitchenDuty)
     activate t
-    ss <-- t:task
+    ss <<-- t:task
     deactivate t
     
     participant "currentSheet.tasks: ArrayList<Task>" as tasks
