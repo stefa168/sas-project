@@ -19,15 +19,16 @@ else
     alt currentSheet.tasks.contains(task) && position >= 0
         ss -> t: remove(task)
         activate t
+        deactivate t
         ss -> t: add(position,task)
+        activate t
         deactivate t
     end
+    
     ktm <<-- ss: currentSheet
     deactivate ss
     UI <<-- ktm : currentSheet
     deactivate ktm
-
-    
 end
 
 @enduml
