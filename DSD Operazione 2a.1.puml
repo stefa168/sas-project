@@ -11,8 +11,8 @@ alt currentSheet==null
     UI <<-- ktm: throw UseCaseLogicException
 else
     participant "kitchenTMgr.currentSheet: SummarySheet" as ss
-    activate ss
     ktm -> ss: deleteExtraDuty(kitchenDuty)
+    activate ss
 
     loop for all task in currentSheet.tasks
         alt (task.optionalDuty.isPresent()) && (task.optionalDuty.orElseThrow() == kitchenDuty)
