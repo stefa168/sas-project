@@ -12,6 +12,7 @@ namespace KitchenTaskManagement {
         +notifyTaskCreate(t: Task)
         --<b>operation methods</b>--
         + createSummarySheet(event: Event, service: Service)
+        + editTask(task: Task, newAmount: int, newDuration: int)
     }
 
     class KitchenTaskReceiver{
@@ -45,7 +46,13 @@ namespace KitchenTaskManagement {
 
 
     ' Incarico
-    class Job
+    class Job {
+        - amount: int
+        - estimatedDuration: Duration
+    }
+
+    Job -> "1"  TurnManagement.Cook: cook
+    Job -> "1" TurnManagement.Turn: turn
 }
 
 'prova
@@ -53,7 +60,15 @@ namespace KitchenTaskManagement {
 namespace TurnManagement {
     class Cook
 
-    class Turn
+    class Turn {
+        - startDate: Date
+        - endDate: Date
+        - complete: boolean
+        --
+        + getDuration(): Duration
+    }
+
+    Cook -> "0..n" Turn: availabilities: HashMap<Turn, Duration>
 }
 
 namespace RecipeManagement {

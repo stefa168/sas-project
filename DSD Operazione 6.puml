@@ -1,0 +1,51 @@
+@startuml Operazione 6
+skinparam Style strictuml
+
+collections UI
+
+participant "taskManager: KitchenTaskManager" as tm
+UI -> tm: createJob(cook, task, turn, amount, estimatedDuration)
+activate tm
+
+participant "task: Task" as task
+
+alt currentSheet == null
+    UI <<-- tm: throw UseCaseLogicException
+else !cook.availabilities.contains(turn) || task.amount == 0 || task.estimatedDuration == 0 || Date.now() > turn.endDate || !turn.complete || cook.availability.get(turn) + estimatedDuration > turn.getDuration()
+    UI <<-- tm: throw TaskException
+else
+
+    tm -> task: addJob(cook, turn, amount, estimatedDuration)
+    activate task
+
+    participant "job: Job" as job
+    task -->> job**: create(cook, turn, amount, estimatedDuration)
+
+    activate job
+    job -> job: this.amount = amount
+    job -> job: this.duration = estimatedDuration
+    job -> job: this.cook = cook
+    job -> job: this.turn = turn
+    
+
+    participant "cook.availability" as ca
+    job -> ca: get(turn)
+    activate ca
+    job <- ca: occupiedTime
+    deactivate ca
+
+    job -> ca: put(turn, occupiedTime + estimatedDuration)
+    activate ca
+    deactivate ca
+
+    return job
+
+    tm <- task: job
+    deactivate task
+
+    UI <- tm: job
+    deactivate tm
+    
+end
+
+@enduml
