@@ -3,7 +3,7 @@ skinparam Style strictuml
 
 collections UI
 
-participant "taskManager: TaskManager" as tm
+participant "taskManager: KitchenTaskManager" as tm
 UI -> tm: createSummarySheet(event, service)
 activate tm
 
@@ -13,7 +13,7 @@ activate um
 tm <<-- um: user
 deactivate um
 
-alt !user.isChef()
+alt !user.isChef() || event.assignedChef != user
     UI <<-- tm: throw UseCaseLogicException
 else !event.isActive() || !event.containsService(service)
     UI <<-- tm: throw EventException
@@ -82,6 +82,8 @@ else
 
     tm <<-- ss: sheet
     deactivate ss
+
+    tm -> tm: this.currentSheet = sheet
 
     UI <<-- tm: sheet
     deactivate tm
