@@ -10,14 +10,21 @@ namespace KitchenTaskManagement {
         +removeReceiver(er: kitchenTaskReceiver)
         +notifySheetCreate(s: SummarySheet)
         +notifyTaskCreate(t: Task)
+        +notifyAddExtraDuty(kd: KitchenDuty)
+        +notifyDeleteExtraDuty(kd: KitchenDuty)
         --<b>operation methods</b>--
         + createSummarySheet(event: Event, service: Service)
+        + sortTask(task: Task, position: int)
+        + addExtraDuty(kd: KitchenDuty)
+        + deleteExtraDuty(kd: KitchenDuty)
     }
 
     class KitchenTaskReceiver{
         --
         +<i>updateSheetCreate(s: SummarySheet)</i>
         +<i>updateTaskCreate(t: Task)</i>
+        +<i>updateAddExtraDuty(kd: KitchenDuty)</i>
+        +<i>updateDeleteExtraDuty(kd: KitchenDuty)</i>
     }
 
     ' Compito
