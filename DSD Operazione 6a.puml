@@ -3,6 +3,8 @@ skinparam Style strictuml
 
 collections UI
 
+'commento di prova per vedere se riesco a pushare sul nuovo pc
+
 participant "taskManager: KitchenTaskManager" as tm
 UI -> tm: deleteJob(task, job)
 activate tm
