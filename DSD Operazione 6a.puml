@@ -6,32 +6,35 @@ collections UI
 'commento di prova per vedere se riesco a pushare sul nuovo pc
 
 participant "taskManager: KitchenTaskManager" as tm
+participant "task: Task" as task
+participant "ktr: KitchenTaskReceiver" as ktr
+participant "job.turn: Turn" as t
+participant "task.jobs: ArrayList<Job>" as jl
+
 UI -> tm: deleteJob(task, job)
 activate tm
 
 alt !task.jobs.contains(job)
     UI <<-- tm: throw TaskException
-else 
-    participant "task: Task" as task
+else
     tm -> task: deleteJob(job)
     activate task
+    task -> t: freeTime(job.cook, job.estimatedDuration)
+    activate t
+    return turn
 
-    participant "job.cook.availabilities: HashMap<Turn, Duration>" as ca
-    task -> ca: get(job.turn)
-    activate ca
-    return oldDuration
-
-    task -> ca: put(job.turn, oldDuration - job.estimatedDuration)
-    activate ca
-    deactivate ca
-
-    participant "task.jobs: ArrayList<Job>" as jl
     task -> jl: remove(job)
     activate jl
     deactivate jl
 
     tm <- task: task
     deactivate task
+
+    loop for all ktr in eventReceivers
+        tm -> ktr : updateJobDeleted(job)
+        activate ktr
+        deactivate ktr
+    end
 
     UI <- tm: task
     deactivate tm

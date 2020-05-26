@@ -38,6 +38,15 @@ else
     ktm <<-- ss: currentSheet
     deactivate ss
 
+    participant "ktr: KitchenTaskReceiver" as ktr
+
+
+    loop for all ktr in eventReceivers
+        ktm -> ktr : updateDeleteExtraDuty(kitchenDuty)
+        activate ktr
+        deactivate ktr
+    end
+
     UI <<-- ktm : currentSheet
     deactivate ktm
 

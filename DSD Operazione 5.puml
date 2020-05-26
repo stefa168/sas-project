@@ -4,6 +4,8 @@ skinparam Style strictuml
 collections UI
 
 participant "taskManager: KitchenTaskManager" as tm
+    participant "ktr: KitchenTaskReceiver" as ktr
+
 UI -> tm: editTask(task, newAmount?, newDuration?)
 activate tm
 
@@ -26,11 +28,14 @@ else
     tm <<--task: task
     deactivate task
 
+    loop for all ktr in eventReceivers
+        tm -> ktr : updateEditTask(task)
+        activate ktr
+        deactivate ktr
+    end
+
     UI <<-- tm: task
     deactivate tm
 
 end
-
-deactivate tm
-
 @enduml
