@@ -18,6 +18,12 @@ else
         alt (task.optionalDuty.isPresent()) && (task.optionalDuty.orElseThrow() == kitchenDuty)
             loop for all job in task.jobs
                 participant "task.jobs: ArrayList<Job>" as j
+                participant "job.turn: Turn" as jobTurn
+
+                ss -> jobTurn: freeTime(job.cook, job.estimatedDuration)
+                activate jobTurn
+                deactivate jobTurn
+
                 ss -> j: remove(job)
                 activate j
                 deactivate j
