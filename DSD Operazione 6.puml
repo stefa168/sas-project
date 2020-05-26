@@ -8,6 +8,7 @@ UI -> tm: createJob(task, turn, amount, estimatedDuration)
 activate tm
 
 participant "task: Task" as task
+participant "ktr: KitchenTaskReceiver" as ktr
 
 alt currentSheet == null
     UI <<-- tm: throw UseCaseLogicException
@@ -31,6 +32,12 @@ else
 
     tm <- task: job
     deactivate task
+
+    loop for all ktr in eventReceivers
+        tm -> ktr : updateCreateJob(job)
+        activate ktr
+        deactivate ktr
+    end
 
     UI <- tm: job
     deactivate tm

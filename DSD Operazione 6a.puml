@@ -7,6 +7,7 @@ collections UI
 
 participant "taskManager: KitchenTaskManager" as tm
 participant "task: Task" as task
+participant "ktr: KitchenTaskReceiver" as ktr
 participant "job.turn: Turn" as t
 participant "task.jobs: ArrayList<Job>" as jl
 
@@ -28,6 +29,12 @@ else
 
     tm <- task: task
     deactivate task
+
+    loop for all ktr in eventReceivers
+        tm -> ktr : updateJobDeleted(job)
+        activate ktr
+        deactivate ktr
+    end
 
     UI <- tm: task
     deactivate tm

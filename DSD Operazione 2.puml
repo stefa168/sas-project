@@ -5,6 +5,8 @@ collections UI
 
 participant "kitchenTMgr: KitchenTaskManager" as ktm
 UI -> ktm: addExtraDuty(kitchenDuty)
+participant "ktr: KitchenTaskReceiver" as ktr
+
 activate ktm
 
 alt currentSheet==null
@@ -32,6 +34,12 @@ else
 
     ktm <<-- ss: task
     deactivate ss
+
+    loop for all ktr in eventReceivers
+        ktm -> ktr : updateAddExtraDuty(kitchenDuty)
+        activate ktr
+        deactivate ktr
+    end
 
     UI <<-- ktm : task
     deactivate ktm

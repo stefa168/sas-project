@@ -8,6 +8,7 @@ UI -> tm: createSummarySheet(event, service)
 activate tm
 
 participant "userMgr: UserManager" as um
+participant "ktr: KitchenTaskReceiver" as ktr
 tm -> um: getCurrentUser()
 activate um
 tm <<-- um: user
@@ -84,6 +85,13 @@ else
     deactivate ss
 
     tm -> tm: this.currentSheet = sheet
+
+    loop for all ktr in eventReceivers
+        tm -> ktr : updateSheetCreate(sheet)
+        activate ktr
+        deactivate ktr
+    end
+
 
     UI <<-- tm: sheet
     deactivate tm
