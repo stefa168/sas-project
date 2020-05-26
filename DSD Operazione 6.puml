@@ -11,7 +11,7 @@ participant "task: Task" as task
 
 alt currentSheet == null
     UI <<-- tm: throw UseCaseLogicException
-else task.amount < 0 || task.estimatedDuration < 0 || Date.now() > turn.endDate || !turn.complete
+else task.amount < 0 || task.estimatedDuration < 0 || Date.now() > turn.endDate || turn.complete
     UI <<-- tm: throw TaskException
 else
 
