@@ -68,6 +68,7 @@ namespace KitchenTaskManagement {
         - estimatedDuration: Duration
         --
         + create(cook: Cook, turn: Turn, amount: int, estimatedDuration: Duration)
+        + edit(user: User, amount: int, estimatedDuration: Duration)
     }
 
     Job --> "1"  TurnManagement.Cook: cook
