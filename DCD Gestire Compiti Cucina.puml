@@ -88,7 +88,10 @@ namespace TurnManagement {
         + getDuration(): Duration
     }
 
-    Cook -> "0..n" Turn: availabilities: HashMap<Turn, Duration>
+    class TurnManager
+
+    Turn -> "0..n" Cook: availabilities: HashMap<Cook, Duration>
+    TurnManager -> "0..n" Turn: turns
 }
 
 namespace RecipeManagement {
