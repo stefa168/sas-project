@@ -28,11 +28,10 @@ else job.cook != user
 
 
     UI <- ktm: job
-
-
-
-end
+else
+    UI <- ktm: job
 deactivate ktm
+end
 
 
 
