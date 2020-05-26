@@ -4,40 +4,28 @@ skinparam Style strictuml
 collections UI
 
 participant "taskManager: KitchenTaskManager" as tm
-UI -> tm: createJob(user, task, turn, amount, estimatedDuration)
+UI -> tm: createJob(task, turn, amount, estimatedDuration)
 activate tm
 
 participant "task: Task" as task
 
 alt currentSheet == null
     UI <<-- tm: throw UseCaseLogicException
-else !user.isCook() || !user.availabilities.contains(turn) || task.amount == 0 || task.estimatedDuration == 0 || Date.now() > turn.endDate || !turn.complete || user.availability.get(turn) + estimatedDuration > turn.getDuration()
+else task.amount < 0 || task.estimatedDuration < 0 || Date.now() > turn.endDate || !turn.complete
     UI <<-- tm: throw TaskException
 else
 
-    tm -> task: addJob(user, turn, amount, estimatedDuration)
+    tm -> task: addJob(turn, amount, estimatedDuration)
     activate task
 
     participant "job: Job" as job
-    task -->> job**: create(user?, turn, amount, estimatedDuration)
+    task -->> job**: create(turn, amount, estimatedDuration)
 
     activate job
         job -> job: this.amount = amount
         job -> job: this.duration = estimatedDuration
         job -> job: this.turn = turn
-        alt  user == null
-           job -> job: this.cook = null
-        end
-
-    participant "cook.availabilities: HashMap<Turn, Duration>" as ca
-    job -> ca: get(turn)
-    activate ca
-    job <- ca: occupiedTime
-    deactivate ca
-
-    job -> ca: put(turn, occupiedTime + estimatedDuration)
-    activate ca
-    deactivate ca
+        job -> job: this.cook = null
 
     return job
 
