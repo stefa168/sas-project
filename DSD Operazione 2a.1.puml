@@ -15,7 +15,7 @@ else
     activate ss
 
     loop for all task in currentSheet.tasks
-        alt (task.optionalDuty.isPresent()) && (task.optionalDuty.orElseThrow() == kitchenDuty)
+        alt (task.optionalDuty != null) && (task.optionalDuty == kitchenDuty)
             loop for all job in task.jobs
                 participant "task.jobs: ArrayList<Job>" as j
                 participant "job.turn: Turn" as jobTurn
