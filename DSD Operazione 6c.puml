@@ -1,0 +1,40 @@
+@startuml
+skinparam Style strictuml
+
+collections UI
+
+participant "kitchentaskMgr: KitchenTaskManager" as ktm
+participant "ktr: KitchenTaskReceiver" as ktr
+participant "job: Job" as job
+
+UI -> ktm: assignCook(user, job)
+activate ktm
+alt user == null || !user.isCook()
+    UI <<-- job: throw UseCaseLogicException
+else
+
+    ktm -> job: assignCook(user)
+    activate job
+    job -> job: this.cook = user
+    ktm <- job: job
+    deactivate job
+
+    loop for all ktr in eventReceivers
+        ktm -> ktr : updateEditJob(job)
+        activate ktr
+        deactivate ktr
+
+    end
+
+
+    UI <- ktm: job
+
+
+
+end
+deactivate ktm
+
+
+
+
+@enduml
