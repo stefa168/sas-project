@@ -11,7 +11,7 @@ UI -> ktm: assignCook(user, job)
 activate ktm
 alt user == null || !user.isCook()
     UI <<-- job: throw UseCaseLogicException
-else
+else job.cook != user
 
     ktm -> job: assignCook(user)
     activate job
