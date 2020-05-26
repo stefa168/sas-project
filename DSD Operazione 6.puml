@@ -19,14 +19,15 @@ else
     activate task
 
     participant "job: Job" as job
-    task -->> job**: create(cook, turn, amount, estimatedDuration)
+    task -->> job**: create(user?, turn, amount, estimatedDuration)
 
     activate job
-    job -> job: this.amount = amount
-    job -> job: this.duration = estimatedDuration
-    job -> job: this.cook = cook
-    job -> job: this.turn = turn
-    
+        alt  user != null && user.isCook()
+            job -> job: this.amount = amount
+            job -> job: this.duration = estimatedDuration
+            job -> job: this.cook = user
+            job -> job: this.turn = turn
+        end
 
     participant "cook.availabilities: HashMap<Turn, Duration>" as ca
     job -> ca: get(turn)
