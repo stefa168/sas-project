@@ -25,7 +25,7 @@ namespace KitchenTaskManagement {
         + deleteExtraDuty(kd: KitchenDuty)
         + createJob(cook: Cook, task: Task, turn: Turn, amount: int, estimatedDuration: Duration)
         + deleteJob(task: Task, job: Job)
-        + editJob(job: Job, user: User, amount: int, estimatedDuration: Duration)
+        + assignCook(job: Job, user: User)
     }
 
     class KitchenTaskReceiver{
@@ -71,7 +71,7 @@ namespace KitchenTaskManagement {
         + edit(user: User, amount: int, estimatedDuration: Duration)
     }
 
-    Job --> "1"  TurnManagement.Cook: cook
+    Job --> "0..1"  UserManagement.User: cook
     Job --> "1" TurnManagement.Turn: turn
 }
 
@@ -88,9 +88,16 @@ namespace TurnManagement {
         + getDuration(): Duration
     }
 
+    class TimeKeeper {
+        - usedTime: Duration
+    }
+
+    TimeKeeper -> UserManagement.User: cook
+
+    Turn -> "0..n" TimeKeeper: assignedCooks
+
     class TurnManager
 
-    Turn -> "0..n" Cook: availabilities: HashMap<Cook, Duration>
     TurnManager -> "0..n" Turn: turns
 }
 
@@ -138,6 +145,7 @@ namespace EventManagement {
 namespace UserManagement {
     class User {
         + isChef(): boolean
+        + isCook(): boolean
     }
 
     class UserManager {
