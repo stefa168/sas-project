@@ -68,7 +68,8 @@ namespace KitchenTaskManagement {
         - estimatedDuration: Duration
         --
         + create(cook: Cook, turn: Turn, amount: int, estimatedDuration: Duration)
-        + edit(user: User, amount: int, estimatedDuration: Duration)
+        + edit(amount: int, estimatedDuration: Duration)
+        + assignCook(user: User)
     }
 
     Job --> "0..1"  UserManagement.User: cook
@@ -78,18 +79,20 @@ namespace KitchenTaskManagement {
 'prova
 
 namespace TurnManagement {
-    class Cook
-
     class Turn {
         - startDate: Date
         - endDate: Date
         - complete: boolean
         --
         + getDuration(): Duration
+        + hasUserEnoughTime(user: User, duration: Duration): boolean
+        + freeTime(user: User, durationToFree: Duration)
+        + takeTime(user: User, durationToTake: Duration)
     }
 
     class TimeKeeper {
         - usedTime: Duration
+        + create(user: User, startDuration: Duration)
     }
 
     TimeKeeper -> UserManagement.User: cook
