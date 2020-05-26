@@ -25,6 +25,7 @@ namespace KitchenTaskManagement {
         + deleteExtraDuty(kd: KitchenDuty)
         + createJob(cook: Cook, task: Task, turn: Turn, amount: int, estimatedDuration: Duration)
         + deleteJob(task: Task, job: Job)
+        + editJob(job: Job, user: User, amount: int, estimatedDuration: Duration)
     }
 
     class KitchenTaskReceiver{
