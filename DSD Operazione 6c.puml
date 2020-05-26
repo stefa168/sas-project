@@ -56,7 +56,7 @@ else
         participant "time: TimeKeeper" as newTime
 
         ' potrebbe trattarsi del primo incarico assegnato all cuoco in questo turno.
-        alt assignedCooks.contains(user)
+        alt !assignedCooks.contains(user)
             turn -> newTime**: create(user, job.estimatedDuration)
             activate newTime
             turn <<-- newTime: time
