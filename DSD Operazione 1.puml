@@ -13,9 +13,9 @@ activate um
 tm <<-- um: user
 deactivate um
 
-alt !user.isChef() || event.assignedChef != user
+alt !user.isChef() || event.assignedChef != user || !event.containsService(service)
     UI <<-- tm: throw UseCaseLogicException
-else !event.isActive() || !event.containsService(service)
+else !event.isActive()
     UI <<-- tm: throw EventException
 else
     participant "sheet: SummarySheet" as ss
