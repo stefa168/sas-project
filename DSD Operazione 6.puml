@@ -10,9 +10,9 @@ activate tm
 participant "task: Task" as task
 participant "ktr: KitchenTaskReceiver" as ktr
 
-alt currentSheet == null
+alt currentSheet == null || Date.now() > turn.endDate || turn.complete
     UI <<-- tm: throw UseCaseLogicException
-else task.amount < 0 || task.estimatedDuration < 0 || Date.now() > turn.endDate || turn.complete
+else task.amount < 0 || task.estimatedDuration < 0
     UI <<-- tm: throw TaskException
 else
 
