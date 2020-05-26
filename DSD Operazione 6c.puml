@@ -11,7 +11,7 @@ participant "assignedCooks: ArrayList<TimeKeeper>" as cooks
 
 UI -> ktm: assignCook(user, job)
 activate ktm
-alt user == null || !user.isCook()
+alt user == null || !user.isCook() || Date.now() > job.turn.endDate
     UI <<-- job: throw UseCaseLogicException
 else job.cook == user
     UI <- ktm: job
