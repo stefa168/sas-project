@@ -58,7 +58,7 @@ namespace KitchenTaskManagement {
     SummarySheet --> "1..n" Task: tasks
     SummarySheet --> "0..n" RecipeManagement.KitchenDuty: extraDuties
     Task -> "1..n" Job: jobs
-    Task -left-> "0..1" RecipeManagement.KitchenDuty: optionalDuty: Optional<KitchenDuty>
+    Task -left-> "0..1" RecipeManagement.KitchenDuty: optionalDuty
 
 
     ' Incarico
