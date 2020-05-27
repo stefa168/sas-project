@@ -21,6 +21,7 @@ else
                 participant "job.turn: Turn" as jobTurn
 
                 ss -> jobTurn: freeTime(job.cook, job.estimatedDuration)
+                note left: La definizione completa di\n//freeTime()// è nel DSD 6c
                 activate jobTurn
                 deactivate jobTurn
 
