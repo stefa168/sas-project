@@ -1,0 +1,61 @@
+@startuml
+skinparam Style strictuml
+skinparam SequenceMessageAlign center
+
+skinparam sequence {
+    ActorBorderColor Black
+    ActorBackgroundColor White
+    ParticipantBorderColor Black
+    ParticipantBackgroundColor White
+}
+
+actor Chef
+participant Sistema
+
+title Gestire compiti della Cucina - UC Base
+
+Chef -> Sistema: **1**. visualizzaRichiestaEvento(evento)
+return nuovo evento
+
+loop #a3daff
+    opt #b6efb6
+        Chef -> Sistema: **2**. visualizzaStatoCucina()
+        return stato cucina
+    end
+
+    opt #b6efb6
+        Chef -> Sistema: **3**. compilaDettagliEvento(durata, numeroPartecipanti)
+        return ok
+    end
+
+    opt #b6efb6
+        Chef -> Sistema: **4**. aggiungiServizio(data, oraInizio, oraTermine, tipologia, dettagli)
+        return ok
+    end
+
+    opt #b6efb6
+        Chef -> Sistema: **5**. visualizzaChef()
+        return lista chef
+    end
+
+    opt #b6efb6
+        Chef -> Sistema: **6**. assegnaChef(chef)
+        return ok
+    end
+
+    opt #b6efb6
+        Chef -> Sistema: **7**. confermaMenu(menu)
+        return ok
+    end
+
+    opt #b6efb6
+        Chef -> Sistema: **8**. visualizzaDisponibilitàPersonale()
+        return ok
+    end
+
+    opt #b6efb6
+        Chef -> Sistema: **9**. assegnaPersonale(personale, turno)
+        return ok
+    end
+end
+@enduml
