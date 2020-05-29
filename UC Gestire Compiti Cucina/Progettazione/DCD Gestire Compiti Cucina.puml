@@ -12,10 +12,13 @@ namespace KitchenTaskManagement {
         --<b>event sender methods</b>--
         +addReceiver(er: kitchenTaskReceiver)
         +removeReceiver(er: kitchenTaskReceiver)
-        +notifySheetCreate(s: SummarySheet)
-        +notifyTaskCreate(t: Task)
-        +notifyAddExtraDuty(kd: KitchenDuty)
-        +notifyDeleteExtraDuty(kd: KitchenDuty)
+        -notifySheetCreate(s: SummarySheet)
+        -notifyAddExtraDuty(kd: KitchenDuty)
+        -notifyDeleteExtraDuty(kd: KitchenDuty)
+        -notifyEditTask(t: Task)
+        -notifyCreatedJob(j: Job)
+        -notifyDeletedJob(j: Job)
+        -notifyEditJob(j: Job)
         --<b>operation methods</b>--
         + createSummarySheet(event: Event, service: Service)
         + editTask(task: Task, newAmount: int, newDuration: int)
@@ -27,12 +30,15 @@ namespace KitchenTaskManagement {
         + assignCook(job: Job, user: User)
     }
 
-    class KitchenTaskReceiver{
+    class "KitchenTaskReceivern \n {interface}" as KitchenTaskReceiver{
         --
         +<i>updateSheetCreate(s: SummarySheet)</i>
-        +<i>updateTaskCreate(t: Task)</i>
         +<i>updateAddExtraDuty(kd: KitchenDuty)</i>
         +<i>updateDeleteExtraDuty(kd: KitchenDuty)</i>
+        +<i>updateEditTask(t: Task)</i>
+        +<i>updateCreatedJob(j: Job)</i>
+        +<i>updateDeletedJob(j: Job)</i>
+        +<i>updateEditJob(j: Job)</i>
     }
 
     ' Compito

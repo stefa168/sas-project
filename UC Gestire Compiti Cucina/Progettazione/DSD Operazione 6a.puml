@@ -31,10 +31,10 @@ else
     deactivate task
 
     |||
-    tm -> tm: notifyJobDeleted(job)
+    tm -> tm: notifyDeletedJob(job)
     activate tm
     loop for all ktr in eventReceivers
-        tm -> ktr : updateJobDeleted(job)
+        tm -> ktr : updateDeletedJob(job)
         activate ktr
         deactivate ktr
     end

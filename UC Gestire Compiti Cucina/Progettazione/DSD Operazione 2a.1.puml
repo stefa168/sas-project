@@ -47,7 +47,7 @@ else
 
     participant "ktr: KitchenTaskReceiver" as ktr
     |||
-    ktm -> ktm: notifyAddExtraDuty(kitchenDuty)
+    ktm -> ktm: notifyDeleteExtraDuty(kitchenDuty)
         activate ktm
     loop for all ktr in eventReceivers
         ktm -> ktr : updateDeleteExtraDuty(kitchenDuty)
