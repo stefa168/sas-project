@@ -132,7 +132,7 @@ namespace RecipeManagement {
     Recipe -left|> KitchenDuty
     Preparation -left|> KitchenDuty
     Recipe -up> "0..n" Preparation: subDuties
-    RecipeManager-up>"0..n" Recipe: recipes
+    RecipeManager-->"0..n" Recipe: recipes
 }
 
 namespace EventManagement {
@@ -225,11 +225,11 @@ namespace MenuManagement {
     }
 
 
-    Menu -left> "0..n" Section: sections
+    Menu --> "0..n" Section: sections
     Menu -> "0..n" MenuItem: freeItems
     Section -left> "0..n" MenuItem: sectionItems
     MenuManager ->"0..n" MenuEventReceiver: eventReceivers
-    MenuManager-left> "0..1" Menu: currentMenu
+    MenuManager--left> "0..1" Menu: currentMenu
     MenuItem -> RecipeManagement.Recipe: itemRecipe
     Menu -> "1" UserManagement.User: owner
 }
