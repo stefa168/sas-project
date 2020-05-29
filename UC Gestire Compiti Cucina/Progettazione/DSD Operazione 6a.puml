@@ -30,11 +30,15 @@ else
     tm <- task: task
     deactivate task
 
+    |||
+    tm -> tm: notifyJobDeleted(job)
+    activate tm
     loop for all ktr in eventReceivers
         tm -> ktr : updateJobDeleted(job)
         activate ktr
         deactivate ktr
     end
+    deactivate tm
 
     UI <- tm: task
     deactivate tm

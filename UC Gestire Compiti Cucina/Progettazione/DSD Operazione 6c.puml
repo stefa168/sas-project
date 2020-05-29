@@ -84,11 +84,15 @@ else
         ktm <- job: job
         deactivate job
 
+        |||
+        ktm -> ktm: notifyEditJob(job)
+        activate ktm
         loop for all ktr in eventReceivers
             ktm -> ktr : updateEditJob(job)
             activate ktr
             deactivate ktr
         end
+        deactivate ktm
 
         UI <- ktm: job
         end

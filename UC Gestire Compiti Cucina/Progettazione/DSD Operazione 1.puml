@@ -80,17 +80,19 @@ else
     end
 
     ss -> ss: this.tasks = tasks
-
     tm <<-- ss: sheet
     deactivate ss
-
+    |||
     tm -> tm: this.currentSheet = sheet
-
+    |||
+    tm -> tm: notifySheetCreate(sheet)
+    activate tm
     loop for all ktr in eventReceivers
         tm -> ktr : updateSheetCreate(sheet)
         activate ktr
         deactivate ktr
     end
+    deactivate tm
 
 
     UI <<-- tm: sheet
