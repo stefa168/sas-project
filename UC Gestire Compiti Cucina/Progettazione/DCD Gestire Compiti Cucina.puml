@@ -3,12 +3,11 @@ skinparam Style strictuml
 skinparam classAttributeIconSize 0
 skinparam linetype polyline
 skinparam linetype ortho
-' skinparam Padding 8
 
 title DCD
 
 namespace KitchenTaskManagement {
-    ' GRASP Controller
+    ' GRASP Controller dei Compiti
     class KitchenTaskManager{
         --<b>event sender methods</b>--
         +addReceiver(er: kitchenTaskReceiver)
@@ -54,14 +53,6 @@ namespace KitchenTaskManagement {
         + deleteExtraDuty(kd: KitchenDuty)        
     }
 
-    KitchenTaskManager --> "0..1" SummarySheet: currentSheet
-    KitchenTaskManager -> "0..n" KitchenTaskReceiver: eventReceivers
-    SummarySheet --> "1..n" Task: tasks
-    SummarySheet --> "0..n" RecipeManagement.KitchenDuty: extraDuties
-    Task -> "1..n" Job: jobs
-    Task -left-> "0..1" RecipeManagement.KitchenDuty: optionalDuty
-
-
     ' Incarico
     class Job {
         - amount: int
@@ -72,13 +63,18 @@ namespace KitchenTaskManagement {
         + assignCook(user: User)
     }
 
+    KitchenTaskManager --> "0..1" SummarySheet: currentSheet
+    KitchenTaskManager -> "0..n" KitchenTaskReceiver: eventReceivers
+    SummarySheet --> "1..n" Task: tasks
+    SummarySheet --> "0..n" RecipeManagement.KitchenDuty: extraDuties
+    Task -> "1..n" Job: jobs
+    Task -left-> "0..1" RecipeManagement.KitchenDuty: optionalDuty
     Job --> "0..1"  UserManagement.User: cook
     Job --> "1" TurnManagement.Turn: turn
 }
 
-'prova
-
 namespace TurnManagement {
+    ' Turno
     class Turn {
         - startDate: Date
         - endDate: Date
@@ -90,21 +86,21 @@ namespace TurnManagement {
         + takeTime(user: User, durationToTake: Duration)
     }
 
+    ' Classe utilitaria suggerita dalle Prof; questa diventerà parte di una HashMap
     class TimeKeeper {
         - usedTime: Duration
         + create(user: User, startDuration: Duration)
     }
 
-    TimeKeeper -> UserManagement.User: cook
-
-    Turn -> "0..n" TimeKeeper: assignedCooks
-
     class TurnManager
 
+    Turn -> "0..n" TimeKeeper: assignedCooks
+    TimeKeeper -> UserManagement.User: cook
     TurnManager -> "0..n" Turn: turns
 }
 
 namespace RecipeManagement {
+    ' Mansione di Cucina
     class KitchenDuty {
         - name: String
         - instructions: String
@@ -113,12 +109,13 @@ namespace RecipeManagement {
         - variableConcreteActivityTime: Duration
         {abstract} List<KitchenDuty> getSubDuties()
     }
-    KitchenDuty --> "1" UserManagement.User: author
 
+    ' Ricetta
     class Recipe {
         -name
     }
 
+    ' Preparazione
     class Preparation{
 
     }
@@ -130,17 +127,19 @@ namespace RecipeManagement {
     }
 
     Recipe -left|> KitchenDuty
-    Preparation -left|> KitchenDuty
     Recipe -up> "0..n" Preparation: subDuties
+    Preparation -left|> KitchenDuty
+    KitchenDuty --> "1" UserManagement.User: author
     RecipeManager-->"0..n" Recipe: recipes
 }
 
 namespace EventManagement {
+    ' Servizio
     class Service {
         + getMenu(): Menu
     }
-    Service -up> "0..1" MenuManagement.Menu: menu
 
+    ' Evento
     class Event {
         - active: boolean
         --
@@ -149,10 +148,11 @@ namespace EventManagement {
     }
     Event -> "1..n" Service: "services"
     Event -left> "1" UserManagement.User: "assignedChef"
-
+    Service -up> "0..1" MenuManagement.Menu: menu
 }
 
 namespace UserManagement {
+    ' Utente
     class User {
         + isChef(): boolean
         + isCook(): boolean
@@ -184,6 +184,8 @@ namespace MenuManagement {
         +sectionsSize(): int
         +moveSection(sec: Section, pos: int)
     }
+
+    ' Sezione
     class Section{
         name: String
         --
@@ -191,6 +193,8 @@ namespace MenuManagement {
         +create(sec: Section)
         +addItem(mi: MenuItem)
     }
+
+    ' Voce (del menù)
     class MenuItem{
         description: String
         --
@@ -225,20 +229,18 @@ namespace MenuManagement {
     }
 
 
-    Menu --> "0..n" Section: sections
-    Menu -> "0..n" MenuItem: freeItems
-    Section -left> "0..n" MenuItem: sectionItems
     MenuManager ->"0..n" MenuEventReceiver: eventReceivers
     MenuManager--left> "0..1" Menu: currentMenu
-    MenuItem -> RecipeManagement.Recipe: itemRecipe
+    Section -left> "0..n" MenuItem: sectionItems
+    Menu --> "0..n" Section: sections
+    Menu -> "0..n" MenuItem: freeItems
     Menu -> "1" UserManagement.User: owner
+    MenuItem -> RecipeManagement.Recipe: itemRecipe
 }
 
 namespace GeneralModule {
     UseCaseLogicException --|> Exception
     EventException --|> Exception
-
-
 }
 
 @enduml
