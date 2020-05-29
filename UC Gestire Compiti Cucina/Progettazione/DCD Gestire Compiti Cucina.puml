@@ -116,16 +116,23 @@ namespace RecipeManagement {
     KitchenDuty --> "1" UserManagement.User: author
 
     class Recipe {
-
+        -name
     }
 
     class Preparation{
 
     }
 
+    class RecipeManager{
+        --<b>event sender methods</b>--
+        --<b>operation methods</b>--
+        +getRecipeBook(): ArrayList<Recipe>
+    }
+
     Recipe -left|> KitchenDuty
     Preparation -left|> KitchenDuty
     Recipe -up> "0..n" Preparation: subDuties
+    RecipeManager-up>"0..n" Recipe: recipes
 }
 
 namespace EventManagement {
@@ -161,15 +168,70 @@ namespace UserManagement {
 }
 
 namespace MenuManagement {
-    class Menu
-    class Section
-    class MenuItem
+    class Menu{
+        -title: String
+        -published: boolean
+        -inUse: boolean
+        -features: String[]
+        -featureValues: boolean[]
+        --
+        +create(owner: User, title: String, features: String[])
+        +addSection(name: String)
+        +addItem(r: Recipe, sec?: Section, desc?: String)
+        +isOwner(user: User): boolean
+        +isinUse(): boolean
+        +hasSection(sec: Section): boolean
+        +sectionsSize(): int
+        +moveSection(sec: Section, pos: int)
+    }
+    class Section{
+        name: String
+        --
+        +create(name: String)
+        +create(sec: Section)
+        +addItem(mi: MenuItem)
+    }
+    class MenuItem{
+        description: String
+        --
+        +create(rec: Recipe, desc?: String)
+        +create(mi: MenuItem)
+    }
+
+    class "MenuEventReceiver \n {interface}" as MenuEventReceiver{
+        --
+        +//updateSectionAdded(m: Menu, sec: Section)//
+        +//updateMenuItemAdded(m: Menu, mi:MenuItem)//
+        +//updateMenuCreated(m: Menu)//
+        +//updateMenuDeleted(m: Menu)//
+        +//updateSectionsRearranged(m: Menu)//
+    }
+
+    class MenuManager{
+        - menuFeatures: String[]
+        --<b>event sender methods</b>--
+        +addReceiver(er: MenuEventReceiver)
+        +removeReceiver(er: MenuEventReceiver)
+        -notifySectionAdded(sec: Section)
+        -notifyMenuItemAdded(mi: MenuItem)
+        -notifyMenuCreated(m: Menu)
+        -notifyMenuDeleted(m: Menu)
+        -notifySectionsRearranged(m: Menu)
+        --<b>operation methods</b>--
+        +defineSection(name: String)
+        +insertItem(r: Recipe, sec?: Section, desc?: String)
+        +createMenu(title: String): Menu
+        +getRecipeBook():ArrayList<Recipe>
+    }
+
 
     Menu -left> "0..n" Section: sections
     Menu -> "0..n" MenuItem: freeItems
     Section -left> "0..n" MenuItem: sectionItems
-
+    MenuManager ->"0..n" MenuEventReceiver: eventReceivers
+    MenuManager-left> "0..1" Menu: currentMenu
     MenuItem -> RecipeManagement.Recipe: itemRecipe
+    Menu -> "1" UserManagement.User: owner
 }
 
 namespace GeneralModule {
