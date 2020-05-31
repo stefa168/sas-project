@@ -14,28 +14,28 @@ participant Sistema
 
 title Gestire compiti della Cucina - UC Base
 
-Chef -> Sistema: **1**. visualizzaRichiestaEvento(evento)
+Chef -> Sistema: **1**. creaEvento()
 return nuovo evento
 
 loop #a3daff
     opt #b6efb6
-        Chef -> Sistema: **2**. visualizzaStatoCucina()
+        Chef -> Sistema: **2**. aggiungiNote(note)
+        return ok
+    end
+
+    opt #b6efb6
+        Chef -> Sistema: **3**. visualizzaStatoCucina()
         return stato cucina
     end
 
     opt #b6efb6
-        Chef -> Sistema: **3**. compilaDettagliEvento(durata, numeroPartecipanti)
+        Chef -> Sistema: **4**. compilaDettagliEvento(durata?, periodicità?, numeroServizi?, numeroPartecipanti?, date?, luoghi?)
         return ok
     end
 
     opt #b6efb6
-        Chef -> Sistema: **4**. aggiungiServizio(data, oraInizio, oraTermine, tipologia, dettagli)
+        Chef -> Sistema: **5**. aggiungiServizio(data, oraInizio, oraTermine, tipologia, dettagli)
         return ok
-    end
-
-    opt #b6efb6
-        Chef -> Sistema: **5**. visualizzaChef()
-        return lista chef
     end
 
     opt #b6efb6
@@ -49,12 +49,7 @@ loop #a3daff
     end
 
     opt #b6efb6
-        Chef -> Sistema: **8**. visualizzaDisponibilitàPersonale()
-        return ok
-    end
-
-    opt #b6efb6
-        Chef -> Sistema: **9**. assegnaPersonale(personale, turno)
+        Chef -> Sistema: **8**. assegnaPersonale(personale, turno)
         return ok
     end
 end
