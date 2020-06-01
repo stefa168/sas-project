@@ -111,7 +111,7 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **8**. assegnaPersonale(personale, turno)
+        Chef -> Sistema: **8**. assegnaPersonale(dipendente, turno, ruolo?)
         return ok
     end
 end
