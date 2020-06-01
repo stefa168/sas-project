@@ -19,9 +19,9 @@ alt #f3d0ff
     return nuovo evento
     ||10||
 else
-    Chef -> Sistema: **1a.1**. apriEvento()
+    Chef -> Sistema: **1a.1**. apriEventoAttivo(evento)
     alt #f3a7c9
-        return evento attivo
+        return foglio evento
         ||10||
     else
         Chef <- Sistema: **1a.1a**. evento terminato o annullato
@@ -57,7 +57,7 @@ else
         ||10||
     end
 else
-    Chef -> Sistema: **1b.1**. apriEvento(evento)
+    Chef -> Sistema: **1b.1**. apriEventoTerminatoAnnullato(evento)
     alt #f3a7c9
         return foglio evento
         ||10||
