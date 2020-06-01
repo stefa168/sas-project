@@ -21,36 +21,43 @@ loop #a3daff
     opt #b6efb6
         Chef -> Sistema: **2**. aggiungiNote(note)
         return ok
+        ||10||
     end
 
     opt #b6efb6
         Chef -> Sistema: **3**. visualizzaStatoCucina()
         return stato cucina
+        ||10||
     end
 
     opt #b6efb6
         Chef -> Sistema: **4**. compilaDettagliEvento(durata?, periodicità?, numeroServizi?, numeroPartecipanti?, date?, luoghi?)
         return ok
+        ||10||
     end
 
     opt #b6efb6
         Chef -> Sistema: **5**. aggiungiServizio(data, oraInizio, oraTermine, tipologia, dettagli)
         return ok
+        ||10||
     end
 
     opt #b6efb6
         Chef -> Sistema: **6**. assegnaChef(chef)
         return ok
+        ||10||
     end
 
     opt #b6efb6
         Chef -> Sistema: **7**. confermaMenu(menu)
         return ok
+        ||10||
     end
 
     opt #b6efb6
         Chef -> Sistema: **8**. assegnaPersonale(personale, turno)
         return ok
+        ||10||
     end
 end
 @enduml
