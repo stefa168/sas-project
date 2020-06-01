@@ -12,7 +12,7 @@ skinparam sequence {
 actor Chef
 participant Sistema
 
-title Gestire compiti della Cucina - UC Base
+title Gestire compiti della Cucina - Operazione 1
 
 alt #f3d0ff
     Chef -> Sistema: **1**. creaEvento()
@@ -20,27 +20,52 @@ alt #f3d0ff
     ||10||
 else
     Chef -> Sistema: **1a.1**. apriEvento()
-    return evento attivo
+    alt #f3a7c9
+        return evento attivo
+        ||10||
+    else
+        Chef <- Sistema: **1a.1a**. evento terminato o annullato
+        destroy Sistema
+        ||10||
+    end
 
     opt #b6efb6
         alt #f3d0ff
             Chef -> Sistema: **1a.2**. annullaEvento()
             return warning penale
-'            destroy Sistema
+            destroy Sistema
             ||10||
         else
-            Chef -> Sistema: **1a.2a**. terminaEvento()
+            Chef -> Sistema: **1a.2a.1**. terminaEvento()
             return ok
-'            destroy Sistema
+            destroy Sistema
+            ||10||
+        else
+            Chef -> Sistema: **1a.2b.1**. eliminaEvento()
+            alt #f3a7c9
+                return ok
+                destroy Sistema
+                ||10||
+            else
+               Chef <- Sistema: **1a.2b.1a**. evento confermato
+               destroy Sistema
+               ||10||
+            end
             ||10||
         end
         ' non abbiamo modo di modificare il colore della X
-        destroy Sistema
         ||10||
     end
 else
-    Chef -> Sistema: **1b.1**. apriEvento()
-    return evento terminato o annullato
+    Chef -> Sistema: **1b.1**. apriEvento(evento)
+    alt #f3a7c9
+        return foglio evento
+        ||10||
+    else
+        Chef <- Sistema: **1b.1a**. evento non terminato o non annullato
+        destroy Sistema
+        ||10||
+    end
 
     opt #b6efb6
         Chef -> Sistema: **1b.2**. gestisciNote(note)
