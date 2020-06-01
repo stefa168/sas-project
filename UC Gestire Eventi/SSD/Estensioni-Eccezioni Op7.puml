@@ -12,49 +12,55 @@ skinparam sequence {
 actor Chef
 participant Sistema
 
-title Gestire compiti della Cucina - UC Base
+title Gestire compiti della Cucina - Operazione 7
 
 Chef -> Sistema: **1**. creaEvento()
 return nuovo evento
 
-loop #a3daff
-    opt #b6efb6
+loop #e0e0e0
+    opt #e0e0e0
         Chef -> Sistema: **2**. aggiungiNote(note)
         return ok
         ||10||
     end
 
-    opt #b6efb6
+    opt #e0e0e0
         Chef -> Sistema: **3**. visualizzaStatoCucina()
         return stato cucina
         ||10||
     end
 
-    opt #b6efb6
+    opt #e0e0e0
         Chef -> Sistema: **4**. compilaDettagliEvento(durata?, periodicità?, numeroServizi?, numeroPartecipanti?, date?, luoghi?)
         return ok
         ||10||
     end
 
-    opt #b6efb6
+    opt #e0e0e0
         Chef -> Sistema: **5**. aggiungiServizio(data, oraInizio, oraTermine, tipologia, dettagli)
         return ok
         ||10||
     end
 
-    opt #b6efb6
+    opt #e0e0e0
         Chef -> Sistema: **6**. assegnaChef(chef)
         return ok
         ||10||
     end
 
     opt #b6efb6
-        Chef -> Sistema: **7**. confermaMenu(menu)
-        return ok
-        ||10||
+        alt #f3d0ff
+            Chef -> Sistema: **7**. confermaMenu(menu)
+            return ok
+            ||10||
+        else
+            Chef -> Sistema: **7a.1**. proponiModificaMenu(menu, modifica)
+            return ok
+            ||10||
+        end
     end
 
-    opt #b6efb6
+    opt #e0e0e0
         Chef -> Sistema: **8**. assegnaPersonale(personale, turno)
         return ok
         ||10||
