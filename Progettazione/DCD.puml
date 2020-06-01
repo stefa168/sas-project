@@ -234,7 +234,6 @@ namespace MenuManagement {
         +getRecipeBook():ArrayList<Recipe>
     }
 
-
     MenuManager ->"0..n" MenuEventReceiver: eventReceivers
     MenuManager--left> "0..1" Menu: currentMenu
     Section -left> "0..n" MenuItem: sectionItems
@@ -248,5 +247,4 @@ namespace GeneralModule {
     UseCaseLogicException --|> Exception
     EventException --|> Exception
 }
-
 @enduml
