@@ -1,0 +1,89 @@
+@startuml
+skinparam Style strictuml
+skinparam SequenceMessageAlign center
+
+skinparam sequence {
+    ActorBorderColor Black
+    ActorBackgroundColor White
+    ParticipantBorderColor Black
+    ParticipantBackgroundColor White
+}
+
+actor Chef
+participant Sistema
+
+title Gestire compiti della Cucina - UC Base
+
+Chef -> Sistema: **1**. creaEvento()
+return nuovo evento
+
+loop #e0e0e0
+    opt #e0e0e0
+        Chef -> Sistema: **2**. aggiungiNote(note)
+        return ok
+        ||10||
+    end
+
+    opt #e0e0e0
+        Chef -> Sistema: **3**. visualizzaStatoCucina()
+        return stato cucina
+        ||10||
+    end
+
+    opt #e0e0e0
+        Chef -> Sistema: **4**. compilaDettagliEvento(durata?, periodicità?, numeroServizi?, numeroPartecipanti?, date?, luoghi?)
+        return ok
+        ||10||
+    end
+
+    opt #b6efb6
+        alt #f3d0ff
+            Chef -> Sistema: **5**. aggiungiServizio(data, oraInizio, oraTermine, tipologia, dettagli)
+            return ok
+        else
+            alt #f3a7c9
+                Chef -> Sistema: **5a.1**. annullaServizio(servizio)
+                return warning penale
+                ||10||
+            else
+                Chef <- Sistema: **5a.1a**. servizio già annullato o concluso
+                destroy Sistema
+                ||10||
+            end
+        else
+            alt #f3a7c9
+                Chef -> Sistema: **5b.1**. eliminaServizio(servizio)
+                return ok
+                ||10||
+            else
+                Chef <- Sistema: **5b.1a**. servizio confermato
+                destroy Sistema
+                ||10||
+            else
+                Chef <- Sistema: **5b.1b**. servizio già annullato o concluso
+                destroy Sistema
+                ||10||
+            end
+        end
+        ||10||
+    end
+
+    opt #e0e0e0
+        Chef -> Sistema: **6**. assegnaChef(chef)
+        return ok
+        ||10||
+    end
+
+    opt #e0e0e0
+        Chef -> Sistema: **7**. confermaMenu(menu)
+        return ok
+        ||10||
+    end
+
+    opt #e0e0e0
+        Chef -> Sistema: **8**. assegnaPersonale(personale, turno)
+        return ok
+        ||10||
+    end
+end
+@enduml
