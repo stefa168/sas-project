@@ -99,7 +99,7 @@ Servizio "1" -- "0..1" Foglio: ha associato
 Foglio "1" *-- "1..n" Compito: organizza
 Foglio "0..n" -- "0..n" Mansione: comprende
 Compito "1" *-- "0..n" Incarico: è distribuito su
-Incarico "0..n" -- "1" Turno: assegnato in
+IncaricoCucina "0..n" -- "1" TurnoCucina: assegnato in
 Cuoco "0..1" -- "0..n" Incarico: incaricato di
 Cuoco "0..n" -- "0..n" Turno: si rende disponibile in
 IncaricoCucina --|> Incarico
