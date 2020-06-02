@@ -1,0 +1,20 @@
+@startuml
+skinparam Style strictuml
+skinparam classAttributeIconSize 0
+skinparam linetype polyline
+skinparam linetype ortho
+
+title DOM
+
+
+object Sezione
+object Menù
+object Voce
+object ricetta
+object preparazione
+object "Mansione di Cucina" as Mansione
+object Evento
+object Servizio
+object "Foglio Riepilogativo" as Foglio
+
+@enduml
