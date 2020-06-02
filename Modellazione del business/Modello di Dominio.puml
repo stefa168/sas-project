@@ -7,14 +7,77 @@ skinparam linetype ortho
 title DOM
 
 
-object Sezione
-object Menù
-object Voce
-object ricetta
-object preparazione
-object "Mansione di Cucina" as Mansione
-object Evento
-object Servizio
+object Sezione{
+    nome: testo
+}
+object Menù{
+    titolo: testo
+    pubblicato: sì/no
+    richiede cuoco: sì/no
+    piatti caldi: sì/no
+    richiede cucina: sì/no
+    buffet: sì/no
+    finger food: sì/no
+    approvato: sì/no
+}
+object Voce{
+    descrizione: testo
+}
+object Ricetta
+object Preparazione
+object "Mansione di Cucina" as Mansione{
+    nome: testo
+    autore: testo
+    istruzioni: testo
+    quantità risultante: numero
+    TAC: numero
+    TT: numero
+    TU: numero
+}
+object Evento{
+    durata evento: numero
+    numero partecipanti: numero
+    luogo
+}
+object Servizio{
+    giorno: Data
+    orario: range ore
+    tipologia: testo
+}
 object "Foglio Riepilogativo" as Foglio
+object Ricettario
+object Chef
+object Compito{
+    quantità: numero
+    tempo stimato: numero
+}
+object Incarico{
+    quantità: numero
+    tempo stimato: numero
+    completato: sì/no
+}
+object "Turno di Cucina" as TurnoCucina
+object "Turno di Servizio" as TurnoServizio
+object Turno{
+    giorno: Data
+    orario: range ore
+}
+object Cuoco
+object "Personale di Servizio" as PersonaleServizio
+object Personale
+object Organizzatore
+object Proposta
+object "Proposta di Aggiunta" as PropostaAggiunta
+object "Proposta di Rimozione" as PropostaRimozione
+
+
+Sezione "0..1" *- "0..n" Voce: appartiene
+Sezione "0..n" --* "1" Menù : contiene
+Menù "0..1" *-- "0..n" Voce: appartiene
+Mansione "1" --- "0..n" Compito : programmata in
+Voce "0..n" -- "1" Ricetta: fa riferimento
+Preparazione "0..n" - "0..n" Ricetta: fa parte di
+Preparazione -|> Mansione
+Ricetta --|> Mansione
 
 @enduml
