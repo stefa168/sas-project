@@ -18,12 +18,12 @@ else
         alt (task.optionalDuty != null) && (task.optionalDuty == kitchenDuty)
             loop for all job in task.jobs
                 participant "task.jobs: ArrayList<Job>" as j
-                participant "job.turn: Turn" as jobTurn
+                participant "job.turn: KitchenTurn" as jobKitchenTurn
 
-                ss -> jobTurn: freeTime(job.cook, job.estimatedDuration)
+                ss -> jobKitchenTurn: freeTime(job.cook, job.estimatedDuration)
                 note left: La definizione completa di\n//freeTime()// è nel DSD 6c
-                activate jobTurn
-                deactivate jobTurn
+                activate jobKitchenTurn
+                deactivate jobKitchenTurn
 
                 ss -> j: remove(job)
                 activate j

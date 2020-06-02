@@ -5,8 +5,8 @@ collections UI
 
 participant "kitchentaskMgr: KitchenTaskManager" as ktm
 participant "ktr: KitchenTaskReceiver" as ktr
-participant "job: Job" as job
-participant "job.turn: Turn" as turn
+participant "job: KitchenJob" as job
+participant "job.turn: KitchenTurn" as turn
 participant "assignedCooks: ArrayList<TimeKeeper>" as cooks
 
 UI -> ktm: assignCook(user, job)
@@ -85,10 +85,10 @@ else
         deactivate job
 
         |||
-        ktm -> ktm: notifyEditJob(job)
+        ktm -> ktm: notifyEditKitchenJob(job)
         activate ktm
         loop for all ktr in eventReceivers
-            ktm -> ktr : updateEditJob(job)
+            ktm -> ktr : updateEditKitchenJob(job)
             activate ktr
             deactivate ktr
         end

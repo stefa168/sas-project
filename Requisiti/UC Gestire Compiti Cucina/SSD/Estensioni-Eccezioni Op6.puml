@@ -40,7 +40,7 @@ loop #e0e0e0
 
     opt #b6efb6
         alt #f3d0ff
-            Chef -> Sistema: **6**. creaIncarico(compito, turno, quantità, tempoStimato)
+            Chef -> Sistema: **6**. creaIncaricoDiCucina(compito, turno, quantità, tempoStimato)
             alt #f3a7c9
                 return ok
             else
@@ -54,7 +54,7 @@ loop #e0e0e0
                 destroy Sistema
             end
         else
-            Chef -> Sistema: **6a.1**. cancellaIncarico(incarico)
+            Chef -> Sistema: **6a.1**. cancellaIncaricoDiCucina(incarico)
             alt #f3a7c9
                 return ok
             else
@@ -62,7 +62,7 @@ loop #e0e0e0
                 destroy Sistema
             end
         else
-            Chef -> Sistema: **6b.1**. modificaDettagliIncarico(incarico, quantità?, tempoStimato?)
+            Chef -> Sistema: **6b.1**. modificaDettagliIncaricoDiCucina(incarico, quantità?, tempoStimato?)
             alt #f3a7c9
                 return ok
             else
@@ -84,7 +84,7 @@ loop #e0e0e0
                 destroy Sistema
             end
         else
-            Chef -> Sistema: **6d.1** modificaStatoTurno(turno, nuovoStato)
+            Chef -> Sistema: **6d.1** modificaStatoTurnoCucina(turno, nuovoStato)
             alt #f3a7c9
                 return ok
             else

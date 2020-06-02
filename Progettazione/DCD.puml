@@ -16,18 +16,18 @@ namespace KitchenTaskManagement {
         -notifyAddExtraDuty(kd: KitchenDuty)
         -notifyDeleteExtraDuty(kd: KitchenDuty)
         -notifyEditTask(t: Task)
-        -notifyCreatedJob(j: Job)
-        -notifyDeletedJob(j: Job)
-        -notifyEditJob(j: Job)
+        -notifyCreatedKitchenJob(j: KitchenJob)
+        -notifyDeletedKitchenJob(j: KitchenJob)
+        -notifyEditKitchenJob(j: KitchenJob)
         --<b>operation methods</b>--
         + createSummarySheet(event: Event, service: Service)
         + editTask(task: Task, newAmount: int, newDuration: int)
         + sortTask(task: Task, position: int)
         + addExtraDuty(kd: KitchenDuty)
         + deleteExtraDuty(kd: KitchenDuty)
-        + createJob(cook: Cook, task: Task, turn: Turn, amount: int, estimatedDuration: Duration)
-        + deleteJob(task: Task, job: Job)
-        + assignCook(job: Job, user: User)
+        + createKitchenJob(cook: Cook, task: Task, turn: KitchenTurn, amount: int, estimatedDuration: Duration)
+        + deleteKitchenJob(task: Task, job: KitchenJob)
+        + assignCook(job: KitchenJob, user: User)
     }
 
     class "KitchenTaskReceivern \n {interface}" as KitchenTaskReceiver{
@@ -36,9 +36,9 @@ namespace KitchenTaskManagement {
         +<i>updateAddExtraDuty(kd: KitchenDuty)</i>
         +<i>updateDeleteExtraDuty(kd: KitchenDuty)</i>
         +<i>updateEditTask(t: Task)</i>
-        +<i>updateCreatedJob(j: Job)</i>
-        +<i>updateDeletedJob(j: Job)</i>
-        +<i>updateEditJob(j: Job)</i>
+        +<i>updateCreatedKitchenJob(j: KitchenJob)</i>
+        +<i>updateDeletedKitchenJob(j: KitchenJob)</i>
+        +<i>updateEditKitchenJob(j: KitchenJob)</i>
     }
 
     ' Compito
@@ -48,8 +48,8 @@ namespace KitchenTaskManagement {
         --
         + create(kitchenDuty: KitchenDuty)
         + editDetails(newAmount: int, newDuration: int)
-        + addJob(cook: Cook, turn: Turn, amount: int, estimatedDuration: Duration)
-        + deleteJob(job: Job)
+        + addKitchenJob(cook: Cook, turn: KitchenTurn, amount: int, estimatedDuration: Duration)
+        + deleteKitchenJob(job: KitchenJob)
     }
 
     ' Foglio Riepilogativo
@@ -60,11 +60,11 @@ namespace KitchenTaskManagement {
     }
 
     ' Incarico
-    class Job {
+    class KitchenJob {
         - amount: int
         - estimatedDuration: Duration
         --
-        + create(cook: Cook, turn: Turn, amount: int, estimatedDuration: Duration)
+        + create(cook: Cook, turn: KitchenTurn, amount: int, estimatedDuration: Duration)
         + edit(amount: int, estimatedDuration: Duration)
         + assignCook(user: User)
     }
@@ -73,15 +73,15 @@ namespace KitchenTaskManagement {
     KitchenTaskManager -> "0..n" KitchenTaskReceiver: eventReceivers
     SummarySheet --> "1..n" Task: tasks
     SummarySheet --> "0..n" RecipeManagement.KitchenDuty: extraDuties
-    Task -> "1..n" Job: jobs
+    Task -> "1..n" KitchenJob: jobs
     Task -left-> "0..1" RecipeManagement.KitchenDuty: optionalDuty
-    Job --> "0..1"  UserManagement.User: cook
-    Job --> "1" TurnManagement.Turn: turn
+    KitchenJob --> "0..1"  UserManagement.User: cook
+    KitchenJob --> "1" TurnManagement.KitchenTurn: turn
 }
 
 namespace TurnManagement {
-    ' Turno
-    class Turn {
+    ' Turno di Cucina
+    class KitchenTurn {
         - startDate: Date
         - endDate: Date
         - complete: boolean
@@ -100,9 +100,9 @@ namespace TurnManagement {
 
     class TurnManager
 
-    Turn -> "0..n" TimeKeeper: assignedCooks
+    KitchenTurn -> "0..n" TimeKeeper: assignedCooks
     TimeKeeper -> UserManagement.User: cook
-    TurnManager -> "0..n" Turn: turns
+    TurnManager -> "0..n" KitchenTurn: turns
 }
 
 namespace RecipeManagement {

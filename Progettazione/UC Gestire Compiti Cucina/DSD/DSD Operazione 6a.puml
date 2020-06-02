@@ -8,16 +8,16 @@ collections UI
 participant "taskManager: KitchenTaskManager" as tm
 participant "task: Task" as task
 participant "ktr: KitchenTaskReceiver" as ktr
-participant "job.turn: Turn" as t
-participant "task.jobs: ArrayList<Job>" as jl
+participant "job.turn: KitchenTurn" as t
+participant "task.jobs: ArrayList<KitchenJob>" as jl
 
-UI -> tm: deleteJob(task, job)
+UI -> tm: deleteKitchenJob(task, job)
 activate tm
 
 alt !task.jobs.contains(job)
     UI <<-- tm: throw TaskException
 else
-    tm -> task: deleteJob(job)
+    tm -> task: deleteKitchenJob(job)
     activate task
     task -> t: freeTime(job.cook, job.estimatedDuration)
     activate t
@@ -31,10 +31,10 @@ else
     deactivate task
 
     |||
-    tm -> tm: notifyDeletedJob(job)
+    tm -> tm: notifyDeletedKitchenJob(job)
     activate tm
     loop for all ktr in eventReceivers
-        tm -> ktr : updateDeletedJob(job)
+        tm -> ktr : updateDeletedKitchenJob(job)
         activate ktr
         deactivate ktr
     end

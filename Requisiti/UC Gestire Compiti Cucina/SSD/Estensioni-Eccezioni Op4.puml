@@ -44,7 +44,7 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **6**. creaIncarico(compito, turno, quantità, tempoStimato)
+        Chef -> Sistema: **6**. creaIncaricoDiCucina(compito, turno, quantità, tempoStimato)
         return ok
     end
 

@@ -4,7 +4,7 @@ skinparam Style strictuml
 collections UI
 
 participant "taskManager: KitchenTaskManager" as tm
-UI -> tm: createJob(task, turn, amount, estimatedDuration)
+UI -> tm: createKitchenJob(task, turn, amount, estimatedDuration)
 activate tm
 
 participant "task: Task" as task
@@ -16,10 +16,10 @@ else task.amount < 0 || task.estimatedDuration < 0
     UI <<-- tm: throw TaskException
 else
 
-    tm -> task: addJob(turn, amount, estimatedDuration)
+    tm -> task: addKitchenKitchenJob(turn, amount, estimatedDuration)
     activate task
 
-    participant "job: Job" as job
+    participant "job: KitchenJob" as job
     task -->> job**: create(turn, amount, estimatedDuration)
 
     activate job
@@ -34,10 +34,10 @@ else
     deactivate task
 
     |||
-    tm -> tm: notifyCreatedJob(job)
+    tm -> tm: notifyCreatedKitchenJob(job)
     activate tm
     loop for all ktr in eventReceivers
-        tm -> ktr : updateCreatedJob(job)
+        tm -> ktr : updateCreatedKitchenJob(job)
         activate ktr
         deactivate ktr
     end
