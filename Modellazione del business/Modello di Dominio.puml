@@ -51,11 +51,16 @@ object Compito{
     quantità: numero
     tempo stimato: numero
 }
-object Incarico{
+object Incarico
+object "Incarico di Cucina" as IncaricoCucina{
     quantità: numero
     tempo stimato: numero
     completato: sì/no
 }
+object "Incarico di Servizio" as IncaricoServizio{
+    ruolo: testo
+}
+
 object "Turno di Cucina" as TurnoCucina
 object "Turno di Servizio" as TurnoServizio
 object Turno{
@@ -94,9 +99,11 @@ Servizio "1" -- "0..1" Foglio: ha associato
 Foglio "1" *-- "1..n" Compito: organizza
 Foglio "0..n" -- "0..n" Mansione: comprende
 Compito "1" *-- "0..n" Incarico: è distribuito su
-Incarico "0..n" *-- "1" Turno: assegnato in
+Incarico "0..n" -- "1" Turno: assegnato in
 Cuoco "0..1" -- "0..n" Incarico: incaricato di
-Cuoco "0..n" -- "0..n" TurnoCucina: si rende disponibile in
+Cuoco "0..n" -- "0..n" Turno: si rende disponibile in
+IncaricoCucina --|> Incarico
+IncaricoServizio --|> Incarico
 PersonaleServizio "0..n" -- "0..n" TurnoServizio: si rende disponibile in
 TurnoServizio -|> Turno
 TurnoCucina -|> Turno
