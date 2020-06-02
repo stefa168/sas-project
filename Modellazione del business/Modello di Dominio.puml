@@ -71,17 +71,40 @@ object "Proposta di Aggiunta" as PropostaAggiunta
 object "Proposta di Rimozione" as PropostaRimozione
 
 
-Sezione "0..1" *-- "0..n" Voce: appartiene
-Sezione "0..n" ---* "1" Menù : contiene
+Menù "1" *-- "0..n" Sezione: contiene
 Menù "0..1" *-- "0..n" Voce: appartiene
-Mansione "1" --- "0..n" Compito : programmata in
-Voce "0..n" -- "1" Ricetta: fa riferimento
-Preparazione "0..n" - "0..n" Ricetta: fa parte di
-Preparazione -|> Mansione
+Menù "0..1" - "0..n" Servizio: è scelto per
+Menù "0..n" -- "0..n" Evento: /in uso in
+Mansione "1" -- "0..n" Compito : programmata in
+Mansione "0..n" -- "0..n" Menù : / è inclusa in
+Mansione "0..n" *-- "1" Ricettario: si trova in
+Voce "0..n" -- "1" Ricetta: fa riferimento a
+Voce "0..n" *-- "0..1" Sezione: appartiene
+Preparazione "0..n" -- "0..n" Ricetta: fa parte di
+Preparazione --|> Mansione
 Ricetta --|> Mansione
 PropostaAggiunta --|> Proposta
 PropostaRimozione --|> Proposta
-PropostaAggiunta "0..n" - "1" Mansione: aggiunge
+PropostaAggiunta "0..n" -- "1" Mansione: aggiunge
 PropostaRimozione "0..n" -- "1" Voce: rimuove
 Proposta "0..n" -- "1" Servizio: modifica
+Evento "1" -- "1..n" Servizio: è suddiviso in
+Evento "0..n" -- "0..1" Chef: assegnato a
+Servizio "1" -- "0..1" Foglio: ha associato
+Foglio "1" *-- "1..n" Compito: organizza
+Foglio "0..n" -- "0..n" Mansione: comprende
+Compito "1" *-- "0..n" Incarico: è distribuito su
+Incarico "0..n" *-- "1" Turno: assegnato in
+Cuoco "0..1" -- "0..n" Incarico: incaricato di
+Cuoco "0..n" -- "0..n" TurnoCucina: si rende disponibile in
+PersonaleServizio "0..n" -- "0..n" TurnoServizio: si rende disponibile in
+TurnoServizio -|> Turno
+TurnoCucina -|> Turno
+Cuoco -|> Personale
+PersonaleServizio --|> Personale
+Personale "1..n" -- "0..n" Servizio: deciso per
+Organizzatore "0..1" -- "0..n" Evento: gestisce
+
+
+
 @enduml
