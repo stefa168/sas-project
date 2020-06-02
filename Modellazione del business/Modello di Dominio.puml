@@ -71,13 +71,17 @@ object "Proposta di Aggiunta" as PropostaAggiunta
 object "Proposta di Rimozione" as PropostaRimozione
 
 
-Sezione "0..1" *- "0..n" Voce: appartiene
-Sezione "0..n" --* "1" Menù : contiene
+Sezione "0..1" *-- "0..n" Voce: appartiene
+Sezione "0..n" ---* "1" Menù : contiene
 Menù "0..1" *-- "0..n" Voce: appartiene
 Mansione "1" --- "0..n" Compito : programmata in
 Voce "0..n" -- "1" Ricetta: fa riferimento
 Preparazione "0..n" - "0..n" Ricetta: fa parte di
 Preparazione -|> Mansione
 Ricetta --|> Mansione
-
+PropostaAggiunta --|> Proposta
+PropostaRimozione --|> Proposta
+PropostaAggiunta "0..n" - "1" Mansione: aggiunge
+PropostaRimozione "0..n" -- "1" Voce: rimuove
+Proposta "0..n" -- "1" Servizio: modifica
 @enduml
