@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="containerPane" prefHeight="393.0" prefWidth="495.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.menu.MenuManagement">
+   <top>
+      <Label fx:id="userLabel" alignment="TOP_LEFT" prefHeight="17.0" prefWidth="484.0" text="Info utente" BorderPane.alignment="TOP_LEFT">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
+      </Label>
+   </top>
+   <center>
+      <fx:include fx:id="menuListPane" source="menu-list.fxml" />
+   </center>
+</BorderPane>
