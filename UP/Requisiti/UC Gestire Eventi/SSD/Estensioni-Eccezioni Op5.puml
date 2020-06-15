@@ -38,8 +38,19 @@ loop #e0e0e0
 
     opt #b6efb6
         alt #f3d0ff
-            Chef -> Sistema: **5**. aggiungiServizio(data, oraInizio, oraTermine, luogo, dettagli)
-            return ok
+            alt #f3a7c9
+                Chef -> Sistema: **5**. aggiungiServizio(data, oraInizio, oraTermine, luogo, dettagli)
+                return ok
+                ||10||
+            else
+                Chef <- Sistema: **5a.1**. data specificata già passata
+                destroy Sistema
+                ||10||
+            else
+                Chef <- Sistema: **5b.1**. orario di inizio dopo quello di terminazione
+                destroy Sistema
+                ||10||
+            end
         else
             alt #f3a7c9
                 Chef -> Sistema: **5a.1**. annullaServizio(servizio)
