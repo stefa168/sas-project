@@ -75,6 +75,28 @@ loop #e0e0e0
                 destroy Sistema
                 ||10||
             end
+        else
+            alt #f3a7c9
+                Chef -> Sistema: **5c.1**. modificaDettagliServizio(servizio, data?, oraInizio?, oraTermine?, luogo?, dettagli?)
+                return ok
+                ||10||
+            else
+                Chef <- Sistema: **5c.1a.1**. servizio confermato
+                destroy Sistema
+                ||10||
+            else
+                Chef <- Sistema: **5c.1b.1**. servizio già annullato o concluso
+                destroy Sistema
+                ||10||
+            else
+                Chef <- Sistema: **5c.1c.1**. data specificata già passata
+                destroy Sistema
+                ||10||
+            else
+                Chef <- Sistema: **5c.1d.1**. orario di inizio dopo quello di terminazione
+                destroy Sistema
+                ||10||
+            end
         end
         ||10||
     end
