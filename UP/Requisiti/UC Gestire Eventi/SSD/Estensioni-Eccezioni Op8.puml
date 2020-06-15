@@ -14,7 +14,7 @@ participant Sistema
 
 title Gestire Eventi - Operazione 8
 
-Chef -> Sistema: **1**. creaEvento()
+Chef -> Sistema: **1**. creaEvento(dataInizio)
 return nuovo evento
 
 loop #e0e0e0
@@ -31,13 +31,13 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **4**. modificaDettagliEvento(periodicità?)
+        Chef -> Sistema: **4**. modificaDettagliEvento(periodicità?, dataInizio?)
         return ok
         ||10||
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **5**. aggiungiServizio(data, oraInizio, oraTermine, luogo, dettagli)
+        Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli)
         return ok
         ||10||
     end

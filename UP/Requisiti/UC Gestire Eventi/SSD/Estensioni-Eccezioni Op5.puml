@@ -14,7 +14,7 @@ participant Sistema
 
 title Gestire Eventi - UC Base
 
-Chef -> Sistema: **1**. creaEvento()
+Chef -> Sistema: **1**. creaEvento(dataInizio)
 return nuovo evento
 
 loop #e0e0e0
@@ -31,7 +31,7 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **4**. modificaDettagliEvento(periodicità?)
+        Chef -> Sistema: **4**. modificaDettagliEvento(periodicità?, dataInizio?)
         return ok
         ||10||
     end
@@ -39,7 +39,7 @@ loop #e0e0e0
     opt #b6efb6
         alt #f3d0ff
             alt #f3a7c9
-                Chef -> Sistema: **5**. aggiungiServizio(data, oraInizio, oraTermine, luogo, dettagli)
+                Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli)
                 return ok
                 ||10||
             else
@@ -77,7 +77,7 @@ loop #e0e0e0
             end
         else
             alt #f3a7c9
-                Chef -> Sistema: **5c.1**. modificaDettagliServizio(servizio, data?, oraInizio?, oraTermine?, luogo?, dettagli?)
+                Chef -> Sistema: **5c.1**. modificaDettagliServizio(servizio, offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli)
                 return ok
                 ||10||
             else
