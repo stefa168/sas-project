@@ -31,14 +31,14 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **4**. compilaDettagliEvento(durata?, periodicità?, numeroServizi?, numeroPartecipanti?, date?, luoghi?)
+        Chef -> Sistema: **4**. modificaDettagliEvento(periodicità?)
         return ok
         ||10||
     end
 
     opt #b6efb6
         alt #f3d0ff
-            Chef -> Sistema: **5**. aggiungiServizio(data, oraInizio, oraTermine, tipologia, dettagli)
+            Chef -> Sistema: **5**. aggiungiServizio(data, oraInizio, oraTermine, luogo, dettagli)
             return ok
         else
             alt #f3a7c9
