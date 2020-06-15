@@ -43,11 +43,7 @@ loop #e0e0e0
                 return ok
                 ||10||
             else
-                Chef <- Sistema: **5a**. data specificata già passata
-                destroy Sistema
-                ||10||
-            else
-                Chef <- Sistema: **5b**. orario di inizio dopo quello di terminazione
+                Chef <- Sistema: **5a**. orario di inizio dopo quello di terminazione
                 destroy Sistema
                 ||10||
             end
@@ -89,11 +85,7 @@ loop #e0e0e0
                 destroy Sistema
                 ||10||
             else
-                Chef <- Sistema: **5c.1c**. data specificata già passata
-                destroy Sistema
-                ||10||
-            else
-                Chef <- Sistema: **5c.1d**. orario di inizio dopo quello di terminazione
+                Chef <- Sistema: **5c.1c**. orario di inizio dopo quello di terminazione
                 destroy Sistema
                 ||10||
             end
