@@ -36,7 +36,7 @@ loop #e0e0e0
             return ok
             ||10||
         else
-            Chef <- Sistema: **4a.1**. lavori avviati: dataInizio non modificabile
+            Chef <- Sistema: **4a**. lavori avviati: dataInizio non modificabile
             destroy Sistema
             ||10||
         end

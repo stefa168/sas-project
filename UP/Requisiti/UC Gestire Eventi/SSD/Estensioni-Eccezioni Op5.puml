@@ -43,11 +43,11 @@ loop #e0e0e0
                 return ok
                 ||10||
             else
-                Chef <- Sistema: **5a.1**. data specificata già passata
+                Chef <- Sistema: **5a**. data specificata già passata
                 destroy Sistema
                 ||10||
             else
-                Chef <- Sistema: **5b.1**. orario di inizio dopo quello di terminazione
+                Chef <- Sistema: **5b**. orario di inizio dopo quello di terminazione
                 destroy Sistema
                 ||10||
             end
@@ -81,19 +81,19 @@ loop #e0e0e0
                 return ok
                 ||10||
             else
-                Chef <- Sistema: **5c.1a.1**. servizio confermato
+                Chef <- Sistema: **5c.1a**. servizio confermato
                 destroy Sistema
                 ||10||
             else
-                Chef <- Sistema: **5c.1b.1**. servizio già annullato o concluso
+                Chef <- Sistema: **5c.1b**. servizio già annullato o concluso
                 destroy Sistema
                 ||10||
             else
-                Chef <- Sistema: **5c.1c.1**. data specificata già passata
+                Chef <- Sistema: **5c.1c**. data specificata già passata
                 destroy Sistema
                 ||10||
             else
-                Chef <- Sistema: **5c.1d.1**. orario di inizio dopo quello di terminazione
+                Chef <- Sistema: **5c.1d**. orario di inizio dopo quello di terminazione
                 destroy Sistema
                 ||10||
             end
