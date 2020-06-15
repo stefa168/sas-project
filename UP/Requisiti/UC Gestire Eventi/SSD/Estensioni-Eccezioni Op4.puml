@@ -1,0 +1,69 @@
+@startuml
+skinparam Style strictuml
+skinparam SequenceMessageAlign center
+
+skinparam sequence {
+    ActorBorderColor Black
+    ActorBackgroundColor White
+    ParticipantBorderColor Black
+    ParticipantBackgroundColor White
+}
+
+actor Chef
+participant Sistema
+
+title Gestire Eventi - Operazione 4
+
+Chef -> Sistema: **1**. creaEvento(dataInizio)
+return nuovo evento
+
+loop #e0e0e0
+    opt #e0e0e0
+        Chef -> Sistema: **2**. aggiungiNote(note)
+        return ok
+        ||10||
+    end
+
+    opt #e0e0e0
+        Chef -> Sistema: **3**. visualizzaStatoCucina()
+        return stato cucina
+        ||10||
+    end
+
+    opt #b6efb6
+            Chef -> Sistema: **4**. modificaDettagliEvento(periodicità?, dataInizio?)
+        alt #f3a7c9
+            return ok
+            ||10||
+        else
+            Chef <- Sistema: **4a.1**. lavori avviati: dataInizio non modificabile
+            destroy Sistema
+            ||10||
+        end
+    end
+
+    opt #e0e0e0
+        Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli)
+        return ok
+        ||10||
+    end
+
+    opt #e0e0e0
+        Chef -> Sistema: **6**. assegnaChef(chef)
+        return ok
+        ||10||
+    end
+
+    opt #e0e0e0
+        Chef -> Sistema: **7**. confermaMenuServizio(servizio)
+        return ok
+        ||10||
+    end
+
+    opt #e0e0e0
+        Chef -> Sistema: **8**. assegnaPersonale(dipendente, turno, ruolo?)
+        return ok
+        ||10||
+    end
+end
+@enduml
