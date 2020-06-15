@@ -12,7 +12,7 @@ skinparam sequence {
 actor Chef
 participant Sistema
 
-title Gestire compiti della Cucina - Operazione 7
+title Gestire Eventi - Operazione 7
 
 Chef -> Sistema: **1**. creaEvento()
 return nuovo evento
@@ -55,15 +55,15 @@ loop #e0e0e0
                 return ok
                 ||10||
             else
-                Chef <- Sistema: **7.a.1**. servizio già confermato
+                Chef <- Sistema: **7a.1**. servizio già confermato
                 destroy Sistema
                 ||10||
             else
-                Chef <- Sistema: **7.b.1**. servizio annullato o terminato
+                Chef <- Sistema: **7b.1**. servizio annullato o terminato
                 destroy Sistema
                 ||10||
             else
-                Chef <- Sistema: **7.c.1**. il servizio non ha un menu associato
+                Chef <- Sistema: **7c.1**. il servizio non ha un menu associato
                 destroy Sistema
                 ||10||
             end

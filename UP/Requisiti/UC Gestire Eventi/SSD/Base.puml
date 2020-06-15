@@ -12,7 +12,7 @@ skinparam sequence {
 actor Chef
 participant Sistema
 
-title Gestire compiti della Cucina - UC Base
+title Gestire Eventi - UC Base
 
 Chef -> Sistema: **1**. creaEvento()
 return nuovo evento

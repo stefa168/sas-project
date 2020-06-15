@@ -12,7 +12,7 @@ skinparam sequence {
 actor Chef
 participant Sistema
 
-title Gestire compiti della Cucina - Operazione 1
+title Gestire Eventi - Operazione 1
 
 alt #f3d0ff
     Chef -> Sistema: **1**. creaEvento()
