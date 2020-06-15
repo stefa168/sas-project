@@ -50,7 +50,7 @@ loop #e0e0e0
 
     opt #b6efb6
         alt #f3d0ff
-            Chef -> Sistema: **7**. confermaMenu(menu)
+            Chef -> Sistema: **7**. confermaMenuServizio(servizio)
             alt #f3a7c9
                 return ok
                 ||10||
@@ -60,6 +60,10 @@ loop #e0e0e0
                 ||10||
             else
                 Chef <- Sistema: **7.b.1**. servizio annullato o terminato
+                destroy Sistema
+                ||10||
+            else
+                Chef <- Sistema: **7.c.1**. il servizio non ha un menu associato
                 destroy Sistema
                 ||10||
             end
