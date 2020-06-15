@@ -49,7 +49,7 @@ loop #a3daff
     end
 
     opt #b6efb6
-        Chef -> Sistema: **7**. confermaMenu(menu)
+        Chef -> Sistema: **7**. confermaMenuServizio(servizio)
         return ok
         ||10||
     end
