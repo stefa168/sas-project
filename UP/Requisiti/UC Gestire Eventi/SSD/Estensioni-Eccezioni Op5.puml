@@ -38,15 +38,9 @@ loop #e0e0e0
 
     opt #b6efb6
         alt #f3d0ff
-            alt #f3a7c9
-                Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli)
-                return ok
-                ||10||
-            else
-                Chef <- Sistema: **5a**. orario di inizio dopo quello di terminazione
-                destroy Sistema
-                ||10||
-            end
+            Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli)
+            return ok
+            ||10||
         else
             alt #f3a7c9
                 Chef -> Sistema: **5a.1**. annullaServizio(servizio)
@@ -82,10 +76,6 @@ loop #e0e0e0
                 ||10||
             else
                 Chef <- Sistema: **5c.1b**. servizio già annullato o concluso
-                destroy Sistema
-                ||10||
-            else
-                Chef <- Sistema: **5c.1c**. orario di inizio dopo quello di terminazione
                 destroy Sistema
                 ||10||
             end
