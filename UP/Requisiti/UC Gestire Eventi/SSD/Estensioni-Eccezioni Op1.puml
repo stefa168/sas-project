@@ -16,8 +16,14 @@ title Gestire Eventi - Operazione 1
 
 alt #f3d0ff
     Chef -> Sistema: **1**. creaEvento(dataInizio)
-    return nuovo evento
-    ||10||
+    alt #f3a7c9
+        return nuovo evento
+        ||10||
+    else
+        Chef <- Sistema: **1a**. data specificata già passata
+        destroy Sistema
+        ||10||
+    end
 else
     Chef -> Sistema: **1a.1**. apriEventoAttivo(evento)
     alt #f3a7c9

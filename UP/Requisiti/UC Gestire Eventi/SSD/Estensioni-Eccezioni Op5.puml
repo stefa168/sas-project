@@ -39,11 +39,17 @@ loop #e0e0e0
     opt #b6efb6
         alt #f3d0ff
             Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli)
-            return ok
-            ||10||
-        else
             alt #f3a7c9
-                Chef -> Sistema: **5a.1**. annullaServizio(servizio)
+                return ok
+                ||10||
+            else
+                Chef <- Sistema: **5a**. offsetInizio identifica un giorno già passato
+                destroy Sistema
+                ||10||
+            end
+        else
+            Chef -> Sistema: **5a.1**. annullaServizio(servizio)
+            alt #f3a7c9
                 return warning penale
                 ||10||
             else
@@ -52,8 +58,8 @@ loop #e0e0e0
                 ||10||
             end
         else
+            Chef -> Sistema: **5b.1**. eliminaServizio(servizio)
             alt #f3a7c9
-                Chef -> Sistema: **5b.1**. eliminaServizio(servizio)
                 return ok
                 ||10||
             else
@@ -66,8 +72,8 @@ loop #e0e0e0
                 ||10||
             end
         else
+            Chef -> Sistema: **5c.1**. modificaDettagliServizio(servizio, offsetInizio?, rangeOrario?, numeroCommensali?, luogo?, dettagli?)
             alt #f3a7c9
-                Chef -> Sistema: **5c.1**. modificaDettagliServizio(servizio, offsetInizio?, rangeOrario?, numeroCommensali?, luogo?, dettagli?)
                 return ok
                 ||10||
             else
@@ -76,6 +82,10 @@ loop #e0e0e0
                 ||10||
             else
                 Chef <- Sistema: **5c.1b**. servizio già annullato o concluso
+                destroy Sistema
+                ||10||
+            else
+                Chef <- Sistema: **5c.1a**. offsetInizio identifica un giorno già passato
                 destroy Sistema
                 ||10||
             end

@@ -39,6 +39,10 @@ loop #e0e0e0
             Chef <- Sistema: **4a**. lavori avviati: dataInizio non modificabile
             destroy Sistema
             ||10||
+        else
+            Chef <- Sistema: **4b**. data specificata già passata
+            destroy Sistema
+            ||10||
         end
     end
 
