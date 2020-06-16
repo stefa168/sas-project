@@ -98,11 +98,27 @@ namespace TurnManagement {
         + create(user: User, startDuration: Duration)
     }
 
+    class ServiceTurn
+
+    class Turn{
+        - day: Date
+        -startHour: Instant
+        -endHour: Instant
+    }
+
     class TurnManager
+
+    class ServiceJob{
+        -role: char
+    }
 
     KitchenTurn -> "0..n" TimeKeeper: assignedCooks
     TimeKeeper -> UserManagement.User: cook
     TurnManager -> "0..n" KitchenTurn: turns
+    ServiceTurn -|> Turn
+    KitchenTurn -|> Turn
+    ServiceJob -> "1" ServiceTurn: turn
+    ServiceJob -> "0..n" UserManagement.User: worker
 }
 
 namespace RecipeManagement {
@@ -142,19 +158,61 @@ namespace RecipeManagement {
 namespace EventManagement {
     ' Servizio
     class Service {
+        -offsetDay: int
+        -startHour: Instant
+        -endHour: Instant
+        -typology: String
+        -place: String
+        -diners: int
+        -state: String
+        --
         + getMenu(): Menu
     }
 
+    class MacroEvent{
+        -note: String
+        -customer: String
+        --
+    }
+
+    class EventManager{
+        --<b>event sender methods</b>--
+        --<b>operation methods</b>--
+    }
+
+    class EventFrequency{
+        -offsetGiorniOccorrenza: int
+        -numeroOccorrenzePreviste: int
+        -numeroOccorrenzeAvvenute: int
+    }
+
+    class Patch
+
+    class AdditionPatch
+
+    class RemovalPatch
+
     ' Evento
     class Event {
-        - active: boolean
+        - state: String
+        - dateStart: Date
         --
         + isActive(): boolean
         + containsService(s:Service): boolean
     }
-    Event -> "1..n" Service: "services"
+    Event --> "1..n" Service: "services"
     Event -left> "1" UserManagement.User: "assignedChef"
     Service -up> "0..1" MenuManagement.Menu: menu
+    RemovalPatch -|> Patch
+    AdditionPatch -|> Patch
+    AdditionPatch --> "1" RecipeManagement.kitchenDuty: duty
+    RemovalPatch -> "1" MenuManagement.MenuItem : menuItem
+    Service ->  "0..n" Patch: patches
+    MacroEvent -> "0..1" EventFrequency: frequency
+    Service -> "0..n" TurnManagement.ServiceJob: serviceJobs
+    MacroEvent -> "1" UserManagement.User: organizer
+    MacroEvent -> "1" Event: defaultEvent
+    MacroEvent -> "1..n" Event: events
 }
 
 namespace UserManagement {
