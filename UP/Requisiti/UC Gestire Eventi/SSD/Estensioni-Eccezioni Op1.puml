@@ -15,7 +15,7 @@ participant Sistema
 title Gestire Eventi - Operazione 1
 
 alt #f3d0ff
-    Chef -> Sistema: **1**. creaEvento(dataInizio)
+    Chef -> Sistema: **1**. creaEvento(dataInizio, cliente)
     alt #f3a7c9
         return nuovo evento
         ||10||
