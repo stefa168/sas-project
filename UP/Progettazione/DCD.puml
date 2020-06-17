@@ -167,6 +167,7 @@ namespace EventManagement {
         -state: String
         --
         + getMenu(): Menu
+        + addSummarySheet(sheet: SummarySheet)
     }
 
     class MacroEvent{
@@ -177,7 +178,8 @@ namespace EventManagement {
         +addEvent(startDate: LocalDate)
     }
     class "EventEventReceivers \n {interface}" as EventEventReceivers{
-        +<i>updateSheetCreate(s: SummarySheet)</i>
+        +<i>updateCreateEvent(ev: Event)</i>
+        +<i>updateCancelEvent(ev: Event)</i>
     }
 
     class EventManager{
@@ -185,6 +187,7 @@ namespace EventManagement {
         +addReceiver(er: EventEventReceivers)
         +removeReceiver(er: EventEventReceivers)
         -notifyCreateEvent(ev: Event)
+        -notifyCancelEvent(ev: Event)
         --<b>operation methods</b>--
         + createEvent(startDate: LocalDate)
     }
@@ -223,7 +226,9 @@ namespace EventManagement {
     MacroEvent -> "1" UserManagement.User: organizer
     MacroEvent -> "1" Event: defaultEvent
     MacroEvent -> "1..n" Event: events
+    Event -> "1" MacroEvent: macroEvent
     EventManager -> "0..n" EventEventReceivers: eventReceivers
+    Service -> "0..1" KitchenTaskManagement.SummarySheet: sheet
 }
 
 namespace UserManagement {

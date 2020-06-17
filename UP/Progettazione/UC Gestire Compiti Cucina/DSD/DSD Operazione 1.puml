@@ -9,6 +9,7 @@ activate tm
 
 participant "userMgr: UserManager" as um
 participant "ktr: KitchenTaskEventReceiver" as ktr
+participant "service: Service" as service
 tm -> um: getCurrentUser()
 activate um
 tm <<-- um: user
@@ -81,6 +82,13 @@ else
 
     ss -> ss: this.tasks = tasks
     tm <<-- ss: sheet
+
+    tm -> service: addSummarySheet(sheet)
+    activate service
+    service->service:this.sheet = sheet
+    tm <<-- service: service
+    deactivate service
+
     deactivate ss
     |||
     tm -> tm: this.currentSheet = sheet
