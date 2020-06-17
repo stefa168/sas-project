@@ -45,7 +45,7 @@ else
     ktm <<-- ss: currentSheet
     deactivate ss
 
-    participant "ktr: KitchenTaskReceiver" as ktr
+    participant "ktr: KitchenTaskEventReceiver" as ktr
     |||
     ktm -> ktm: notifyDeleteExtraDuty(kitchenDuty)
         activate ktm

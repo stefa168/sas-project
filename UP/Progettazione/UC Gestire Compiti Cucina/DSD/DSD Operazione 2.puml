@@ -5,7 +5,7 @@ collections UI
 
 participant "kitchenTMgr: KitchenTaskManager" as ktm
 UI -> ktm: addExtraDuty(kitchenDuty)
-participant "ktr: KitchenTaskReceiver" as ktr
+participant "ktr: KitchenTaskEventReceiver" as ktr
 
 activate ktm
 

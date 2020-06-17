@@ -7,7 +7,7 @@ collections UI
 
 participant "taskManager: KitchenTaskManager" as tm
 participant "task: Task" as task
-participant "ktr: KitchenTaskReceiver" as ktr
+participant "ktr: KitchenTaskEventReceiver" as ktr
 participant "job.turn: KitchenTurn" as t
 participant "task.jobs: ArrayList<KitchenJob>" as jl
 

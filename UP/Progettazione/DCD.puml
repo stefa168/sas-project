@@ -30,7 +30,7 @@ namespace KitchenTaskManagement {
         + assignCook(job: KitchenJob, user: User)
     }
 
-    class "KitchenTaskReceivern \n {interface}" as KitchenTaskReceiver{
+    class "KitchenTaskEventReceiver \n {interface}" as KitchenTaskReceiver{
         --
         +<i>updateSheetCreate(s: SummarySheet)</i>
         +<i>updateAddExtraDuty(kd: KitchenDuty)</i>
@@ -174,11 +174,17 @@ namespace EventManagement {
         -customer: String
         --
         +setDefaultEvent(event: Event)
-        +addEvent(event: Event
+        +addEvent(startDate: LocalDate)
+    }
+    class "EventEventReceivers \n {interface}" as EventEventReceivers{
+        +<i>updateSheetCreate(s: SummarySheet)</i>
     }
 
     class EventManager{
         --<b>event sender methods</b>--
+        +addReceiver(er: EventEventReceivers)
+        +removeReceiver(er: EventEventReceivers)
+        -notifyCreateEvent(ev: Event)
         --<b>operation methods</b>--
         + createEvent(startDate: LocalDate)
     }
@@ -202,6 +208,7 @@ namespace EventManagement {
         --
         + isActive(): boolean
         + containsService(s:Service): boolean
+
     }
     Event --> "1..n" Service: "services"
     Event -left> "1" UserManagement.User: "assignedChef"
@@ -216,6 +223,7 @@ namespace EventManagement {
     MacroEvent -> "1" UserManagement.User: organizer
     MacroEvent -> "1" Event: defaultEvent
     MacroEvent -> "1..n" Event: events
+    EventManager -> "0..n" EventEventReceivers: eventReceivers
 }
 
 namespace UserManagement {

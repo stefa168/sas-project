@@ -4,7 +4,7 @@ skinparam Style strictuml
 collections UI
 
 participant "taskManager: KitchenTaskManager" as tm
-    participant "ktr: KitchenTaskReceiver" as ktr
+participant "ktr: KitchenTaskEventReceiver" as ktr
 
 UI -> tm: editTask(task, newAmount?, newDuration?)
 activate tm

@@ -8,7 +8,7 @@ UI -> tm: createKitchenJob(task, turn, amount, estimatedDuration)
 activate tm
 
 participant "task: Task" as task
-participant "ktr: KitchenTaskReceiver" as ktr
+participant "ktr: KitchenTaskEventReceiver" as ktr
 
 alt currentSheet == null || Date.now() > turn.endDate || turn.complete
     UI <<-- tm: throw UseCaseLogicException
