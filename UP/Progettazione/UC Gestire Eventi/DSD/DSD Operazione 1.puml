@@ -1,0 +1,64 @@
+@startuml
+skinparam Style strictuml
+
+collections UI
+participant "evenManager: EventManager" as em
+participant "userMgr: UserManager" as um
+
+UI -> em: createEvent(startDate)
+
+em -> um: getCurrentUser()
+activate um
+em <<-- um: user
+deactivate um
+
+alt !user.isOrganizer()
+    UI <<-- em: throw UseCaseLogicException
+else startDate.compareTo(LocalDate.now())) < 0
+    UI <<-- em: throw EventException
+else
+    participant "macroEvent: MacroEvent" as maev
+    em -->> maev **: create()
+    activate maev
+    participant "macroEvent.events: ArrayList<Event>" as events
+    maev-->> events**:create()
+    activate events
+    maev <<-- events: events
+    deactivate events
+    maev -> maev: this.events = events
+    em <<-- maev: macroEvent
+    deactivate maev
+
+    participant "event: Event" as ev
+    em -->> ev **: create(startDate)
+    activate ev
+    ev->ev: this.startDate = startDate
+    ev -> ev: this.state = active
+    em <<-- ev: event
+    deactivate ev
+
+
+    em -> maev : setDefaultEvent(event)
+    activate maev
+    maev <- maev: this.defaultEvent = event
+    maev <- maev: this.state = active
+    em <<-- maev: macroEvent
+    deactivate maev
+
+
+    em -> maev: addEvent(event)
+    activate maev
+    maev -> events: add(event)
+    activate events
+    deactivate events
+    em <<-- maev: macroEvent
+    deactivate maev
+    |||
+    UI <<-- em: macroEvent
+
+
+
+
+end
+
+@enduml

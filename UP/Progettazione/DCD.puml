@@ -82,8 +82,8 @@ namespace KitchenTaskManagement {
 namespace TurnManagement {
     ' Turno di Cucina
     class KitchenTurn {
-        - startDate: Date
-        - endDate: Date
+        - startDate: LocalDate
+        - endDate: LocalDate
         - complete: boolean
         --
         + getDuration(): Duration
@@ -101,7 +101,7 @@ namespace TurnManagement {
     class ServiceTurn
 
     class Turn{
-        - day: Date
+        - day: LocalDate
         -startHour: Instant
         -endHour: Instant
     }
@@ -173,11 +173,14 @@ namespace EventManagement {
         -note: String
         -customer: String
         --
+        +setDefaultEvent(event: Event)
+        +addEvent(event: Event
     }
 
     class EventManager{
         --<b>event sender methods</b>--
         --<b>operation methods</b>--
+        + createEvent(startDate: LocalDate)
     }
 
     class EventFrequency{
@@ -195,7 +198,7 @@ namespace EventManagement {
     ' Evento
     class Event {
         - state: String
-        - dateStart: Date
+        - dateStart: LocalDate
         --
         + isActive(): boolean
         + containsService(s:Service): boolean
