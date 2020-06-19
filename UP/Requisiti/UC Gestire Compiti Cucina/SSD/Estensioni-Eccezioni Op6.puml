@@ -44,16 +44,16 @@ loop #e0e0e0
             alt #f3a7c9
                 return ok
             else
-                Chef <- Sistema: **6.a.1**. Il turno si è già concluso
+                Chef <- Sistema: **6a.1**. Il turno si è già concluso
                 destroy Sistema
             else
-                Chef <- Sistema: **6.b.1**. Il turno è segnato come al completo
+                Chef <- Sistema: **6b.1**. Il turno è segnato come al completo
                 destroy Sistema
             else
-                Chef <- Sistema: **6.c.1**. Il compito associato non è stato compilato
+                Chef <- Sistema: **6c.1**. Il compito associato non è stato compilato
                 destroy Sistema
             else
-                Chef <- Sistema: **6.d.1**. Il compito è impostato come da non farsi
+                Chef <- Sistema: **6d.1**. Il compito è impostato come da non farsi
                 destroy Sistema
             end
         else

@@ -60,7 +60,7 @@ loop #e0e0e0
             alt #f3a7c9
                 return ok
             else
-                Chef <- Sistema: **8.a**. servizio annullato o terminato
+                Chef <- Sistema: **8a.1**. servizio annullato o terminato
                 destroy Sistema
                 ||10||
             end
@@ -70,7 +70,7 @@ loop #e0e0e0
             alt #f3a7c9
                 return ok
             else
-                Chef <- Sistema: **8a.1a**. servizio annullato o terminato
+                Chef <- Sistema: **8a.1a.1**. servizio annullato o terminato
                 destroy Sistema
                 ||10||
             end
