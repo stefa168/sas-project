@@ -11,45 +11,48 @@ participant "eventManager.eventReceivers: EventEventReceivers" as eer
 
 UI -> em: cancelEvent(event)
 activate em
-em -> um: getCurrentUser()
-activate um
-em <<-- um: user
-deactivate um
+    em -> um: getCurrentUser()
+    activate um
+        em <<-- um: user
+    deactivate um
 
-alt !user.isOrganizer() || event.getMacroEvent().getOrganizer() != user
-    UI <<-- em: throw UseCaseLogicException
-else
-    em -> ev: cancel()
-    activate ev
-    ev -> ev: this.state = cancel
+    alt !user.isOrganizer() || event.getMacroEvent().getOrganizer() != user
+        UI <<-- em: throw UseCaseLogicException
+    else
+        em -> ev: cancel()
+        activate ev
+            ev -> ev: this.state = cancel
 
-    loop for all service in event.services
-        loop for all task in service.sheet.tasks
-            ev -> task: deleteAllKitchenJobs()
-            activate task
-            loop for all job in task.jobs
-                task -> task: this.deleteKitchenJob(job)
-                note right: La definizione completa di\n//deleteKitchenJob(job)// è nel DSD 6a \ndell' UC Gestire Compiti Cucina
+            loop for all service in event.services
+                loop for all task in service.sheet.tasks
+                    ev -> task: deleteAllKitchenJobs()
+                    activate task
+                    loop for all job in task.jobs
+                        task -> task: this.deleteKitchenJob(job)
+                        note right: La definizione completa di\n//deleteKitchenJob(job)// è nel DSD 6a \ndell' UC Gestire Compiti Cucina
+                    end
+                    ev <<-- task: task
+                    deactivate task
+
+                end
+
+                ev -> sj: clear ()
+                activate sj
+                deactivate sj
             end
-            ev <<-- task: task
-            deactivate task
 
-        end
+        deactivate ev
+        |||
+        em -> em: notifyDeleteEvent(event)
+        activate em
+            loop for all receivers in eventReceivers
+                em -> eer: updateCancelEvent(event)
+                activate eer
+                deactivate eer
+            end
+        deactivate em
+        |||
 
-        ev -> sj: clear ()
-        activate sj
-        deactivate sj
     end
-
-    deactivate ev
-    |||
-    loop for all receivers in eventReceivers
-        em -> eer: updateCancelEvent(event)
-        activate eer
-        deactivate eer
-    end
-    |||
-    deactivate em
-    |||
-end
+deactivate em
 @enduml

@@ -8,60 +8,68 @@ participant "eventManager.eventReceivers: EventEventReceivers" as eer
 
 UI -> em: createEvent(startDate)
 activate em
-em -> um: getCurrentUser()
-activate um
-em <<-- um: user
-deactivate um
+    em -> um: getCurrentUser()
+    activate um
+        em <<-- um: user
+    deactivate um
 
-alt !user.isOrganizer()
-    UI <<-- em: throw UseCaseLogicException
-else startDate.compareTo(LocalDate.now())) < 0
-    UI <<-- em: throw EventException
-else
-    participant "macroEvent: MacroEvent" as maev
-    em -->> maev **: create()
-    activate maev
-    participant "macroEvent.events: ArrayList<Event>" as events
-    maev-->> events**:create()
-    activate events
-    maev <<-- events: events
-    deactivate events
-    maev -> maev: this.events = events
-    em <<-- maev: macroEvent
-    deactivate maev
-
-    em -> maev: addEvent(startDate)
-    activate maev
-    participant "event: Event" as ev
-    maev -->> ev **: create(startDate)
-    activate ev
-    ev->ev: this.startDate = startDate
-    ev -> ev: this.state = active
-    maev <<-- ev: event
-    deactivate ev
-    maev -> events: add(event)
-    activate events
-    deactivate events
-    em <<-- maev: event
-    deactivate maev
-
-
-    em -> maev : setDefaultEvent(event)
-    activate maev
-    alt !macroEvent.events.contains(event)
-        UI <<-- maev: UseCaseLogicException
+    alt !user.isOrganizer()
+        UI <<-- em: throw UseCaseLogicException
+    else startDate.compareTo(LocalDate.now())) < 0
+        UI <<-- em: throw EventException
     else
-        maev <- maev: this.defaultEvent = event
-        em <<-- maev: event
-    end
+        participant "macroEvent: MacroEvent" as maev
+        em -->> maev **: create()
+        activate maev
+            participant "macroEvent.events: ArrayList<Event>" as events
+            maev -->> events**:create()
+            activate events
+                maev <<-- events: events
+            deactivate events
+            maev -> maev: this.events = events
+            em <<-- maev: macroEvent
         deactivate maev
-        loop for all receivers in eventReceivers
-            em -> eer: updateCreateEvent(event)
-            activate eer
-            deactivate eer
-        end
-    UI <<-- em: macroEvent
-    deactivate em
-end
+
+        em -> maev: addEvent(startDate)
+        activate maev
+            participant "event: Event" as ev
+            maev -->> ev **: create(startDate)
+            activate ev
+                ev -> ev: this.startDate = startDate
+                ev -> ev: this.state = programmed
+                maev <<-- ev: event
+            deactivate ev
+            maev -> events: add(event)
+            activate events
+            deactivate events
+            em <<-- maev: event
+        deactivate maev
+
+        em -> ev: event.setState("compiled")
+        activate ev
+            ev -> ev: this.state = newState
+            ev -[hidden]> em
+        deactivate ev
+
+        em -> maev : setDefaultEvent(event)
+        activate maev
+            alt !macroEvent.events.contains(event)
+                UI <<-- maev: UseCaseLogicException
+            else
+                maev <- maev: this.defaultEvent = event
+                em <<-- maev: event
+            end
+        deactivate maev
+
+        em -> em: notifyCreateEvent(event)
+        activate em
+            loop for all receivers in eventReceivers
+                em -> eer: updateCreateEvent(event)
+                activate eer
+                deactivate eer
+            end
+        deactivate em
+        return macroEvent
+    end
 
 @enduml
