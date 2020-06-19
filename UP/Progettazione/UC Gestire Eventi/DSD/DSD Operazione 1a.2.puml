@@ -39,9 +39,7 @@ else
     end
 
     deactivate ev
-
     |||
-
     loop for all receivers in eventReceivers
         em -> eer: updateCancelEvent(event)
         activate eer
