@@ -6,7 +6,7 @@ collections UI
 participant "taskManager: KitchenTaskManager" as tm
 participant "ktr: KitchenTaskEventReceiver" as ktr
 
-UI -> tm: editTask(task, newAmount?, newDuration?)
+UI -> tm: editTask(newAmount?, newDuration?, newToDo?)
 activate tm
 
 participant "task: Task" as task
@@ -14,7 +14,7 @@ participant "task: Task" as task
 alt currentSheet==null
     UI <<-- tm: throw UseCaseLogicException
 else
-    tm -> task: editDetails(newAmount?, newDuration?)
+    tm -> task: editDetails(newAmount?, newDuration?, newToDo?)
     activate task
 
     alt newAmount != null
@@ -23,6 +23,15 @@ else
 
     alt newDuration != null
         task -> task: this.duration = Duration.ofSeconds(newDuration)
+    end
+
+    alt newToDo != null
+        alt this.jobs.count() > 0
+            tm <<-- task: throw UseCaseLogicException
+            UI <<-- tm: throw UseCaseLogicException
+        end
+
+        task -> task: this.toDo = newToDo
     end
 
     tm <<--task: task

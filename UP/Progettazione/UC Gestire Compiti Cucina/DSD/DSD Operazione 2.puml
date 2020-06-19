@@ -24,6 +24,9 @@ else
     participant "task: Task" as t
     ss -->> t**: create(kitchenDuty)
     activate t
+    t -> t: this.amount = 0
+    t -> t: this.estimatedDuration = Duration.ZERO
+    t -> t: this.toDo = true
     ss <<-- t:task
     deactivate t
     

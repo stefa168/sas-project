@@ -45,9 +45,10 @@ namespace KitchenTaskManagement {
     class Task{
         - amount: int
         - estimatedDuration: Duration
+        - toDo: boolean
         --
         + create(kitchenDuty: KitchenDuty)
-        + editDetails(newAmount: int, newDuration: int)
+        + editDetails(newAmount: int, newDuration: int, newToDo: boolean)
         + addKitchenJob(cook: Cook, turn: KitchenTurn, amount: int, estimatedDuration: Duration)
         + deleteKitchenJob(job: KitchenJob)
     }
@@ -73,7 +74,7 @@ namespace KitchenTaskManagement {
     KitchenTaskManager -> "0..n" KitchenTaskReceiver: eventReceivers
     SummarySheet --> "1..n" Task: tasks
     SummarySheet --> "0..n" RecipeManagement.KitchenDuty: extraDuties
-    Task -> "1..n" KitchenJob: jobs
+    Task -> "0..n" KitchenJob: jobs
     Task -left-> "0..1" RecipeManagement.KitchenDuty: optionalDuty
     KitchenJob --> "0..1"  UserManagement.User: cook
     KitchenJob --> "1" TurnManagement.KitchenTurn: turn
