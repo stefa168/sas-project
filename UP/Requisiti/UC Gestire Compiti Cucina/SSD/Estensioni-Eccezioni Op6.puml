@@ -52,6 +52,9 @@ loop #e0e0e0
             else
                 Chef <- Sistema: **6.c.1**. Il compito associato non è stato compilato
                 destroy Sistema
+            else
+                Chef <- Sistema: **6.d.1**. Il compito è impostato come da non farsi
+                destroy Sistema
             end
         else
             Chef -> Sistema: **6a.1**. cancellaIncaricoDiCucina(incarico)

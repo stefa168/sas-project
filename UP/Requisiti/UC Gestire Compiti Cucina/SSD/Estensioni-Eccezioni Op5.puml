@@ -12,33 +12,39 @@ skinparam sequence {
 actor Chef
 participant Sistema
 
-title Gestire compiti della Cucina - UC Base
+title Gestire compiti della Cucina - Operazione 5
 
 Chef -> Sistema: **1**. creaFoglioRiepilogativo(evento, servizio)
 return foglio precompilato
 
-loop #a3daff
-    opt #b6efb6
+loop #e0e0e0
+    opt #e0e0e0
         Chef -> Sistema: **2**. aggiungiMansioneFuoriMenu(mansioneDiCucina)
         return ok
     end
 
-    opt #b6efb6
+    opt #e0e0e0
         Chef -> Sistema: **3**. organizzaCompiti(ordine)
         return compiti organizzati
     end
 
-    opt #b6efb6
+    opt #e0e0e0
         Chef -> Sistema: **4**. consultaTurni()
         return turni
     end
 
     opt #b6efb6
         Chef -> Sistema: **5**. modificaCompito(compito, quantità?, tempoStimato?, daFarsi?)
-        return ok
+        alt #f3a7c9
+            return ok
+        else
+            Chef <- Sistema: **5a.1**. compito ha degli incarichi associati e non è da farsi
+            destroy Sistema
+            ||10||
+        end
     end
 
-    opt #b6efb6
+    opt #e0e0e0
         Chef -> Sistema: **6**. creaIncaricoDiCucina(compito, turno, quantità, tempoStimato)
         return ok
     end
