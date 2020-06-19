@@ -16,7 +16,7 @@ activate um
 em <<-- um: user
 deactivate um
 
-alt !user.isOrganizer() && event.getMacroEvent().getOrganizer() != user
+alt !user.isOrganizer() || event.getMacroEvent().getOrganizer() != user
     UI <<-- em: throw UseCaseLogicException
 else
     em -> ev: cancel()

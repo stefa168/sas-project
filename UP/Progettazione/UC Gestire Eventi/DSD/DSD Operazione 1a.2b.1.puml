@@ -14,14 +14,14 @@ participant "macroEvent.events: ArrayList <Event>" as events
 participant "eventManager.eventReceivers: EventEventReceivers" as eer
 
 
-UI -> em: cancelEvent(event)
+UI -> em: deleteEvent(event)
 activate em
 em -> um: getCurrentUser()
 activate um
 em <<-- um: user
 deactivate um
 
-alt !user.isOrganizer() && event.getMacroEvent().getOrganizer() != user
+alt !user.isOrganizer() || event.getMacroEvent().getOrganizer() != user
     UI <<-- em: throw UseCaseLogicException
 else
     em -> ev: delete()
