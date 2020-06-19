@@ -37,17 +37,17 @@ else
 
     opt #b6efb6
         alt #f3d0ff
-            Chef -> Sistema: **1a.2**. annullaEvento()
+            Chef -> Sistema: **1a.2**. annullaEvento(evento)
             return warning penale
             destroy Sistema
             ||10||
         else
-            Chef -> Sistema: **1a.2a.1**. terminaEvento()
+            Chef -> Sistema: **1a.2a.1**. terminaEvento(evento)
             return ok
             destroy Sistema
             ||10||
         else
-            Chef -> Sistema: **1a.2b.1**. eliminaEvento()
+            Chef -> Sistema: **1a.2b.1**. eliminaEvento(evento)
             alt #f3a7c9
                 return ok
                 destroy Sistema

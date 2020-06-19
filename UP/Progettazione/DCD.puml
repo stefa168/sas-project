@@ -181,6 +181,7 @@ namespace EventManagement {
     class "EventEventReceivers \n {interface}" as EventEventReceivers{
         +<i>updateCreateEvent(ev: Event)</i>
         +<i>updateCancelEvent(ev: Event)</i>
+        +<i>updateDeleteEvent(ev: Event)</i>
     }
 
     class EventManager{
@@ -189,8 +190,11 @@ namespace EventManagement {
         +removeReceiver(er: EventEventReceivers)
         -notifyCreateEvent(ev: Event)
         -notifyCancelEvent(ev: Event)
+        -notifyDeleteEvent(ev: Event)
         --<b>operation methods</b>--
         + createEvent(startDate: LocalDate)
+        + cancelEvent(ev: Event)
+        + deleteEvent(ev: Event)
     }
 
     class EventFrequency{

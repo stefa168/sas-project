@@ -5,9 +5,9 @@ collections UI
 participant "evenManager: EventManager" as em
 participant "userMgr: UserManager" as um
 participant "event: Event" as ev
-participant "service.serviceJobs: ArrayList<serviceJob>" as sj
-participant "task.jobs: ArrayList<kitchenJob>" as kj
-participant "sheet.tasks : ArrayList <Task>" as shta
+participant "task.jobs: ArrayList<KitchenJob>" as kj
+participant "service.serviceJobs: ArrayList<ServiceJob>" as sj
+participant "service.sheet.tasks : ArrayList <Task>" as shta
 participant "event.services : ArrayList <Service>" as evse
 participant "event.macroEvent: MacroEvent" as maev
 participant "macroEvent.events: ArrayList <Event>" as events
@@ -28,33 +28,32 @@ else
     activate ev
 
     loop for all service in event.services
-        loop for all serviceJob in service.serviceJobs
-            ev -> sj: delete (serviceJob)
-            activate sj
-            deactivate sj
-        end
+
         loop for all task in service.sheet.tasks
-            loop for all kitchenJob in task.jobs
-                ev -> kj: delete(kitchenJob)
-                activate kj
-                deactivate kj
-            end
-            |||
-            ev-> shta: delete(task)
-            activate shta
-            deactivate shta
+            ev -> kj: clear()
+            activate kj
+            deactivate kj
         end
-        |||
-        ev-> evse : delete (service)
-        activate evse
-        deactivate evse
+
+        ev -> sj: clear ()
+        activate sj
+        deactivate sj
+
+        ev-> shta: clear()
+        activate shta
+        deactivate shta
     end
+
+    ev-> evse : clear ()
+    activate evse
+    deactivate evse
+
     ev -> maev: delete(this)
     activate maev
     alt event.equals(macroEvent.defaultEvent)
     maev -> maev: this.defaultEvent = null
     end
-    maev -> events: delete(event)
+    maev -> events: remove(event)
     activate events
     deactivate events
 

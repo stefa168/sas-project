@@ -5,8 +5,8 @@ collections UI
 participant "evenManager: EventManager" as em
 participant "userMgr: UserManager" as um
 participant "event: Event" as ev
-participant "service.serviceJobs: ArrayList<serviceJob>" as sj
-participant "task.jobs: ArrayList<kitchenJob>" as kj
+participant "service.serviceJobs: ArrayList<ServiceJob>" as sj
+participant "task.jobs: ArrayList<KitchenJob>" as kj
 participant "eventManager.eventReceivers: EventEventReceivers" as eer
 
 UI -> em: cancelEvent(event)
@@ -24,18 +24,16 @@ else
     ev -> ev: this.state = cancel
 
     loop for all service in event.services
-        loop for all serviceJob in service.serviceJobs
-            ev -> sj: delete (serviceJob)
-            activate sj
-            deactivate sj
-        end
+
         loop for all task in service.sheet.tasks
-            loop for all kitchenJob in task.jobs
-                ev -> kj: delete(kitchenJob)
-                activate kj
-                deactivate kj
-            end
+            ev -> kj: clear()
+            activate kj
+            deactivate kj
         end
+
+        ev -> sj: clear ()
+        activate sj
+        deactivate sj
     end
 
     deactivate ev
