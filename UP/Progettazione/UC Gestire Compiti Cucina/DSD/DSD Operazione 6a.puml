@@ -27,7 +27,7 @@ else
     activate jl
     deactivate jl
 
-    tm <- task: task
+    tm <<-- task: task
     deactivate task
 
     |||
@@ -40,7 +40,7 @@ else
     end
     deactivate tm
 
-    UI <- tm: task
+    UI <<-- tm: task
     deactivate tm
 
 end

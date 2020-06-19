@@ -5,9 +5,9 @@ collections UI
 participant "evenManager: EventManager" as em
 participant "userMgr: UserManager" as um
 participant "event: Event" as ev
-participant "task.jobs: ArrayList<KitchenJob>" as kj
+participant "service.summarySheet: SummarySheet" as ss
+participant "task: Task" as task
 participant "service.serviceJobs: ArrayList<ServiceJob>" as sj
-participant "service.sheet.tasks : ArrayList <Task>" as shta
 participant "event.services : ArrayList <Service>" as evse
 participant "event.macroEvent: MacroEvent" as maev
 participant "macroEvent.events: ArrayList <Event>" as events
@@ -29,19 +29,21 @@ else
 
     loop for all service in event.services
 
-        loop for all task in service.sheet.tasks
-            ev -> kj: clear()
-            activate kj
-            deactivate kj
-        end
+        ev -> ss: deleteAllTasks()
+        activate ss
+            loop for all task in sheet.tasks
+                ss -> task: deleteAllKitchenJobs()
+                activate task
+                note right: La definizione completa di\n//deleteAllKitchenJobs()// è nel DSD 1a.2 \ndell' UC Gestire Eventi
+                ss <<-- task: task
+                deactivate task
+            end
+        ev <<-- ss: summarySheet
+        deactivate ss
 
         ev -> sj: clear ()
         activate sj
         deactivate sj
-
-        ev-> shta: clear()
-        activate shta
-        deactivate shta
     end
 
     ev-> evse : clear ()

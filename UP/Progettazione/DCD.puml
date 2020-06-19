@@ -51,13 +51,16 @@ namespace KitchenTaskManagement {
         + editDetails(newAmount: int, newDuration: int, newToDo: boolean)
         + addKitchenJob(cook: Cook, turn: KitchenTurn, amount: int, estimatedDuration: Duration)
         + deleteKitchenJob(job: KitchenJob)
+        + deleteAllKitchenJobs()
+
     }
 
     ' Foglio Riepilogativo
     class SummarySheet {
         + create(menu: Menu)
         + addExtraDuty(kd: KitchenDuty)
-        + deleteExtraDuty(kd: KitchenDuty)        
+        + deleteExtraDuty(kd: KitchenDuty)
+        + deleteAllTasks()
     }
 
     ' Incarico
