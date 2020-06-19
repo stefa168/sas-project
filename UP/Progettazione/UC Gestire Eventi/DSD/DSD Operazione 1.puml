@@ -49,17 +49,17 @@ else
     em -> maev : setDefaultEvent(event)
     activate maev
     alt !macroEvent.events.contains(event)
-    UI <<-- maev: UseCaseLogicException
+        UI <<-- maev: UseCaseLogicException
     else
-    maev <- maev: this.defaultEvent = event
-    em <<-- maev: event
-    deactivate maev
-    loop for all receivers in eventReceivers
+        maev <- maev: this.defaultEvent = event
+        em <<-- maev: event
+        deactivate maev
+        loop for all receivers in eventReceivers
             em -> eer: updateCreateEvent(event)
             activate eer
             deactivate eer
+        end
     end
-
     UI <<-- em: macroEvent
     deactivate em
 end
