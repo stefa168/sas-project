@@ -81,18 +81,17 @@ activate em
             end
         em <<-- maev: cancelEvents
         deactivate maev
-        |||
-        em -> em: notifyCancelEvent(event)
-        activate em
-            loop for all event in cancelEvents
-                loop for all receivers in eventReceivers
-                    em -> eer: updateCancelEvent(event)
-                    activate eer
-                    deactivate eer
-                end
+        loop for all event in cancelEvents
+            em -> em: notifyCancelEvent(event)
+            activate em
+            loop for all receivers in eventReceivers
+                em -> eer: updateCancelEvent(event)
+                activate eer
+                deactivate eer
             end
-        deactivate em
+            deactivate em
         |||
+        end
 
     end
 deactivate em
