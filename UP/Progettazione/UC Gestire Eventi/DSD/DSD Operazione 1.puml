@@ -45,22 +45,6 @@ activate em
             em <<-- maev: event
         deactivate maev
 
-        em -> ev: event.setState("compiled")
-        activate ev
-            ev -> ev: this.state = newState
-            ev -[hidden]> em
-        deactivate ev
-
-        em -> maev : setDefaultEvent(event)
-        activate maev
-            alt !macroEvent.events.contains(event)
-                UI <<-- maev: UseCaseLogicException
-            else
-                maev <- maev: this.defaultEvent = event
-                em <<-- maev: event
-            end
-        deactivate maev
-
         em -> em: notifyCreateEvent(event)
         activate em
             loop for all receivers in eventReceivers

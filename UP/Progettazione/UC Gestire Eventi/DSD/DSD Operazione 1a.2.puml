@@ -9,6 +9,7 @@ participant "event: Event" as event
 participant "task: Task" as task
 participant "service.serviceJobs: ArrayList<ServiceJob>" as sj
 participant "ev: Event" as ev
+participant "cancelEvents: ArrayList <Event>" as evcanc
 participant "eventManager.eventReceivers: EventEventReceivers" as eer
 
 UI -> em: cancelEvent(event, strategy)
@@ -18,13 +19,16 @@ activate em
         em <<-- um: user
     deactivate um
 
-    alt !user.isOrganizer() || event.getMacroEvent().getOrganizer() != user
+    alt !user.isOrganizer() || event.getMacroEvent().getOrganizer() != user || !(event.state.equals("active")
         UI <<-- em: throw UseCaseLogicException
     else
 
         em -> maev: cancel(event, strategy)
         activate maev
-
+            maev -->> evcanc**: create()
+            activate evcanc
+            maev <<-- evcanc: cancelEvents
+            deactivate evcanc
 
             maev -> event: cancel()
             activate event
@@ -49,32 +53,43 @@ activate em
             end
             maev <<-- event: event
             deactivate event
+            maev -> evcanc: add(event)
+            activate evcanc
+            deactivate evcanc
             |||
             alt strategy.equals("All")
                 loop for all ev in macroEvent.events && !ev.equals(event)
                     maev -> ev: cancel()
-                    note right: La definizione di//cancel()// usata qua e sotto \n fa riferimento a quella sopra definita
+                    note right: La definizione di //cancel()// usata qua e sotto \n fa riferimento a quella sopra definita && (event.state.equals("active")
                     activate ev
                     maev <<-- ev: ev
                     deactivate ev
+                    maev -> evcanc: add(ev)
+                    activate evcanc
+                    deactivate evcanc
                 end
             else strategy.equals ("AllNext")
-                loop for all ev in macroEvent.events && !ev.equals(event) && ev.getStartDate().compareTo(event.getStartDate()) > 0
+                loop for all ev in macroEvent.events && !ev.equals(event) && ev.getStartDate().compareTo(event.getStartDate()) > 0 && (event.state.equals("active")
                     maev -> ev: cancel()
                     activate ev
                     maev <<-- ev: ev
                     deactivate ev
+                    maev -> evcanc: add(ev)
+                    activate evcanc
+                    deactivate evcanc
                 end
             end
-        em <<-- maev: macroEvent
+        em <<-- maev: cancelEvents
         deactivate maev
         |||
-        em -> em: notifyDeleteEvent(event)
+        em -> em: notifyCancelEvent(event)
         activate em
-            loop for all receivers in eventReceivers
-                em -> eer: updateCancelEvent(event)
-                activate eer
-                deactivate eer
+            loop for all event in cancelEvents
+                loop for all receivers in eventReceivers
+                    em -> eer: updateCancelEvent(event)
+                    activate eer
+                    deactivate eer
+                end
             end
         deactivate em
         |||
