@@ -1,0 +1,140 @@
+@startuml
+skinparam Style strictuml
+
+collections UI
+participant "eventManager: EventManager" as em
+participant "baseEvent: Event" as ev
+participant "userMgr: UserManager" as um
+participant "baseEvent.macroEvent: MacroEvent" as maev
+participant "event: Event" as event_iterator
+participant "frequency: Frequency" as freq
+participant "frequencies: ArrayList<LocalDate>" as frequencies
+participant "frequency.condition: FrequencyCondition" as condition
+participant "addedEvents: ArrayList<Event>" as addedEvents
+participant "removedEvents: ArrayList<Event>" as removedEvents
+participant "newEvent: Event" as newEvent
+participant "newService: Service" as newService
+participant "eventManager.eventReceivers: EventEventReceivers" as eer
+
+UI -> em: editEventFrequency(baseEvent, frequency, editFrom)
+
+activate em
+    em -> um: getCurrentUser()
+    activate um
+        em <<-- um: user
+    deactivate um
+
+    alt !user.isOrganizer() || baseEvent.getMacroEvent().getOrganizer() != user ||\n !(baseEvent.state.equals("programmed") || baseEvent.state.equals("active")) ||\n !baseEvent.macroEvent.events.contains(baseEvent)
+        UI <<-- em: throw UseCaseLogicException
+    else
+        em -> maev: changeFrequency(baseEvent, frequency, editFrom)
+        activate maev
+
+            maev -> maev: this.frequency = frequency
+
+            maev -> freq: getDates(macroEvent, editFrom)
+            note right: //getDates()// genera una lista con tutte\nle date delle occorrenze dell'evento\nche devono ancora tenersi
+            activate freq
+                freq -> frequencies **: create()
+                activate frequencies
+                return frequencies
+
+                freq -> frequencies: add(editFrom)
+                activate frequencies
+                deactivate frequencies
+
+                loop frequency.stopCondition.shouldContinue(macroEvent, editFrom, frequencies)
+                    freq -> condition: nextDate(frequencies.get(frequencies.length()-1))
+                    activate condition
+                    return nextDate
+
+                    freq->frequencies: add(nextDate)
+                    activate frequencies
+                    deactivate frequencies
+                end
+            return frequencies
+
+            maev -->> removedEvents**: create()
+            activate removedEvents
+            return removedEvents
+
+            loop for all event in macroEvent.events
+                alt event.state.equals("programmed") && event.dateStart >= editFrom
+                    maev -> event_iterator: delete()
+                    note right: La definizione completa di //delete()// è\nnel DSD 1a.2b.1 dell'UC Gestire Eventi
+                    activate event_iterator
+                    deactivate event_iterator
+                    maev -> removedEvents: add(event)
+                    activate removedEvents
+                    deactivate removedEvents
+                end
+            end
+
+            maev -->> addedEvents**: create()
+            activate addedEvents
+            return addedEvents
+
+            loop for all date in frequencies
+                maev -> maev: addEvent(date)
+                note right: La definizione completa di //addEvent()// è\nnel DSD 1 dell'UC Gestire Eventi
+                activate maev
+                    maev -[hidden]> newEvent **
+                return newEvent
+
+                maev -> maev: this.events.add(newEvent)
+
+                maev -> addedEvents: add(newEvent)
+                activate addedEvents
+                deactivate addedEvents
+
+                loop for all service in macroEvent.defaultEvent.services
+                    maev -> newEvent: cloneService(service)
+
+                    activate newEvent
+                        newEvent -> newEvent: addService(service.offsetDay, service.startHour, service.endHour,\n\t\t service.diners, service.place, service.typology)
+                        note right: La definizione completa di //addService()// è\nnel DSD 5 dell'UC Gestire Eventi
+                        activate newEvent
+                            newEvent -[hidden]> newService **
+                        return newService
+
+                        newEvent -> newService : clonePatches(service)
+                        activate newService
+                            loop for all patch in service.patches
+                                newService -> newService: patches.add(patch.clone())
+                            end
+                        deactivate newService
+
+                        newEvent -> newService: assignChef(service.assignedChef)
+                        activate newService
+                            newService -> newService: this.assignedChef = chef
+                            newEvent <[hidden]- newService
+                        deactivate newService
+                    deactivate newEvent
+                end
+            end
+
+        return addedEvents, removedEvents
+
+        loop for all addedEvent in addedEvents
+            em -> em: notifyCreateEvent(addedEvent)
+            activate em
+                loop for all receivers in eventReceivers
+                    em -> eer: updateCreateEvent(addedEvent)
+                    activate eer
+                    deactivate eer
+                end
+            deactivate em
+        end
+        loop for all removedEvent in removedEvents
+            em -> em: notifyRemoveEvent(removedEvent)
+            activate em
+                loop for all receivers in eventReceivers
+                    em -> eer: updateCreateEvent(removedEvent)
+                    activate eer
+                    deactivate eer
+                end
+            deactivate em
+        end
+    end
+deactivate em
+@enduml

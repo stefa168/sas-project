@@ -180,7 +180,7 @@ namespace EventManagement {
         --
         +setDefaultEvent(event: Event)
         +addEvent(startDate: LocalDate)
-        +changeFrequency(frequency: EventFrequency)
+        +changeFrequency(baseEvent: Event, frequency: EventFrequency, editFrom: LocalDate)
     }
 
     class "EventEventReceivers \n {interface}" as EventEventReceivers{
@@ -202,14 +202,65 @@ namespace EventManagement {
         + createEvent(startDate: LocalDate)
         + cancelEvent(ev: Event)
         + deleteEvent(ev: Event)
-        + editEventDetails(event: Event, frequency: EventFrequency, startDate: LocalDate)
+        + editEventFrequency(baseEvent: Event, frequency: EventFrequency, editFrom: LocalDate)
     }
 
-    class EventFrequency{
-        -offsetGiorniOccorrenza: int
-        -numeroOccorrenzePreviste: int
-        -numeroOccorrenzeAvvenute: int
+    class EventFrequency {
+        --
+        + getDates(macroEvent: MacroEvent, baseDate: LocalDate): ArrayList<LocalDate>
     }
+
+    class "FrequencyCondition\n{interface}" as FrequencyCondition {
+        - baseFrequency: int
+        --
+        + <i>nextDate(from: LocalDate): LocalDate</i>
+    }
+
+    class DailyFrequency {
+        + nextDate(from: LocalDate): LocalDate
+    }
+
+    class WeeklyFrequency {
+        - weekdays: List<String>
+        --
+        + nextDate(from: LocalDate): LocalDate
+    }
+
+    class MonthlyFrequency {
+        + nextDate(from: LocalDate): LocalDate
+    }
+
+    class YearlyFrequency {
+        + nextDate(from: LocalDate): LocalDate
+    }
+
+    DailyFrequency -|> FrequencyCondition
+    WeeklyFrequency -|> FrequencyCondition
+    MonthlyFrequency -|> FrequencyCondition
+    YearlyFrequency -|> FrequencyCondition
+
+    EventFrequency -> "1" FrequencyCondition: condition
+
+    class "FrequencyStopCondition\n{interface}" as FrequencyStopCondition {
+        + <i>shouldContinue(macroEvent: MacroEvent, baseDate: LocalDate, newDates: ArrayList<LocalDate>): boolean</i>
+    }
+
+    class ForNTimes {
+        - wantedOccurrencesCount: int
+        --
+        + shouldContinue(macroEvent: MacroEvent, baseDate: LocalDate, newDates: ArrayList<LocalDate>): boolean
+    }
+
+    class UntilDate {
+        - endDate: LocalDate
+        --
+        + shouldContinue(macroEvent: MacroEvent, baseDate: LocalDate, newDates: ArrayList<LocalDate>): boolean
+    }
+
+    ForNTimes -|> FrequencyStopCondition
+    UntilDate -|> FrequencyStopCondition
+
+    EventFrequency -> "1" FrequencyStopCondition: stopCondition
 
     class Patch
 
