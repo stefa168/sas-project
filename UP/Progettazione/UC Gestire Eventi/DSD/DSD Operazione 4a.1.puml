@@ -3,7 +3,6 @@ skinparam Style strictuml
 
 collections UI
 participant "eventManager: EventManager" as em
-participant "baseEvent: Event" as ev
 participant "userMgr: UserManager" as um
 participant "baseEvent.macroEvent: MacroEvent" as maev
 participant "event: Event" as event_iterator
