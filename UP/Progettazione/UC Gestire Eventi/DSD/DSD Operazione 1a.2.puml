@@ -58,9 +58,9 @@ activate em
             deactivate evcanc
             |||
             alt strategy.equals("All")
-                loop for all ev in macroEvent.events && !ev.equals(event)
+                loop for all ev in macroEvent.events && !ev.equals(event) && (event.state.equals("active")
                     maev -> ev: cancel()
-                    note right: La definizione di //cancel()// usata qua e sotto \n fa riferimento a quella sopra definita && (event.state.equals("active")
+                    note right: La definizione di //cancel()// usata qua e sotto \nfa riferimento a quella sopra definita
                     activate ev
                     maev <<-- ev: ev
                     deactivate ev
