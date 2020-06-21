@@ -276,8 +276,10 @@ namespace EventManagement {
         + isActive(): boolean
         + containsService(s:Service): boolean
         + editDetails(startDate: LocalDate)
+        + changeFrequency(baseEvent: Event, frequency: EventFrequency, editFromDate: LocalDate)
         + delete()
     }
+
     Event --> "1..n" Service: "services"
     Event -left> "1" UserManagement.User: "assignedChef"
     Service -up> "0..1" MenuManagement.Menu: menu
