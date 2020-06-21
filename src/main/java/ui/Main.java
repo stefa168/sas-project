@@ -42,7 +42,7 @@ public class Main {
     }
 
     public void startMenuManagement() {
-        CatERing.getInstance().getUserManager().fakeLogin("Lidia");
+        CatERing.getInstance().getUserManager().fakeLogin("Tony");
 
         menuManagementPaneController.initialize();
         paneContainer.getChildren().remove(startPane);

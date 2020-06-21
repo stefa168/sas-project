@@ -56,10 +56,6 @@ else
                Chef <- Sistema: **1a.2b.1a.1**. evento confermato
                destroy Sistema
                ||10||
-            else
-                Chef <- Sistema: **1a.2b.1b.1**. evento di default
-                destroy Sistema
-                ||10||
             end
             ||10||
         end

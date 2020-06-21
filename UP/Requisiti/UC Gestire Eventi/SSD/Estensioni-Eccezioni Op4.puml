@@ -46,7 +46,7 @@ loop #e0e0e0
                 ||10||
             end
         else
-            Chef -> Sistema: **4a.1**. impostaEventoDefault(evento)
+            Chef -> Sistema: **4a.1**. modificaPeriodicità(evento)
             return ok
     end
 
