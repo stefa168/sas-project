@@ -49,14 +49,14 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **7**. confermaMenu(menu)
+        Chef -> Sistema: **7**. confermaMenuServizio(servizio)
         return ok
         ||10||
     end
 
     opt #b6efb6
         alt #f3d0ff
-            Chef -> Sistema: **8**. assegnaPersonale(dipendente, turno, ruolo?)
+            Chef -> Sistema: **8**. assegnaPersonale(dipendente, turnoDiServizio, ruolo?)
             alt #f3a7c9
                 return ok
             else
@@ -66,7 +66,7 @@ loop #e0e0e0
             end
             ||10||
         else
-            Chef -> Sistema: **8a.1**. rimuoviPersonale(dipendente, turno)
+            Chef -> Sistema: **8a.1**. rimuoviPersonale(dipendente, turnoDiServizio)
             alt #f3a7c9
                 return ok
             else

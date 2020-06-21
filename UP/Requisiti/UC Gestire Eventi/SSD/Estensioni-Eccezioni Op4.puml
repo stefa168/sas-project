@@ -32,7 +32,7 @@ loop #e0e0e0
 
     opt #b6efb6
         alt #f3d0ff
-            Chef -> Sistema: **4**. modificaDettagliEvento(periodicità?, dataInizio?, cliente?)
+            Chef -> Sistema: **4**. modificaDettagliEvento(evento, dataInizio)
             alt #f3a7c9
                 return ok
                 ||10||
@@ -46,7 +46,7 @@ loop #e0e0e0
                 ||10||
             end
         else
-            Chef -> Sistema: **4a.1**. modificaPeriodicità(evento)
+            Chef -> Sistema: **4a.1**. modificaPeriodicità(eventoBase, periodicità, dataPartenza)
             return ok
     end
 

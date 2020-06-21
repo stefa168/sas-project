@@ -50,7 +50,7 @@ loop #e0e0e0
 
     opt #b6efb6
         alt #f3d0ff
-            Chef -> Sistema: **7**. confermaMenuServizio(servizio)
+            Chef -> Sistema: **7**. confermaMenuServizio(evento, servizio)
             alt #f3a7c9
                 return ok
                 ||10||
@@ -68,7 +68,7 @@ loop #e0e0e0
                 ||10||
             end
         else
-            Chef -> Sistema: **7a.1**. proponiModificaMenu(menu, modifica)
+            Chef -> Sistema: **7a.1**. proponiModificaMenu(evento, servizio, menu, proposta, strategia)
             alt #f3a7c9
                 return ok
                 ||10||
