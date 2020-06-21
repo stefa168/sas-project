@@ -5,25 +5,25 @@ collections UI
 participant "evenManager: EventManager" as em
 participant "userMgr: UserManager" as um
 participant "macroEvent: MacroEvent" as maev
-participant "event: Event" as event
+participant "currentEvent: Event" as event
 participant "task: Task" as task
 participant "service.serviceJobs: ArrayList<ServiceJob>" as sj
 participant "ev: Event" as ev
 participant "cancelEvents: ArrayList <Event>" as evcanc
 participant "eventManager.eventReceivers: EventEventReceivers" as eer
 
-UI -> em: cancelEvent(event, strategy)
+UI -> em: cancelEvent(strategy)
 activate em
     em -> um: getCurrentUser()
     activate um
         em <<-- um: user
     deactivate um
 
-    alt !user.isOrganizer() || event.getMacroEvent().getOrganizer() != user || !(event.state.equals("active")
+    alt !user.isOrganizer() || currentEvent.getMacroEvent().getOrganizer() != user || !(event.state.equals("active")
         UI <<-- em: throw UseCaseLogicException
     else
 
-        em -> maev: cancel(event, strategy)
+        em -> maev: cancel(currentEvent, strategy)
         activate maev
             maev -->> evcanc**: create()
             activate evcanc
@@ -34,7 +34,7 @@ activate em
             activate event
             event -> event: this.state = cancel
 
-            loop for all service in event.services
+            loop for all service in currentEvent.services
                 loop for all task in service.sheet.tasks
                     event -> task: deleteAllKitchenJobs()
                     activate task
@@ -51,14 +51,14 @@ activate em
                 activate sj
                 deactivate sj
             end
-            maev <<-- event: event
+            maev <<-- event: currentEvent
             deactivate event
-            maev -> evcanc: add(event)
+            maev -> evcanc: add(currentEvent)
             activate evcanc
             deactivate evcanc
             |||
             alt strategy.equals("All")
-                loop for all ev in macroEvent.events && !ev.equals(event) && (event.state.equals("active")
+                loop for all ev in macroEvent.events && !ev.equals(currentEvent) && ev.state.equals("active")
                     maev -> ev: cancel()
                     note right: La definizione di //cancel()// usata qua e sotto \nfa riferimento a quella sopra definita
                     activate ev
@@ -69,7 +69,7 @@ activate em
                     deactivate evcanc
                 end
             else strategy.equals ("AllNext")
-                loop for all ev in macroEvent.events && !ev.equals(event) && ev.getStartDate().compareTo(event.getStartDate()) > 0 && (event.state.equals("active")
+                loop for all ev in macroEvent.events && !ev.equals(currentEvent) && ev.getStartDate().compareTo(currentEvent.getStartDate()) > 0 && ev.state.equals("active")
                     maev -> ev: cancel()
                     activate ev
                     maev <<-- ev: ev

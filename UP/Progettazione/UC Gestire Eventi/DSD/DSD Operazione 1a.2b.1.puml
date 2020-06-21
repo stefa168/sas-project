@@ -6,7 +6,7 @@ participant "eventManager: EventManager" as em
 participant "userMgr: UserManager" as um
 participant "macroEvent: MacroEvent" as macroEvent
 participant "deleteEvents: ArrayList <Event>" as evdel
-participant "event: Event" as ev
+participant "currentEvent: Event" as ev
 participant "ev: Event" as evstrg
 participant "service.summarySheet: SummarySheet" as ss
 participant "task: Task" as task
@@ -17,18 +17,18 @@ participant "macroEvent.events: ArrayList <Event>" as events
 participant "eventManager.eventReceivers: EventEventReceivers" as eer
 
 
-UI -> em: deleteEvent(event, strategy)
+UI -> em: deleteEvent(strategy)
 activate em
     em -> um: getCurrentUser()
     activate um
         em <<-- um: user
     deactivate um
 
-    alt !user.isOrganizer() || event.getMacroEvent().getOrganizer() != user  || !(event.state.equals("programmed") )
+    alt !user.isOrganizer() || currentEvent.getMacroEvent().getOrganizer() != user  || !(event.state.equals("programmed") )
         UI <<-- em: throw UseCaseLogicException
     else
 
-        em -> macroEvent: delete(event, strategy)
+        em -> macroEvent: delete(currentEvent, strategy)
         activate macroEvent
             macroEvent -->> evdel**: create()
             activate evdel
@@ -38,7 +38,7 @@ activate em
             macroEvent -> ev: delete()
 
             activate ev
-                loop for all service in event.services
+                loop for all service in currentEvent.services
                     ev -> ss: deleteAllTasks()
                     activate ss
                         loop for all task in sheet.tasks
@@ -58,16 +58,19 @@ activate em
                 ev-> evse : clear ()
                 activate evse
                 deactivate evse
-                macroEvent <<-- ev: event
+                macroEvent <<-- ev: currentEvent
             deactivate ev
 
-            macroEvent -> events: remove(event)
+            macroEvent -> evdel: add(currentEvent)
+            activate evdel
+            deactivate evdel
+            macroEvent -> events: remove(currentEvent)
             activate events
             deactivate events
             |||
 
             alt strategy.equals("All")
-                loop for all ev in macroEvent.events && !ev.equals(event) && event.state.equals("programmed")
+                loop for all ev in macroEvent.events && !ev.equals(currentEvent) && ev.state.equals("programmed")
                     macroEvent -> evstrg: delete()
                     note right: La definizione di //delete()// usata qua e sotto \n fa riferimento a quella sopra definita
                     activate evstrg
@@ -81,7 +84,7 @@ activate em
                     deactivate events
                 end
             else strategy.equals ("AllNext")
-                loop for all ev in macroEvent.events && !ev.equals(event) && ev.getStartDate().compareTo(event.getStartDate()) > 0 && event.state.equals("programmed")
+                loop for all ev in macroEvent.events && !ev.equals(currentEvent) && ev.getStartDate().compareTo(currentEvent.getStartDate()) > 0 && ev.state.equals("programmed")
                     macroEvent -> evstrg: delete()
                     activate evstrg
                         macroEvent <<-- evstrg: ev
