@@ -24,7 +24,7 @@ activate em
         em <<-- um: user
     deactivate um
 
-    alt !user.isOrganizer() || currentEvent.getMacroEvent().getOrganizer() != user  || !(event.state.equals("programmed") )
+    alt !user.isOrganizer() || !(event.state.equals("programmed") )
         UI <<-- em: throw UseCaseLogicException
     else
 

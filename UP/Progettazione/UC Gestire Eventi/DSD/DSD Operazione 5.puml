@@ -19,7 +19,7 @@ activate em
         em <<-- um: user
     deactivate um
 
-    alt !user.isOrganizer() || baseEvent.getMacroEvent().getOrganizer() != user
+    alt !user.isOrganizer()
         UI <<-- em: throw UseCaseLogicException
     else
         em -> ev: addService(startOffset, startHour, endHour, diners, place, details)

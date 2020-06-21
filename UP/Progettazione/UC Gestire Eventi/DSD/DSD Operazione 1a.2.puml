@@ -19,7 +19,7 @@ activate em
         em <<-- um: user
     deactivate um
 
-    alt !user.isOrganizer() || currentEvent.getMacroEvent().getOrganizer() != user || !(event.state.equals("active")
+    alt !user.isOrganizer() || !(event.state.equals("active")
         UI <<-- em: throw UseCaseLogicException
     else
 
@@ -69,7 +69,7 @@ activate em
                     deactivate evcanc
                 end
             else strategy.equals ("AllNext")
-                loop for all ev in macroEvent.events && !ev.equals(currentEvent) && ev.getStartDate().compareTo(currentEvent.getStartDate()) > 0 && ev.state.equals("active")
+                loop for all ev in macroEvent.events && !ev.equals(currentEvent) && ev.getStartDate().compareTo(currentEvent.getStartDate()) > 0 && currentEvent.state.equals("active")
                     maev -> ev: cancel()
                     activate ev
                     maev <<-- ev: ev

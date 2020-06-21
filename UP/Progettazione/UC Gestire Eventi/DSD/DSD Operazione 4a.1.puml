@@ -23,7 +23,7 @@ activate em
         em <<-- um: user
     deactivate um
 
-    alt !user.isOrganizer() || baseEvent.getMacroEvent().getOrganizer() != user ||\n !(baseEvent.state.equals("programmed") || baseEvent.state.equals("active")) ||\n !baseEvent.macroEvent.events.contains(baseEvent)
+    alt !user.isOrganizer() ||\n !(baseEvent.state.equals("programmed") || baseEvent.state.equals("active")) ||\n !baseEvent.macroEvent.events.contains(baseEvent)
         UI <<-- em: throw UseCaseLogicException
     else
         em -> maev: changeFrequency(baseEvent, frequency, editFromDate)
