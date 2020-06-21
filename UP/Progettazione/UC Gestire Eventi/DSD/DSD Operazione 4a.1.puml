@@ -15,7 +15,7 @@ participant "newEvent: Event" as newEvent
 participant "newService: Service" as newService
 participant "eventManager.eventReceivers: EventEventReceivers" as eer
 
-UI -> em: editEventFrequency(baseEvent, frequency, editFrom)
+UI -> em: editEventFrequency(baseEvent, frequency, editFromDate)
 
 activate em
     em -> um: getCurrentUser()
@@ -26,23 +26,23 @@ activate em
     alt !user.isOrganizer() || baseEvent.getMacroEvent().getOrganizer() != user ||\n !(baseEvent.state.equals("programmed") || baseEvent.state.equals("active")) ||\n !baseEvent.macroEvent.events.contains(baseEvent)
         UI <<-- em: throw UseCaseLogicException
     else
-        em -> maev: changeFrequency(baseEvent, frequency, editFrom)
+        em -> maev: changeFrequency(baseEvent, frequency, editFromDate)
         activate maev
 
             maev -> maev: this.frequency = frequency
 
-            maev -> freq: getDates(macroEvent, editFrom)
+            maev -> freq: getDates(macroEvent, editFromDate)
             note right: //getDates()// genera una lista con tutte\nle date delle occorrenze dell'evento\nche devono ancora tenersi
             activate freq
                 freq -> frequencies **: create()
                 activate frequencies
                 return frequencies
 
-                freq -> frequencies: add(editFrom)
+                freq -> frequencies: add(editFromDate)
                 activate frequencies
                 deactivate frequencies
 
-                loop frequency.stopCondition.shouldContinue(macroEvent, editFrom, frequencies)
+                loop frequency.stopCondition.shouldContinue(macroEvent, editFromDate, frequencies)
                     freq -> condition: nextDate(frequencies.get(frequencies.length()-1))
                     activate condition
                     return nextDate
@@ -58,7 +58,7 @@ activate em
             return removedEvents
 
             loop for all event in macroEvent.events
-                alt event.state.equals("programmed") && event.dateStart >= editFrom
+                alt event.state.equals("programmed") && event.dateStart >= editFromDate
                     maev -> event_iterator: delete()
                     note right: La definizione completa di //delete()// è\nnel DSD 1a.2b.1 dell'UC Gestire Eventi
                     activate event_iterator
