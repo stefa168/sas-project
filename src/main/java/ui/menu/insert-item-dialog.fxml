@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="141.0" prefWidth="367.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.menu.InsertItemDialog">
+   <bottom>
+      <FlowPane alignment="CENTER" hgap="5.0" prefHeight="0.0" prefWidth="409.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="insertButton" disable="true" mnemonicParsing="false" onAction="#aggiungiButtonPressed" text="Aggiungi" />
+            <Button mnemonicParsing="false" onAction="#annullaButtonPressed" text="Annulla" />
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
+      </FlowPane>
+   </bottom>
+   <center>
+      <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="5.0" BorderPane.alignment="CENTER_LEFT">
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
+         <children>
+            <ComboBox fx:id="recipeCombo" onAction="#recipeComboSelection" prefHeight="27.0" prefWidth="469.0" />
+            <CheckBox fx:id="descCheck" disable="true" mnemonicParsing="false" onAction="#descCheckSelection" text="Specifica un testo diverso" />
+            <TextField fx:id="descField" disable="true" prefHeight="27.0" prefWidth="374.0" promptText="(inserisci un testo per la voce)" />
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

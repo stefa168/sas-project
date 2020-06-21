@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
@@ -11,30 +12,57 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="457.0" prefWidth="527.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.menu.MenuContent">
+<BorderPane prefHeight="457.0" prefWidth="748.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.menu.MenuContent">
    <top>
-      <Label fx:id="titleLabel" alignment="TOP_LEFT" prefHeight="17.0" prefWidth="551.0" text="Titolo del menu" BorderPane.alignment="CENTER_LEFT">
-         <font>
-            <Font size="21.0" />
-         </font>
+      <BorderPane nodeOrientation="LEFT_TO_RIGHT" BorderPane.alignment="CENTER_LEFT">
          <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </BorderPane.margin>
-      </Label>
+         <center>
+            <Label fx:id="titleLabel" alignment="TOP_LEFT" prefHeight="17.0" prefWidth="551.0" text="Titolo del menu" BorderPane.alignment="CENTER_LEFT">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+         </center>
+         <right>
+            <FlowPane alignment="CENTER" hgap="5.0" prefHeight="60.0" prefWidth="236.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#editTitleButtonPressed" text="Edit Title" />
+                  <Button mnemonicParsing="false" onAction="#editFeaturesButtonPressed" text="Features" />
+                  <Button mnemonicParsing="false" onAction="#eventInfoButtonPressed" text="Events Info" />
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+               <padding>
+                  <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+               </padding>
+            </FlowPane>
+         </right>
+      </BorderPane>
    </top>
    <bottom>
-      <FlowPane alignment="CENTER" prefHeight="46.0" prefWidth="527.0" BorderPane.alignment="CENTER">
+      <FlowPane alignment="CENTER" hgap="5.0" prefHeight="39.0" prefWidth="517.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#okButtonPressed" text="Ok">
+            <Button mnemonicParsing="false" onAction="#publishButtonPressed" text="Pubblica">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#exitButtonPressed" text="Esci">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
          </children>
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
       </FlowPane>
    </bottom>
    <center>
-      <GridPane BorderPane.alignment="CENTER">
+      <GridPane fx:id="centralPane" BorderPane.alignment="CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -55,12 +83,27 @@
                   </Label>
                </top>
                <center>
-                  <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                  <BorderPane BorderPane.alignment="CENTER">
+                     <center>
+                        <ListView fx:id="sectionList" prefHeight="200.0" prefWidth="200.0" />
+                     </center>
+                     <bottom>
+                        <ToggleButton fx:id="freeItemsToggle" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#freeItemsToggleChanged" text="Vedi/Modifica voci libere" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </BorderPane.margin>
+                        </ToggleButton>
+                     </bottom>
+                  </BorderPane>
                </center>
                <bottom>
-                  <FlowPane alignment="CENTER" prefHeight="38.0" prefWidth="264.0" BorderPane.alignment="CENTER">
+                  <FlowPane alignment="CENTER" hgap="5.0" prefHeight="38.0" prefWidth="264.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button mnemonicParsing="false" text="To do" />
+                        <Button mnemonicParsing="false" onAction="#addSectionPressed" text="+" />
+                        <Button fx:id="deleteSectionButton" disable="true" mnemonicParsing="false" onAction="#deleteSectionButtonPressed" text="–" />
+                        <Button fx:id="editSectionButton" disable="true" mnemonicParsing="false" onAction="#editSectionButtonPressed" text="Modifica" />
+                        <Button fx:id="upSectionButton" disable="true" mnemonicParsing="false" onAction="#upSectionPressed" text="Up" />
+                        <Button fx:id="downSectionButton" disable="true" mnemonicParsing="false" onAction="#downSectionPressed" text="Down" />
                      </children>
                   </FlowPane>
                </bottom>
@@ -71,9 +114,9 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </BorderPane>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #aaaaaa; -fx-border-width: 1;" GridPane.columnIndex="1">
+            <BorderPane fx:id="itemsPane" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #aaaaaa; -fx-border-width: 1;" GridPane.columnIndex="1">
                <top>
-                  <Label prefHeight="17.0" prefWidth="272.0" text="Voci:" BorderPane.alignment="CENTER_LEFT">
+                  <Label fx:id="itemsTitle" prefHeight="17.0" prefWidth="272.0" text="Voci:" BorderPane.alignment="CENTER_LEFT">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -83,13 +126,21 @@
                   </Label>
                </top>
                <center>
-                  <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                  <ListView fx:id="itemsList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                </center>
                <bottom>
-                  <FlowPane alignment="CENTER" prefHeight="38.0" prefWidth="264.0" BorderPane.alignment="CENTER">
+                  <FlowPane alignment="CENTER" hgap="5.0" prefHeight="38.0" prefWidth="264.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button mnemonicParsing="false" text="To do" />
+                        <Button fx:id="addItemButton" disable="true" mnemonicParsing="false" onAction="#addItemPressed" text="+" />
+                        <Button fx:id="deleteItem" disable="true" mnemonicParsing="false" onAction="#deleteItemPressed" text="–" />
+                        <Button fx:id="upItemButton" disable="true" mnemonicParsing="false" onAction="#upItemPressed" text="Up" />
+                        <Button fx:id="downItemButton" disable="true" mnemonicParsing="false" onAction="#downItemPressed" text="Down" />
+                        <Button fx:id="spostaItemButton" disable="true" mnemonicParsing="false" onAction="#spostaItemPressed" text="Sposta" />
+                        <Button fx:id="modificaItemButton" disable="true" mnemonicParsing="false" onAction="#modificaItemPressed" text="Modifica" />
                      </children>
+                     <BorderPane.margin>
+                        <Insets />
+                     </BorderPane.margin>
                   </FlowPane>
                </bottom>
                <padding>

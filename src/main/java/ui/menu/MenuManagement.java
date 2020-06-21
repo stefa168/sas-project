@@ -1,6 +1,7 @@
 package ui.menu;
 
 import businesslogic.CatERing;
+import businesslogic.menu.Menu;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -53,8 +54,9 @@ public class MenuManagement {
         containerPane.setCenter(menuContentPane);
     }
 
-    public void showMenuList() {
+    public void showMenuList(Menu m) {
         menuListPaneController.initialize();
+        menuListPaneController.selectMenu(m);
         containerPane.setCenter(menuListPane);
     }
 

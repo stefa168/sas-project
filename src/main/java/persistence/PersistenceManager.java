@@ -1,5 +1,7 @@
 package persistence;
 
+import com.sun.javafx.binding.StringFormatter;
+
 import java.sql.*;
 
 public class PersistenceManager {
@@ -7,6 +9,16 @@ public class PersistenceManager {
     private static String username = "root";
     private static String password = "root";
 
+    private static int lastId;
+
+    public static String escapeString(String input) {
+        input = input.replace("\\", "\\\\");
+        input = input.replace("\'", "\\\'");
+        input = input.replace("\"", "\\\"");
+        input = input.replace("\n", "\\n");
+        input = input.replace("\t", "\\t");
+        return input;
+    }
     public static void testSQLConnection() {
         try (Connection conn = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users");
@@ -34,7 +46,7 @@ public class PersistenceManager {
 
     }
 
-    public static int[] executeUpdate(String parametrizedQuery, int itemNumber, BatchUpdateHandler handler) {
+    public static int[] executeBatchUpdate(String parametrizedQuery, int itemNumber, BatchUpdateHandler handler) {
         int[] result = new int[0];
         try (
                 Connection conn = DriverManager.getConnection(url, username, password);
@@ -57,5 +69,26 @@ public class PersistenceManager {
         }
 
         return result;
+    }
+
+    public static int executeUpdate(String update) {
+        int result = 0;
+        try (Connection conn = DriverManager.getConnection(url, username, password);
+             PreparedStatement ps = conn.prepareStatement(update, Statement.RETURN_GENERATED_KEYS)) {
+            result = ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                lastId = rs.getInt(1);
+            } else {
+                lastId = 0;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    public static int getLastId() {
+        return lastId;
     }
 }
