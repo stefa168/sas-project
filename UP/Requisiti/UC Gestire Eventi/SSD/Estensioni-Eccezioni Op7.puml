@@ -14,7 +14,7 @@ participant Sistema
 
 title Gestire Eventi - Operazione 7
 
-Chef -> Sistema: **1**. creaEvento(dataInizio)
+Chef -> Sistema: **1**. creaEvento(dataInizio, cliente)
 return nuovo evento
 
 loop #e0e0e0
@@ -31,26 +31,26 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **4**. modificaDettagliEvento(periodicità?, dataInizio?)
+        Chef -> Sistema: **4**. modificaDettagliEvento(dataInizio?, cliente?)
         return ok
         ||10||
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli)
+        Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli, strategia)
         return ok
         ||10||
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **6**. assegnaChef(chef)
+        Chef -> Sistema: **6**. assegnaChef(chef, strategia)
         return ok
         ||10||
     end
 
     opt #b6efb6
         alt #f3d0ff
-            Chef -> Sistema: **7**. confermaMenuServizio(evento, servizio)
+            Chef -> Sistema: **7**. confermaMenuServizio(servizio)
             alt #f3a7c9
                 return ok
                 ||10||
@@ -68,7 +68,7 @@ loop #e0e0e0
                 ||10||
             end
         else
-            Chef -> Sistema: **7a.1**. proponiModificaMenu(evento, servizio, menu, proposta, strategia)
+            Chef -> Sistema: **7a.1**. proponiModificaMenu(servizio, menu, proposta, strategia)
             alt #f3a7c9
                 return ok
                 ||10||
@@ -85,7 +85,7 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **8**. assegnaPersonale(dipendente, turno, ruolo?)
+        Chef -> Sistema: **8**. assegnaPersonale(dipendente, turnoServizio, ruolo?)
         return ok
         ||10||
     end

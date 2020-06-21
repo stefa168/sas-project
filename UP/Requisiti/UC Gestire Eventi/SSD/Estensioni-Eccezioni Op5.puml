@@ -14,7 +14,7 @@ participant Sistema
 
 title Gestire Eventi - Operazione 5
 
-Chef -> Sistema: **1**. creaEvento(dataInizio)
+Chef -> Sistema: **1**. creaEvento(dataInizio, cliente)
 return nuovo evento
 
 loop #e0e0e0
@@ -31,7 +31,7 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **4**. modificaDettagliEvento(periodicità?, dataInizio?)
+        Chef -> Sistema: **4**. modificaDettagliEvento(dataInizio?, cliente?)
         return ok
         ||10||
     end
@@ -48,7 +48,7 @@ loop #e0e0e0
                 ||10||
             end
         else
-            Chef -> Sistema: **5a.1**. annullaServizio(evento, servizio, strategia)
+            Chef -> Sistema: **5a.1**. annullaServizio(servizio, strategia)
             alt #f3a7c9
                 return warning penale
                 ||10||
@@ -58,7 +58,7 @@ loop #e0e0e0
                 ||10||
             end
         else
-            Chef -> Sistema: **5b.1**. eliminaServizio(evento, servizio, strategia)
+            Chef -> Sistema: **5b.1**. eliminaServizio(servizio, strategia)
             alt #f3a7c9
                 return ok
                 ||10||
@@ -94,7 +94,7 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **6**. assegnaChef(chef)
+        Chef -> Sistema: **6**. assegnaChef(chef, strategia)
         return ok
         ||10||
     end
@@ -106,7 +106,7 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **8**. assegnaPersonale(dipendente, turno, ruolo?)
+        Chef -> Sistema: **8**. assegnaPersonale(dipendente, turnoServizio, ruolo?)
         return ok
         ||10||
     end

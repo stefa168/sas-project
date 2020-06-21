@@ -41,17 +41,17 @@ else
 
     opt #b6efb6
         alt #f3d0ff
-            Chef -> Sistema: **1a.2**. annullaEvento(evento, strategia)
+            Chef -> Sistema: **1a.2**. annullaEvento(strategia)
             return warning penale
             destroy Sistema
             ||10||
         else
-            Chef -> Sistema: **1a.2a.1**. terminaEvento(evento)
+            Chef -> Sistema: **1a.2a.1**. terminaEvento()
             return ok
             destroy Sistema
             ||10||
         else
-            Chef -> Sistema: **1a.2b.1**. eliminaEvento(evento, strategia)
+            Chef -> Sistema: **1a.2b.1**. eliminaEvento(strategia)
             alt #f3a7c9
                 return ok
                 destroy Sistema
@@ -105,17 +105,17 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **4**. modificaDettagliEvento(periodicità?, dataInizio?)
+        Chef -> Sistema: **4**. modificaDettagliEvento(dataInizio?, cliente?)
         return ok
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli)
+        Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli, strategia)
         return ok
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **6**. assegnaChef(chef)
+        Chef -> Sistema: **6**. assegnaChef(chef, strategia)
         return ok
     end
 
@@ -125,7 +125,7 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **8**. assegnaPersonale(dipendente, turno, ruolo?)
+        Chef -> Sistema: **8**. assegnaPersonale(dipendente, turnoServizio, ruolo?)
         return ok
     end
 end

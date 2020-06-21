@@ -14,7 +14,7 @@ participant Sistema
 
 title Gestire Eventi - UC Base
 
-Chef -> Sistema: **1**. creaEvento(dataInizio)
+Chef -> Sistema: **1**. creaEvento(dataInizio, cliente)
 return nuovo evento
 
 loop #a3daff
@@ -31,19 +31,19 @@ loop #a3daff
     end
 
     opt #b6efb6
-        Chef -> Sistema: **4**. modificaDettagliEvento(periodicità?, dataInizio?)
+        Chef -> Sistema: **4**. modificaDettagliEvento(dataInizio?, cliente?)
         return ok
         ||10||
     end
 
     opt #b6efb6
-        Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli)
+        Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli, strategia)
         return ok
         ||10||
     end
 
     opt #b6efb6
-        Chef -> Sistema: **6**. assegnaChef(chef)
+        Chef -> Sistema: **6**. assegnaChef(chef, strategia)
         return ok
         ||10||
     end
@@ -55,7 +55,7 @@ loop #a3daff
     end
 
     opt #b6efb6
-        Chef -> Sistema: **8**. assegnaPersonale(dipendente, turno, ruolo?)
+        Chef -> Sistema: **8**. assegnaPersonale(dipendente, turnoServizio, ruolo?)
         return ok
         ||10||
     end
