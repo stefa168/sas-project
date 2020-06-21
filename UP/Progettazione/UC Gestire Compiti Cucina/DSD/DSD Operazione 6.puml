@@ -36,7 +36,7 @@ else
     |||
     tm -> tm: notifyCreatedKitchenJob(job)
     activate tm
-    loop for all ktr in eventReceivers
+    loop ""for all"" ktr ""in"" eventReceivers
         tm -> ktr : updateCreatedKitchenJob(job)
         activate ktr
         deactivate ktr

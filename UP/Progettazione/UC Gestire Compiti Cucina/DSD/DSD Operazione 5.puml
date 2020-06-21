@@ -39,7 +39,7 @@ else
     |||
     tm -> tm: notifyEditTask(task)
     activate tm
-    loop for all ktr in eventReceivers
+    loop ""for all"" ktr ""in"" eventReceivers
         tm -> ktr : updateEditTask(task)
         activate ktr
         deactivate ktr

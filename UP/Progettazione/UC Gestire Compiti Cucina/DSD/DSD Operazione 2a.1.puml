@@ -14,9 +14,9 @@ else
     ktm -> ss: deleteExtraDuty(kitchenDuty)
     activate ss
 
-    loop for all task in currentSheet.tasks
+    loop ""for all"" task ""in"" currentSheet.tasks
         alt (task.optionalDuty != null) && (task.optionalDuty == kitchenDuty)
-            loop for all job in task.jobs
+            loop ""for all"" job ""in"" task.jobs
                 participant "task.jobs: ArrayList<Job>" as j
                 participant "job.turn: KitchenTurn" as jobKitchenTurn
 
@@ -49,7 +49,7 @@ else
     |||
     ktm -> ktm: notifyDeleteExtraDuty(kitchenDuty)
         activate ktm
-    loop for all ktr in eventReceivers
+    loop ""for all"" ktr ""in"" eventReceivers
         ktm -> ktr : updateDeleteExtraDuty(kitchenDuty)
         activate ktr
         deactivate ktr

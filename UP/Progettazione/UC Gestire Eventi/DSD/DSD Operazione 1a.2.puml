@@ -34,11 +34,11 @@ activate em
             activate event
             event -> event: this.state = cancel
 
-            loop for all service in currentEvent.services
-                loop for all task in service.sheet.tasks
+            loop ""for all"" service ""in"" currentEvent.services
+                loop ""for all"" task ""in"" service.sheet.tasks
                     event -> task: deleteAllKitchenJobs()
                     activate task
-                    loop for all job in task.jobs
+                    loop ""for all"" job ""in"" task.jobs
                         task -> task: this.deleteKitchenJob(job)
                         note right: La definizione completa di\n//deleteKitchenJob(job)// è nel DSD 6a \ndell' UC Gestire Compiti Cucina
                     end
@@ -58,7 +58,7 @@ activate em
             deactivate evcanc
             |||
             alt strategy.equals("All")
-                loop for all ev in macroEvent.events && !ev.equals(currentEvent) && ev.state.equals("active")
+                loop ""for all"" ev ""in"" macroEvent.events ""where"" !ev.equals(currentEvent) && ev.state.equals("active")
                     maev -> ev: cancel()
                     note right: La definizione di //cancel()// usata qua e sotto \nfa riferimento a quella sopra definita
                     activate ev
@@ -69,7 +69,7 @@ activate em
                     deactivate evcanc
                 end
             else strategy.equals ("AllNext")
-                loop for all ev in macroEvent.events && !ev.equals(currentEvent) && ev.getStartDate().compareTo(currentEvent.getStartDate()) > 0 && currentEvent.state.equals("active")
+                loop ""for all"" ev ""in"" macroEvent.events ""where"" !ev.equals(currentEvent) && ev.getStartDate().compareTo(currentEvent.getStartDate()) > 0 && currentEvent.state.equals("active")
                     maev -> ev: cancel()
                     activate ev
                     maev <<-- ev: ev
@@ -81,10 +81,10 @@ activate em
             end
         em <<-- maev: cancelEvents
         deactivate maev
-        loop for all event in cancelEvents
+        loop ""for all"" event ""in"" cancelEvents
             em -> em: notifyCancelEvent(event)
             activate em
-            loop for all receivers in eventReceivers
+            loop ""for all"" receivers ""in"" eventReceivers
                 em -> eer: updateCancelEvent(event)
                 activate eer
                 deactivate eer

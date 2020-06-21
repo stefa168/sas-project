@@ -57,7 +57,7 @@ activate em
             activate removedEvents
             return removedEvents
 
-            loop for all event in macroEvent.events
+            loop ""for all"" event ""in"" macroEvent.events
                 alt event.state.equals("programmed") && event.dateStart >= editFromDate
                     maev -> event_iterator: delete()
                     note right: La definizione completa di //delete()// è\nnel DSD 1a.2b.1 dell'UC Gestire Eventi
@@ -73,7 +73,7 @@ activate em
             activate addedEvents
             return addedEvents
 
-            loop for all date in frequencies
+            loop ""for all"" date ""in"" frequencies
                 maev -> maev: addEvent(date)
                 note right: La definizione completa di //addEvent()// è\nnel DSD 1 dell'UC Gestire Eventi
                 activate maev
@@ -86,7 +86,7 @@ activate em
                 activate addedEvents
                 deactivate addedEvents
 
-                loop for all service in macroEvent.defaultEvent.services
+                loop ""for all"" service ""in"" macroEvent.defaultEvent.services
                     maev -> newEvent: cloneService(service)
 
                     activate newEvent
@@ -98,7 +98,7 @@ activate em
 
                         newEvent -> newService : clonePatches(service)
                         activate newService
-                            loop for all patch in service.patches
+                            loop ""for all"" patch ""in"" service.patches
                                 newService -> newService: patches.add(patch.clone())
                             end
                         deactivate newService
@@ -114,20 +114,20 @@ activate em
 
         return addedEvents, removedEvents
 
-        loop for all addedEvent in addedEvents
+        loop ""for all"" addedEvent ""in"" addedEvents
             em -> em: notifyCreateEvent(addedEvent)
             activate em
-                loop for all receivers in eventReceivers
+                loop ""for all"" receivers ""in"" eventReceivers
                     em -> eer: updateCreateEvent(addedEvent)
                     activate eer
                     deactivate eer
                 end
             deactivate em
         end
-        loop for all removedEvent in removedEvents
+        loop ""for all"" removedEvent ""in"" removedEvents
             em -> em: notifyRemoveEvent(removedEvent)
             activate em
-                loop for all receivers in eventReceivers
+                loop ""for all"" receivers ""in"" eventReceivers
                     em -> eer: updateCreateEvent(removedEvent)
                     activate eer
                     deactivate eer

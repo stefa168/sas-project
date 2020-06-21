@@ -30,8 +30,8 @@ else
     return kitchenDuties
     deactivate kdList
     
-    loop for all section in menu.sections
-        loop for all menuItem in section.sectionItems
+    loop ""for all"" section ""in"" menu.sections
+        loop ""for all"" menuItem ""in"" section.sectionItems
             ss -> kdList: add(menuItem.itemRecipe)
             activate kdList
             deactivate kdList
@@ -49,7 +49,7 @@ else
         end
     end
 
-    loop for all freeItem in menu.freeItems
+    loop ""for all"" freeItem ""in"" menu.freeItems
         ss -> kdList: add(freeItem.itemRecipe)
         activate kdList
         deactivate kdList
@@ -68,7 +68,7 @@ else
     participant "tasks: ArrayList<Task>" as tasks
     ss -->> tasks**: create()
 
-    loop for all kitchenDuty in kitchenDuties
+    loop ""for all"" kitchenDuty ""in"" kitchenDuties
         participant "task : Task" as t
         ss -->> t **: create(kitchenDuty)
         activate t
@@ -97,7 +97,7 @@ else
     |||
     tm -> tm: notifySheetCreate(sheet)
     activate tm
-    loop for all ktr in eventReceivers
+    loop ""for all"" ktr ""in"" eventReceivers
         tm -> ktr : updateSheetCreate(sheet)
         activate ktr
         deactivate ktr

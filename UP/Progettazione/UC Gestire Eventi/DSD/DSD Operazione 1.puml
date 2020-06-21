@@ -50,7 +50,7 @@ activate em
         em -> em: this.currentEvent = event
         em -> em: notifyCreateEvent(event)
         activate em
-            loop for all receivers in eventReceivers
+            loop ""for all"" receivers in eventReceivers
                 em -> eer: updateCreateEvent(event)
                 activate eer
                 deactivate eer

@@ -38,10 +38,10 @@ activate em
             macroEvent -> ev: delete()
 
             activate ev
-                loop for all service in currentEvent.services
+                loop ""for all"" service ""in"" currentEvent.services
                     ev -> ss: deleteAllTasks()
                     activate ss
-                        loop for all task in sheet.tasks
+                        loop ""for all"" task ""in"" sheet.tasks
                             ss -> task: deleteAllKitchenJobs()
                                 activate task
                                     note right: La definizione completa di\n//deleteAllKitchenJobs()// è nel DSD 1a.2 \ndell' UC Gestire Eventi
@@ -70,7 +70,7 @@ activate em
             |||
 
             alt strategy.equals("All")
-                loop for all ev in macroEvent.events && !ev.equals(currentEvent) && ev.state.equals("programmed")
+                loop ""for all"" ev ""in"" macroEvent.events ""where"" !ev.equals(currentEvent) && ev.state.equals("programmed")
                     macroEvent -> evstrg: delete()
                     note right: La definizione di //delete()// usata qua e sotto \n fa riferimento a quella sopra definita
                     activate evstrg
@@ -84,7 +84,7 @@ activate em
                     deactivate events
                 end
             else strategy.equals ("AllNext")
-                loop for all ev in macroEvent.events && !ev.equals(currentEvent) && ev.getStartDate().compareTo(currentEvent.getStartDate()) > 0 && ev.state.equals("programmed")
+                loop ""for all"" ev ""in"" macroEvent.events ""where"" !ev.equals(currentEvent) && ev.getStartDate().compareTo(currentEvent.getStartDate()) > 0 && ev.state.equals("programmed")
                     macroEvent -> evstrg: delete()
                     activate evstrg
                         macroEvent <<-- evstrg: ev
@@ -103,8 +103,8 @@ activate em
 
         em -> em: notifyDeleteEvent(event)
         activate em
-            loop for all event in deleteEvents
-                loop for all receivers in eventReceivers
+            loop ""for all"" event ""in"" deleteEvents
+                loop ""for all"" receivers ""in"" eventReceivers
                     em -> eer: updateDeleteEvent(event)
                     activate eer
                     deactivate eer

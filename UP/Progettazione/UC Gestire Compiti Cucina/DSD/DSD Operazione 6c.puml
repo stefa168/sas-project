@@ -87,7 +87,7 @@ else
         |||
         ktm -> ktm: notifyEditKitchenJob(job)
         activate ktm
-        loop for all ktr in eventReceivers
+        loop ""for all"" ktr ""in"" eventReceivers
             ktm -> ktr : updateEditKitchenJob(job)
             activate ktr
             deactivate ktr

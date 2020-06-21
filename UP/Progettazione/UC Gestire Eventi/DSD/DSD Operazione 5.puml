@@ -46,7 +46,7 @@ activate em
         deactivate evc
 
         alt strategy.equals("All")
-            loop for all ev in event.macroEvent.events && !ev.equals(event) && (event.state.equals("programmed")
+            loop ""for all"" ev ""in"" event.macroEvent.events ""where"" !ev.equals(event) && (event.state.equals("programmed")
                 em -> ev2: addService(startOffset, startHour, endHour, diners, place, details)
                 note left: La definizione di //addService()// qua usata\nfa riferimento a quella sopra definita
                 activate ev2
@@ -56,7 +56,7 @@ activate em
                 deactivate evc
             end
         else strategy.equals ("AllNext")
-            loop for all ev in macroEvent.events && !ev.equals(event) && ev.getStartDate().compareTo(event.getStartDate()) > 0 && (event.state.equals("programmed")
+            loop ""for all"" ev ""in"" macroEvent.events ""where"" !ev.equals(event) && ev.getStartDate().compareTo(event.getStartDate()) > 0 && (event.state.equals("programmed")
                 em -> ev2: addService(startOffset, startHour, endHour, diners, place, details)
                 activate ev2
                 return newService
@@ -67,10 +67,10 @@ activate em
         end
 
         activate em
-            loop for all event in changedEvents
+            loop ""for all"" event ""in"" changedEvents
             em -> em: notifyEditEvent(event)
             activate em
-                loop for all receivers in eventReceivers
+                loop ""for all"" receivers ""in"" eventReceivers
                     em -> eer: updateEditEvent(event)
                     activate eer
                     deactivate eer
