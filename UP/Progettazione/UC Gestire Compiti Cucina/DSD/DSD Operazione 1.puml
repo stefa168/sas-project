@@ -77,7 +77,7 @@ else
         t -> t: this.toDo = true
         return task
         deactivate t
-        ss -->>tasks: add(task)
+        ss ->tasks: add(task)
         activate tasks
         deactivate tasks
     end

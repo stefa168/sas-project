@@ -21,22 +21,24 @@ else
 
     turn -> cooks: get(job.cook)
     activate cooks
-    return time
+    turn <<--cooks: time
+    deactivate cooks
 
     turn -> turn: enoughTime = (startDate + time.usedTime + job.estimatedDuration) <= endDate
 
-    return enoughTime
+    ktm <<-- turn: enoughTime
     deactivate turn
 
     alt !enoughTime
-        UI <<-- job: throw TaskException
+        UI <<-- ktm: throw TaskException
     else
         alt job.cook != null
             ktm -> turn: freeTime(job.cook, job.estimatedDuration)
             activate turn
             turn -> cooks: get(job.cook)
             activate cooks
-            return time
+            turn <<-- cooks: time
+            deactivate cooks
 
             turn -> turn: time.usedTime -= job.estimatedDuration
 
@@ -52,6 +54,7 @@ else
                 deactivate cooks
             end
             deactivate turn
+            |||
         end
 
         ktm -> turn: takeTime(user, job.estimatedDuration)
@@ -85,7 +88,8 @@ else
         ktm -> job: assignCook(user)
         activate job
         job -> job: this.cook = user
-        return job
+        ktm <<-- job: job
+        deactivate job
 
         |||
         ktm -> ktm: notifyEditKitchenJob(job)
@@ -98,7 +102,7 @@ else
         deactivate ktm
 
         UI <-- ktm: job
+        deactivate ktm
         end
-deactivate ktm
 end
 @enduml

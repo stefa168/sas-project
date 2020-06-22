@@ -16,7 +16,7 @@ else task.amount <= 0 || task.estimatedDuration.isZero() || task.estimatedDurati
     UI <<-- tm: throw TaskException
 else
 
-    tm -> task: addKitchenKitchenJob(turn, amount, estimatedDuration)
+    tm -> task: addKitchenJob(turn, amount, estimatedDuration)
     activate task
 
     participant "job: KitchenJob" as job
@@ -30,7 +30,7 @@ else
 
     return job
 
-    tm <- task: job
+    tm <<-- task: job
     deactivate task
 
     |||
@@ -43,7 +43,7 @@ else
     end
     deactivate tm
 
-    UI <- tm: job
+    UI <<-- tm: job
     deactivate tm
     
 end
