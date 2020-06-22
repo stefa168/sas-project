@@ -24,12 +24,7 @@ loop #e0e0e0
             return ok
         else
             Chef -> Sistema: **2a.1**. rimuoviMansioneFuoriMenù(mansioneDiCucina)
-            alt #f3a7c9
-                return foglio precompilato
-            else
-                Chef <- Sistema: **2a.1a.1**. Il foglio riepilogativo ha solo più una mansione
-                destroy Sistema
-            end
+            return foglio precompilato
         end
     end
 
