@@ -28,7 +28,7 @@ activate em
         UI <<-- em: throw UseCaseLogicException
     else
 
-        em -> macroEvent: delete(currentEvent, strategy)
+        em -> macroEvent: delete(this.currentEvent, strategy)
         activate macroEvent
             macroEvent -->> evdel**: create()
             activate evdel

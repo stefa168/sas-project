@@ -23,7 +23,7 @@ activate em
         UI <<-- em: throw UseCaseLogicException
     else
 
-        em -> maev: cancel(currentEvent, strategy)
+        em -> maev: cancel(this.currentEvent, strategy)
         activate maev
             maev -->> evcanc**: create()
             activate evcanc
@@ -53,7 +53,7 @@ activate em
             end
             maev <<-- event: currentEvent
             deactivate event
-            maev -> evcanc: add(currentEvent)
+            maev -> evcanc: add(this.currentEvent)
             activate evcanc
             deactivate evcanc
             |||
