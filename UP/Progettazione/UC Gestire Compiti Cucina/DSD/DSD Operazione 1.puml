@@ -24,7 +24,7 @@ else
     tm -->> service: createSummarySheet()
     activate service
 
-        service -->>ss**: create()
+        service -->>ss**: create(this.getMenu())
         activate ss
 
             participant "kitchenDuties: ArrayList<KitchenDuty>" as kdList
