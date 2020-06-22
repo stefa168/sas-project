@@ -14,7 +14,7 @@ participant Sistema
 
 title Gestire Eventi - Operazione 4
 
-org -> Sistema: **1**. creaEvento(dataInizio, cliente)
+org -> Sistema: **1**. creaEvento(dataInizio, cliente, name)
 return nuovo evento
 
 loop #e0e0e0
