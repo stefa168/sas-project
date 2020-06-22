@@ -43,7 +43,7 @@ loop #a3daff
     end
 
     opt #b6efb6
-        org -> Sistema: **6**. assegnaorg(chef, strategia)
+        org -> Sistema: **6**. assegnaChef(chef, strategia)
         return ok
         ||10||
     end
