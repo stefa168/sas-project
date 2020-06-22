@@ -36,7 +36,8 @@ activate em
             activate freq
                 freq -> frequencies **: create()
                 activate frequencies
-                return frequencies
+                freq <<-- frequencies: frequencies
+                deactivate frequencies
 
                 freq -> frequencies: add(editFromDate)
                 activate frequencies
@@ -45,13 +46,16 @@ activate em
                 loop frequency.stopCondition.shouldContinue(macroEvent, editFromDate, frequencies)
                     freq -> condition: nextDate(frequencies.get(frequencies.length()-1))
                     activate condition
-                    return nextDate
+                    freq <<-- condition: nextDate
+                    deactivate condition
+
 
                     freq->frequencies: add(nextDate)
                     activate frequencies
                     deactivate frequencies
                 end
-            return frequencies
+            maev <<-- freq: frequencies
+            deactivate freq
 
             maev -->> removedEvents**: create()
             activate removedEvents
@@ -111,8 +115,8 @@ activate em
                     deactivate newEvent
                 end
             end
-
-        return addedEvents, removedEvents
+        em <<-- maev: addedEvents, removedEvents
+        deactivate maev
 
         loop ""for all"" addedEvent ""in"" addedEvents
             em -> em: notifyCreateEvent(addedEvent)
@@ -134,6 +138,7 @@ activate em
                 end
             deactivate em
         end
-    end
-deactivate em
+        UI <<-- em: addedEvents, removedEvents
+        deactivate em
+end
 @enduml

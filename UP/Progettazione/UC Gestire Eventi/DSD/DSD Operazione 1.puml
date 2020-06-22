@@ -56,7 +56,8 @@ activate em
                 deactivate eer
             end
         deactivate em
-        return macroEvent
+        UI <<--em: macroEvent
+        deactivate em
     end
 
 @enduml

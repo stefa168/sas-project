@@ -92,7 +92,8 @@ activate em
             deactivate em
         |||
         end
-
-    end
+    UI <<-- em: cancelEvents
 deactivate em
+end
+
 @enduml

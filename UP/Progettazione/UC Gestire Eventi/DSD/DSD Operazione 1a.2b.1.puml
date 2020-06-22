@@ -112,6 +112,7 @@ activate em
             end
         deactivate em
         |||
-    end
+UI <<-- em: deleteEvents
 deactivate em
+ end
 @enduml

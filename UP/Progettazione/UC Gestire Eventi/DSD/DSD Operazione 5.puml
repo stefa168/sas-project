@@ -33,13 +33,15 @@ activate em
                 service -> service: this.place = place
                 service -> service: this.typology = details
                 service -> service: this.state = "preparation"
-            return service
+            ev <<-- service : service
+            deactivate service
 
             ev -> ss: add(service)
             activate ss
             deactivate ss
 
-        return service
+        em <<-- ev: services
+        deactivate ev
 
         em -> evc: add(this.currentEvent)
         activate evc
@@ -50,7 +52,8 @@ activate em
                 em -> ev2: addService(startOffset, startHour, endHour, diners, place, details)
                 note left: La definizione di //addService()// qua usata\nfa riferimento a quella sopra definita
                 activate ev2
-                return newService
+                em <<--ev2: newService
+                deactivate ev2
                 em -> evc: add(ev)
                 activate evc
                 deactivate evc
@@ -59,7 +62,8 @@ activate em
             loop ""for all"" ev ""in"" macroEvent.events ""where"" !ev.equals(event) && ev.getStartDate().compareTo(event.getStartDate()) > 0 && (event.state.equals("programmed")
                 em -> ev2: addService(startOffset, startHour, endHour, diners, place, details)
                 activate ev2
-                return newService
+                em <<--ev2: newService
+                deactivate ev2
                 em -> evc: add(ev)
                 activate evc
                 deactivate evc
@@ -77,7 +81,8 @@ activate em
                 end
             end
         deactivate em
-    end
 
-deactivate em
+    UI <<-- em: services
+    deactivate em
+end
 @enduml
