@@ -9,53 +9,53 @@ skinparam sequence {
     ParticipantBackgroundColor White
 }
 
-actor Chef
+actor "Organizzatore" as org
 participant Sistema
 
 title Gestire Eventi - UC Base
 
-Chef -> Sistema: **1**. creaEvento(dataInizio, cliente)
+org -> Sistema: **1**. creaEvento(dataInizio, cliente)
 return nuovo evento
 
 loop #a3daff
     opt #b6efb6
-        Chef -> Sistema: **2**. aggiungiNote(note)
+        org -> Sistema: **2**. aggiungiNote(note)
         return ok
         ||10||
     end
 
     opt #b6efb6
-        Chef -> Sistema: **3**. visualizzaStatoCucina()
+        org -> Sistema: **3**. visualizzaStatoCucina()
         return stato cucina
         ||10||
     end
 
     opt #b6efb6
-        Chef -> Sistema: **4**. modificaDettagliEvento(dataInizio?, cliente?)
+        org -> Sistema: **4**. modificaDettagliEvento(dataInizio?, cliente?)
         return ok
         ||10||
     end
 
     opt #b6efb6
-        Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli, strategia)
+        org -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli, strategia)
         return ok
         ||10||
     end
 
     opt #b6efb6
-        Chef -> Sistema: **6**. assegnaChef(chef, strategia)
+        org -> Sistema: **6**. assegnaorg(chef, strategia)
         return ok
         ||10||
     end
 
     opt #b6efb6
-        Chef -> Sistema: **7**. confermaMenuServizio(servizio)
+        org -> Sistema: **7**. confermaMenuServizio(servizio)
         return ok
         ||10||
     end
 
     opt #b6efb6
-        Chef -> Sistema: **8**. assegnaPersonale(dipendente, turnoServizio, ruolo?)
+        org -> Sistema: **8**. assegnaPersonale(dipendente, turnoServizio, ruolo?)
         return ok
         ||10||
     end

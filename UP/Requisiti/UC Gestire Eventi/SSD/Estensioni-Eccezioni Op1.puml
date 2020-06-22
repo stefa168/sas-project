@@ -9,55 +9,55 @@ skinparam sequence {
     ParticipantBackgroundColor White
 }
 
-actor Chef
+actor "Organizzatore" as org
 participant Sistema
 
 title Gestire Eventi - Operazione 1
 
 alt #f3d0ff
-    Chef -> Sistema: **1**. creaEvento(dataInizio, cliente)
+    org -> Sistema: **1**. creaEvento(dataInizio, cliente)
     alt #f3a7c9
         return nuovo evento
         ||10||
     else
-        Chef <- Sistema: **1a.1**. data specificata già passata
+        org <- Sistema: **1a.1**. data specificata già passata
         destroy Sistema
         ||10||
     end
 else
-    Chef -> Sistema: **1a.1**. apriEvento(evento)
+    org -> Sistema: **1a.1**. apriEvento(evento)
     alt #f3a7c9
         return foglio evento
         ||10||
     else
-        Chef <- Sistema: **1a.1a.1**. evento terminato o annullato
+        org <- Sistema: **1a.1a.1**. evento terminato o annullato
         destroy Sistema
         ||10||
     else
-        Chef <- Sistema: **1a.1b.1**. l'organizzatore non gestisce evento
+        org <- Sistema: **1a.1b.1**. l'organizzatore non gestisce evento
         destroy Sistema
         ||10||
     end
 
     opt #b6efb6
         alt #f3d0ff
-            Chef -> Sistema: **1a.2**. annullaEvento(strategia)
+            org -> Sistema: **1a.2**. annullaEvento(strategia)
             return warning penale
             destroy Sistema
             ||10||
         else
-            Chef -> Sistema: **1a.2a.1**. terminaEvento()
+            org -> Sistema: **1a.2a.1**. terminaEvento()
             return ok
             destroy Sistema
             ||10||
         else
-            Chef -> Sistema: **1a.2b.1**. eliminaEvento(strategia)
+            org -> Sistema: **1a.2b.1**. eliminaEvento(strategia)
             alt #f3a7c9
                 return ok
                 destroy Sistema
                 ||10||
             else
-               Chef <- Sistema: **1a.2b.1a.1**. evento confermato
+               org <- Sistema: **1a.2b.1a.1**. evento confermato
                destroy Sistema
                ||10||
             end
@@ -67,65 +67,65 @@ else
         ||10||
     end
 else
-    Chef -> Sistema: **1b.1**. apriEventoTerminatoAnnullato(evento)
+    org -> Sistema: **1b.1**. apriEventoTerminatoAnnullato(evento)
     alt #f3a7c9
         return foglio evento
         ||10||
     else
-        Chef <- Sistema: **1b.1a.1**. evento non terminato o non annullato
+        org <- Sistema: **1b.1a.1**. evento non terminato o non annullato
         destroy Sistema
         ||10||
     else
-        Chef <- Sistema: **1b.1b.1**. l'organizzatore non gestisce evento
+        org <- Sistema: **1b.1b.1**. l'organizzatore non gestisce evento
         destroy Sistema
         ||10||
     end
 
     opt #b6efb6
-        Chef -> Sistema: **1b.2**. gestisciNote(note)
+        org -> Sistema: **1b.2**. gestisciNote(note)
         return ok
         ||10||
     end
 
     ||10||
     destroy Sistema
-'    note over Chef, Sistema #fff: Il caso d'uso termina.
+'    note over org, Sistema #fff: Il caso d'uso termina.
     ||10||
 end
 
 loop #e0e0e0
     opt #e0e0e0
-        Chef -> Sistema: **2**. aggiungiNote(note)
+        org -> Sistema: **2**. aggiungiNote(note)
         return ok
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **3**. visualizzaStatoCucina()
+        org -> Sistema: **3**. visualizzaStatoCucina()
         return stato cucina
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **4**. modificaDettagliEvento(dataInizio?, cliente?)
+        org -> Sistema: **4**. modificaDettagliEvento(dataInizio?, cliente?)
         return ok
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli, strategia)
+        org -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli, strategia)
         return ok
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **6**. assegnaChef(chef, strategia)
+        org -> Sistema: **6**. assegnaorg(chef, strategia)
         return ok
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **7**. confermaMenuServizio(servizio)
+        org -> Sistema: **7**. confermaMenuServizio(servizio)
         return ok
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **8**. assegnaPersonale(dipendente, turnoServizio, ruolo?)
+        org -> Sistema: **8**. assegnaPersonale(dipendente, turnoServizio, ruolo?)
         return ok
     end
 end

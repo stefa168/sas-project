@@ -9,75 +9,75 @@ skinparam sequence {
     ParticipantBackgroundColor White
 }
 
-actor Chef
+actor "Organizzatore" as org
 participant Sistema
 
 title Gestire Eventi - Operazione 7
 
-Chef -> Sistema: **1**. creaEvento(dataInizio, cliente)
+org -> Sistema: **1**. creaEvento(dataInizio, cliente)
 return nuovo evento
 
 loop #e0e0e0
     opt #e0e0e0
-        Chef -> Sistema: **2**. aggiungiNote(note)
+        org -> Sistema: **2**. aggiungiNote(note)
         return ok
         ||10||
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **3**. visualizzaStatoCucina()
+        org -> Sistema: **3**. visualizzaStatoCucina()
         return stato cucina
         ||10||
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **4**. modificaDettagliEvento(dataInizio?, cliente?)
+        org -> Sistema: **4**. modificaDettagliEvento(dataInizio?, cliente?)
         return ok
         ||10||
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli, strategia)
+        org -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli, strategia)
         return ok
         ||10||
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **6**. assegnaChef(chef, strategia)
+        org -> Sistema: **6**. assegnaorg(chef, strategia)
         return ok
         ||10||
     end
 
     opt #b6efb6
         alt #f3d0ff
-            Chef -> Sistema: **7**. confermaMenuServizio(servizio)
+            org -> Sistema: **7**. confermaMenuServizio(servizio)
             alt #f3a7c9
                 return ok
                 ||10||
             else
-                Chef <- Sistema: **7a.1**. servizio già confermato
+                org <- Sistema: **7a.1**. servizio già confermato
                 destroy Sistema
                 ||10||
             else
-                Chef <- Sistema: **7b.1**. servizio annullato o terminato
+                org <- Sistema: **7b.1**. servizio annullato o terminato
                 destroy Sistema
                 ||10||
             else
-                Chef <- Sistema: **7c.1**. il servizio non ha un menu associato
+                org <- Sistema: **7c.1**. il servizio non ha un menu associato
                 destroy Sistema
                 ||10||
             end
         else
-            Chef -> Sistema: **7a.1**. proponiModificaMenu(servizio, menu, proposta, strategia)
+            org -> Sistema: **7a.1**. proponiModificaMenu(servizio, menu, proposta, strategia)
             alt #f3a7c9
                 return ok
                 ||10||
             else
-                Chef <- Sistema: **7a.1a.1**. servizio annullato o terminato
+                org <- Sistema: **7a.1a.1**. servizio annullato o terminato
                 destroy Sistema
                 ||10||
             else
-                Chef <- Sistema: **7a.1b.1**. servizio confermato
+                org <- Sistema: **7a.1b.1**. servizio confermato
                 destroy Sistema
                 ||10||
             end
@@ -85,7 +85,7 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **8**. assegnaPersonale(dipendente, turnoServizio, ruolo?)
+        org -> Sistema: **8**. assegnaPersonale(dipendente, turnoServizio, ruolo?)
         return ok
         ||10||
     end
