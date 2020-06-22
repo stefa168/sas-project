@@ -9,7 +9,7 @@ activate tm
 
 participant "userMgr: UserManager" as um
 participant "ktr: KitchenTaskEventReceiver" as ktr
-participant "service: Service" as service
+participant "event.service: Service" as service
 tm -> um: getCurrentUser()
 activate um
 tm <<-- um: user

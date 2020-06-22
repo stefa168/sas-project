@@ -13,28 +13,26 @@ namespace KitchenTaskManagement {
         +addReceiver(er: kitchenTaskReceiver)
         +removeReceiver(er: kitchenTaskReceiver)
         -notifySheetCreate(s: SummarySheet)
-        -notifyAddExtraDuty(kd: KitchenDuty)
+        -notifyAddExtraDuty(kd: KitchenDuty, task: Task)
         -notifyDeleteExtraDuty(kd: KitchenDuty)
         -notifyEditTask(t: Task)
         -notifyCreatedKitchenJob(j: KitchenJob)
         -notifyDeletedKitchenJob(j: KitchenJob)
         -notifyEditKitchenJob(j: KitchenJob)
         --<b>operation methods</b>--
-        + createSummarySheet(event: Event, service: Service)
-        + editTask(task: Task, newAmount: int, newDuration: int)
-        + sortTask(task: Task, position: int)
-        + addExtraDuty(kd: KitchenDuty)
-        + deleteExtraDuty(kd: KitchenDuty)
-        + createKitchenJob(cook: Cook, task: Task, turn: KitchenTurn, amount: int, estimatedDuration: Duration)
-        + deleteKitchenJob(task: Task, job: KitchenJob)
-        + assignCook(job: KitchenJob, user: User)
+        + createSummarySheet(event: Event, service: Service): SummarySheet
+        + addExtraDuty(kd: KitchenDuty): Task
+        + deleteExtraDuty(kd: KitchenDuty): SummarySheet
+        + createKitchenJob(task: Task, turn: KitchenTurn, amount: int, estimatedDuration: int): KitchenJob
+        + deleteKitchenJob(task: Task, job: KitchenJob): Task
+        + assignCook(job: KitchenJob, user: User): KitchenJob
     }
 
     class "KitchenTaskEventReceiver \n {interface}" as KitchenTaskReceiver{
         --
         +<i>updateSheetCreate(s: SummarySheet)</i>
-        +<i>updateAddExtraDuty(kd: KitchenDuty)</i>
-        +<i>updateDeleteExtraDuty(kd: KitchenDuty)</i>
+        +<i>updateAddExtraDuty(kd: KitchenDuty, task: Task)</i>
+        +<i>updateDeleteExtraDuty(kd: KitchenDuty, task: Task)</i>
         +<i>updateEditTask(t: Task)</i>
         +<i>updateCreatedKitchenJob(j: KitchenJob)</i>
         +<i>updateDeletedKitchenJob(j: KitchenJob)</i>
@@ -44,12 +42,12 @@ namespace KitchenTaskManagement {
     ' Compito
     class Task{
         - amount: int
-        - estimatedDuration: Duration
+        - estimatedDuration: int
         - toDo: boolean
         --
         + create(kitchenDuty: KitchenDuty)
         + editDetails(newAmount: int, newDuration: int, newToDo: boolean)
-        + addKitchenJob(cook: Cook, turn: KitchenTurn, amount: int, estimatedDuration: Duration)
+        + addKitchenJob(cook: Cook, turn: KitchenTurn, amount: int, estimatedDuration: int)
         + deleteKitchenJob(job: KitchenJob)
         + deleteAllKitchenJobs()
     }
@@ -57,7 +55,7 @@ namespace KitchenTaskManagement {
     ' Foglio Riepilogativo
     class SummarySheet {
         + create(menu: Menu)
-        + addExtraDuty(kd: KitchenDuty)
+        + addExtraDuty(kd: KitchenDuty): Task
         + deleteExtraDuty(kd: KitchenDuty)
         + deleteAllTasks()
     }
@@ -65,10 +63,10 @@ namespace KitchenTaskManagement {
     ' Incarico
     class KitchenJob {
         - amount: int
-        - estimatedDuration: Duration
+        - estimatedDuration: int
         --
-        + create(cook: Cook, turn: KitchenTurn, amount: int, estimatedDuration: Duration)
-        + edit(amount: int, estimatedDuration: Duration)
+        + create(turn: KitchenTurn, amount: int, estimatedDuration: int)
+        + edit(amount: int, estimatedDuration: int)
         + assignCook(user: User)
     }
 
@@ -89,16 +87,16 @@ namespace TurnManagement {
         - endDate: LocalDate
         - complete: boolean
         --
-        + getDuration(): Duration
-        + hasUserEnoughTime(user: User, duration: Duration): boolean
-        + freeTime(user: User, durationToFree: Duration)
-        + takeTime(user: User, durationToTake: Duration)
+        + freeTime(user: User, durationToFree: int)
+        + takeTime(user: User, durationToTake: int)
+        + getDuration(): int
+        + hasUserEnoughTime(user: User, duration: int): boolean
     }
 
     ' Classe utilitaria suggerita dalle Prof; questa diventerà parte di una HashMap
     class TimeKeeper {
-        - usedTime: Duration
-        + create(user: User, startDuration: Duration)
+        - usedTime: int
+        + create(user: User, startDuration: int)
     }
 
     class ServiceTurn
@@ -126,18 +124,20 @@ namespace TurnManagement {
 
 namespace RecipeManagement {
     ' Mansione di Cucina
-    class KitchenDuty {
+    class "KitchenDuty\n{abstract}" as KitchenDuty {
         - name: String
         - instructions: String
         - resultingAmount: int
-        - constantConcreteActivityTime: Duration
-        - variableConcreteActivityTime: Duration
-        {abstract} List<KitchenDuty> getSubDuties()
+        - constantConcreteActivityTime: int
+        - variableConcreteActivityTime: int
+        + getSubDuties(): ArrayList<KitchenDuty>
     }
 
     ' Ricetta
     class Recipe {
         -name
+        --
+        + getSubDuties(): ArrayList<KitchenDuty>
     }
 
     ' Preparazione
@@ -171,9 +171,8 @@ namespace EventManagement {
         -state: String
         --
         + getMenu(): Menu
-        + addSummarySheet(sheet: SummarySheet)
+        + createSummarySheet(): SummarySheet
         + clonePatches(serviceToClone: Service)
-
     }
 
     class MacroEvent {
