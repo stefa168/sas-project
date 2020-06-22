@@ -2,7 +2,7 @@
 skinparam Style strictuml
 
 collections UI
-participant "evenManager: EventManager" as em
+participant "eventManager: EventManager" as em
 participant "userMgr: UserManager" as um
 participant "eventManager.eventReceivers: EventEventReceivers" as eer
 
@@ -56,7 +56,7 @@ activate em
                 deactivate eer
             end
         deactivate em
-        UI <<--em: macroEvent
+        UI <<--em: event
         deactivate em
     end
 

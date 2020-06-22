@@ -129,7 +129,7 @@ activate em
             deactivate em
         end
         loop ""for all"" removedEvent ""in"" removedEvents
-            em -> em: notifyRemoveEvent(removedEvent)
+            em -> em: notifyDeleteEvent(removedEvent)
             activate em
                 loop ""for all"" receivers ""in"" eventReceivers
                     em -> eer: updateCreateEvent(removedEvent)

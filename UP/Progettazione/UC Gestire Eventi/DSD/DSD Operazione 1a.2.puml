@@ -42,7 +42,7 @@ activate em
                         task -> task: this.deleteKitchenJob(job)
                         note right: La definizione completa di\n//deleteKitchenJob(job)// è nel DSD 6a \ndell' UC Gestire Compiti Cucina
                     end
-                    event <<-- task: task
+
                     deactivate task
 
                 end

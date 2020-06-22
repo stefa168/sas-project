@@ -19,7 +19,7 @@ activate em
         em <<-- um: user
     deactivate um
 
-    alt !user.isOrganizer()
+    alt !user.isOrganizer() startHour < endHour
         UI <<-- em: throw UseCaseLogicException
     else
         em -> ev: addService(startOffset, startHour, endHour, diners, place, details)
@@ -40,7 +40,7 @@ activate em
             activate ss
             deactivate ss
 
-        em <<-- ev: services
+        em <<-- ev: service
         deactivate ev
 
         em -> evc: add(this.currentEvent)

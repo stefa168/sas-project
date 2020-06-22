@@ -45,10 +45,10 @@ activate em
                             ss -> task: deleteAllKitchenJobs()
                                 activate task
                                     note right: La definizione completa di\n//deleteAllKitchenJobs()// è nel DSD 1a.2 \ndell' UC Gestire Eventi
-                                    ss <<-- task: task
+
                                 deactivate task
                         end
-                        ev <<-- ss: summarySheet
+
                     deactivate ss
                     ev -> sj: clear ()
                     activate sj
