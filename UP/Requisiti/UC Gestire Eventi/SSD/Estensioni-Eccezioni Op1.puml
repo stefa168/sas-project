@@ -110,7 +110,7 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        org -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli, strategia)
+        org -> Sistema: **5**. aggiungiServizio(nome, offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli, strategia)
         return ok
     end
 

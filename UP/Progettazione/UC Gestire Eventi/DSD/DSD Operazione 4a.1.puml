@@ -90,7 +90,7 @@ activate em
                 activate addedEvents
                 deactivate addedEvents
 
-                loop ""for all"" service ""in"" macroEvent.defaultEvent.services
+                loop ""for all"" service ""in"" baseEvent.services
                     maev -> newEvent: cloneService(service)
 
                     activate newEvent

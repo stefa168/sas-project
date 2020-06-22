@@ -38,7 +38,7 @@ loop #e0e0e0
 
     opt #b6efb6
         alt #f3d0ff
-            org -> Sistema: **5**. aggiungiServizio(offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli, strategia)
+            org -> Sistema: **5**. aggiungiServizio(nome, offsetInizio, rangeOrario, numeroCommensali, luogo, dettagli, strategia)
             alt #f3a7c9
                 return ok
                 ||10||
@@ -72,7 +72,7 @@ loop #e0e0e0
                 ||10||
             end
         else
-            org -> Sistema: **5c.1**. modificaDettagliServizio(servizio, offsetInizio?, rangeOrario?, numeroCommensali?, luogo?, dettagli?, strategia)
+            org -> Sistema: **5c.1**. modificaDettagliServizio(servizio, nome?, offsetInizio?, rangeOrario?, numeroCommensali?, luogo?, dettagli?, strategia)
             alt #f3a7c9
                 return ok
                 ||10||

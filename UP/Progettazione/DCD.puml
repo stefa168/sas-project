@@ -52,7 +52,6 @@ namespace KitchenTaskManagement {
         + addKitchenJob(cook: Cook, turn: KitchenTurn, amount: int, estimatedDuration: Duration)
         + deleteKitchenJob(job: KitchenJob)
         + deleteAllKitchenJobs()
-
     }
 
     ' Foglio Riepilogativo
@@ -162,6 +161,7 @@ namespace RecipeManagement {
 namespace EventManagement {
     ' Servizio
     class Service {
+        -name: String
         -offsetDay: int
         -startHour: Instant
         -endHour: Instant
@@ -172,15 +172,20 @@ namespace EventManagement {
         --
         + getMenu(): Menu
         + addSummarySheet(sheet: SummarySheet)
+        + clonePatches(serviceToClone: Service)
+
     }
 
     class MacroEvent {
+        - name: String
         - notes: String
         - customer: String
         --
-        +setDefaultEvent(event: Event)
-        +addEvent(startDate: LocalDate)
-        +changeFrequency(baseEvent: Event, frequency: EventFrequency, editFrom: LocalDate)
+        +create(client: String, organizer: User)
+        +addEvent(startDate: LocalDate): Event
+        +cancel(event: Event, strategy: String): ArrayList<Event>
+        +delete(event: Event, strategy: String): ArrayList<Event>
+        +changeFrequency(baseEvent: Event, frequency: EventFrequency, editFrom: LocalDate): Pair<ArrayList<Event>,ArrayList<Event>>
     }
 
     class "EventEventReceivers \n {interface}" as EventEventReceivers{
@@ -195,14 +200,15 @@ namespace EventManagement {
         +addReceiver(er: EventEventReceivers)
         +removeReceiver(er: EventEventReceivers)
         -notifyCreateEvent(ev: Event)
-        -notifyEditEvent(ev: Event)
         -notifyCancelEvent(ev: Event)
+        -notifyEditEvent(ev: Event)
         -notifyDeleteEvent(ev: Event)
         --<b>operation methods</b>--
-        + createEvent(startDate: LocalDate)
-        + cancelEvent(ev: Event)
-        + deleteEvent(ev: Event)
-        + editEventFrequency(baseEvent: Event, frequency: EventFrequency, editFrom: LocalDate)
+        + createEvent(startDate: LocalDate, client: String): Event
+        + cancelEvent(strategy: String): ArrayList<Event>
+        + deleteEvent(strategy: String): ArrayList<Event>
+        + editEventFrequency(baseEvent: Event, frequency: EventFrequency, editFromDate: LocalDate): Pair<ArrayList<Event>,ArrayList<Event>>
+        + addService(startOffset: int, startHour: int, endHour: int, diners: int, place: String, details: String, strategy: String): ArrayList<Service>
     }
 
     class EventFrequency {
@@ -273,11 +279,13 @@ namespace EventManagement {
         - state: String
         - dateStart: LocalDate
         --
+        + create(startDate: LocalDate)
+        + cancel(): Event
+        + delete(): Event
         + isActive(): boolean
         + containsService(s:Service): boolean
-        + editDetails(startDate: LocalDate)
-        + changeFrequency(baseEvent: Event, frequency: EventFrequency, editFromDate: LocalDate)
-        + delete()
+        + addService(name: String, startOffset: int, startHour: int, endHour: int, diners: int, place: String, details: String): Service
+        + cloneService(serviceToClone: Service)
     }
 
     Event --> "1..n" Service: "services"
