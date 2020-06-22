@@ -14,7 +14,7 @@ activate ktm
 alt user == null || !user.isCook() || Date.now() > job.turn.endDate
     UI <<-- job: throw UseCaseLogicException
 else job.cook == user
-    UI <- ktm: job
+    UI <<-- ktm: job
 else
     ktm -> turn: hasUserEnoughTime(user, job.estimatedDuration)
     activate turn
@@ -43,9 +43,13 @@ else
             ' se per caso liberando del tempo ci accorgiamo che il TimeKeeper è vuoto, cancelliamolo.
             alt time.usedTime == 0
                 turn -> cooks: remove(job.cook)
+                activate cooks
+                deactivate cooks
             ' altrimenti aggiorniamo il tempo.
             else
                 turn -> cooks: update(job.cook, time)
+                activate cooks
+                deactivate cooks
             end
             deactivate turn
         end
@@ -81,8 +85,7 @@ else
         ktm -> job: assignCook(user)
         activate job
         job -> job: this.cook = user
-        ktm <- job: job
-        deactivate job
+        return job
 
         |||
         ktm -> ktm: notifyEditKitchenJob(job)
@@ -94,7 +97,7 @@ else
         end
         deactivate ktm
 
-        UI <- ktm: job
+        UI <-- ktm: job
         end
 deactivate ktm
 end

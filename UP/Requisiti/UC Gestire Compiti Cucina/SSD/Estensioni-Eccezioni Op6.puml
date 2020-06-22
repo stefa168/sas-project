@@ -57,7 +57,7 @@ loop #e0e0e0
                 destroy Sistema
             end
         else
-            Chef -> Sistema: **6a.1**. cancellaIncaricoDiCucina(incarico)
+            Chef -> Sistema: **6a.1**. cancellaIncaricoDiCucina(compito, incarico)
             alt #f3a7c9
                 return ok
             else
@@ -87,7 +87,7 @@ loop #e0e0e0
                 destroy Sistema
             end
         else
-            Chef -> Sistema: **6d.1** modificaStatoTurnoCucina(turno, nuovoStato)
+            Chef -> Sistema: **6d.1** modificaStatoTurnoCucina(turno, alCompleto)
             alt #f3a7c9
                 return ok
             else
