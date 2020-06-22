@@ -84,6 +84,7 @@ else
 
     ss -> ss: this.tasks = tasks
     tm <<-- ss: sheet
+    deactivate ss
 
     tm -> service: addSummarySheet(sheet)
     activate service
@@ -91,7 +92,6 @@ else
     tm <<-- service: service
     deactivate service
 
-    deactivate ss
     |||
     tm -> tm: this.currentSheet = sheet
     |||
