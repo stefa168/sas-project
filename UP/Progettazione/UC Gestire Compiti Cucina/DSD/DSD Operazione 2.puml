@@ -39,10 +39,10 @@ else
     ktm <<-- ss: task
     deactivate ss
     |||
-    ktm -> ktm: notifyAddExtraDuty(kitchenDuty)
+    ktm -> ktm: notifyAddExtraDuty(kitchenDuty, task)
     activate ktm
     loop ""for all"" ktr ""in"" eventReceivers
-        ktm -> ktr : updateAddExtraDuty(kitchenDuty)
+        ktm -> ktr : updateAddExtraDuty(kitchenDuty. task)
         activate ktr
         deactivate ktr
     end

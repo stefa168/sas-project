@@ -42,15 +42,15 @@ else
     activate kdList
     deactivate kdList
     
-    ktm <<-- ss: currentSheet
+    ktm <<-- ss: task
     deactivate ss
 
     participant "ktr: KitchenTaskEventReceiver" as ktr
     |||
-    ktm -> ktm: notifyDeleteExtraDuty(kitchenDuty)
+    ktm -> ktm: notifyDeleteExtraDuty(kitchenDuty, task)
         activate ktm
     loop ""for all"" ktr ""in"" eventReceivers
-        ktm -> ktr : updateDeleteExtraDuty(kitchenDuty)
+        ktm -> ktr : updateDeleteExtraDuty(kitchenDuty, task)
         activate ktr
         deactivate ktr
     end

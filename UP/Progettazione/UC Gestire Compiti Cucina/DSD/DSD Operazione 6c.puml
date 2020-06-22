@@ -9,10 +9,10 @@ participant "job: KitchenJob" as job
 participant "job.turn: KitchenTurn" as turn
 participant "assignedCooks: ArrayList<TimeKeeper>" as cooks
 
-UI -> ktm: assignCook(user, job)
+UI -> ktm: assignCook(job, user)
 activate ktm
 alt user == null || !user.isCook() || Date.now() > job.turn.endDate
-    UI <<-- job: throw UseCaseLogicException
+    UI <<-- ktm: throw UseCaseLogicException
 else job.cook == user
     UI <<-- ktm: job
 else
@@ -75,8 +75,8 @@ else
         else
             turn -> cooks: get(user)
             activate cooks
-            return time
-
+            turn <<-- cooks: time
+            deactivate cooks
             turn -> turn: time.usedTime += job.estimatedDuration
 
             turn -> cooks: add(time)
@@ -88,7 +88,7 @@ else
         ktm -> job: assignCook(user)
         activate job
         job -> job: this.cook = user
-        ktm <<-- job: job
+        ktm <[hidden]-- job:
         deactivate job
 
         |||
@@ -101,7 +101,7 @@ else
         end
         deactivate ktm
 
-        UI <-- ktm: job
+        UI <<-- ktm: job
         deactivate ktm
         end
 end
