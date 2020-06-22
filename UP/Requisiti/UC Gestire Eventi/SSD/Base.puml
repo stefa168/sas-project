@@ -14,7 +14,7 @@ participant Sistema
 
 title Gestire Eventi - UC Base
 
-org -> Sistema: **1**. creaEvento(dataInizio, cliente, name)
+org -> Sistema: **1**. creaEvento(dataInizio, cliente, nome)
 return nuovo evento
 
 loop #a3daff
