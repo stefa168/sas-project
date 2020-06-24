@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+// import java.time.LocalDate;
 
 public class CatERingApp extends Application {
 
@@ -23,4 +24,27 @@ public class CatERingApp extends Application {
             e.printStackTrace();
         }
     }
+
+    /*public interface FrequencyGenerator {
+        LocalDate nextDate(LocalDate from);
+    }
+
+    public abstract class AbstractFrequencyGenerator implements FrequencyGenerator {
+        protected int baseFrequency;
+
+        public AbstractFrequencyGenerator(int baseFrequency) {
+            this.baseFrequency = baseFrequency;
+        }
+    }
+
+    public class DailyFrequencyGenerator extends AbstractFrequencyGenerator {
+        public DailyFrequencyGenerator(int baseFrequency) {
+            super(baseFrequency);
+        }
+
+        @Override
+        public LocalDate nextDate(LocalDate from) {
+            return from.plusDays(baseFrequency);
+        }
+    }*/
 }
