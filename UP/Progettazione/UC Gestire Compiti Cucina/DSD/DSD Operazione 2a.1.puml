@@ -1,6 +1,8 @@
 @startuml Operazione 2a.1
 skinparam Style strictuml
 
+title 2a.1 deleteExtraDuty
+
 collections UI
 
 participant "kitchenTMgr: KitchenTaskManager" as ktm

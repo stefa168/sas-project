@@ -1,6 +1,8 @@
 @startuml Operazione 1
 skinparam Style strictuml
 
+title 1 createSummarySheet
+
 collections UI
 
 participant "taskManager: KitchenTaskManager" as tm

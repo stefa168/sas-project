@@ -1,9 +1,9 @@
 @startuml Operazione 6a
 skinparam Style strictuml
 
-collections UI
+title 6a deleteKitchenJob
 
-'commento di prova per vedere se riesco a pushare sul nuovo pc
+collections UI
 
 participant "taskManager: KitchenTaskManager" as tm
 participant "task: Task" as task

@@ -1,6 +1,8 @@
 @startuml
 skinparam Style strictuml
 
+title 6c assignCook
+
 collections UI
 
 participant "kitchentaskMgr: KitchenTaskManager" as ktm

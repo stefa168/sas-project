@@ -1,6 +1,8 @@
 @startuml Operazione 6
 skinparam Style strictuml
 
+title 6 createKitchenJob
+
 collections UI
 
 participant "taskManager: KitchenTaskManager" as tm
