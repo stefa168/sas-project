@@ -7,7 +7,7 @@ participant "kitchentaskMgr: KitchenTaskManager" as ktm
 participant "ktr: KitchenTaskEventReceiver" as ktr
 participant "job: KitchenJob" as job
 participant "job.turn: KitchenTurn" as turn
-participant "assignedCooks: ArrayList<TimeKeeper>" as cooks
+participant "job.turn.assignedCooks: ArrayList<TimeKeeper>" as cooks
 
 UI -> ktm: assignCook(job, user)
 activate ktm

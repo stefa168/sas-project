@@ -76,7 +76,7 @@ namespace KitchenTaskManagement {
     Task --> "0..n" KitchenJob: jobs
 '    todo 4
     SummarySheet --> "0..n" RecipeManagement.KitchenDuty: extraDuties
-    Task -left-> "0..1" RecipeManagement.KitchenDuty: optionalDuty
+    Task -left-> "1" RecipeManagement.KitchenDuty: duty
     KitchenJob --> "0..1"  UserManagement.User: cook
     KitchenJob --> "1" TurnManagement.KitchenTurn: turn
 }
