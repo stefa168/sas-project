@@ -6,6 +6,8 @@ participant "eventManager: EventManager" as em
 participant "userMgr: UserManager" as um
 participant "eventManager.eventReceivers: EventEventReceivers" as eer
 
+title 1 createEvent
+
 UI -> em: createEvent(startDate, client, name)
 activate em
     em -> um: getCurrentUser()

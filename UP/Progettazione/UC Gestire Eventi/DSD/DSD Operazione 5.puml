@@ -11,6 +11,8 @@ participant "ev: Event" as ev2
 participant "changedEvents: ArrayList<Event>" as evc
 participant "eventManager.eventReceivers: EventEventReceivers" as eer
 
+title 5 addService
+
 UI -> em: addService(name, startOffset, startHour, endHour, diners, place, details, strategy)
 
 activate em

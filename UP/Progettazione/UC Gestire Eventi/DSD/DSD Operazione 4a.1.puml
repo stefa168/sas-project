@@ -16,6 +16,8 @@ participant "newEvent: Event" as newEvent
 participant "newService: Service" as newService
 participant "eventManager.eventReceivers: EventEventReceivers" as eer
 
+title 4a.1 editEventFrequency
+
 UI -> em: editEventFrequency(baseEvent, frequency, editFromDate)
 
 activate em
