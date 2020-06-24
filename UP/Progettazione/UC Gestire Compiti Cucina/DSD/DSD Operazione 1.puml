@@ -76,11 +76,13 @@ else
 
             loop ""for all"" kitchenDuty ""in"" kitchenDuties
                 participant "task : Task" as t
-                ss -->> t **: create(kitchenDuty)
+                ss -->> t **: create(kitchenDuty, false)
                 activate t
                     t -> t: this.amount = 0
                     t -> t: this.estimatedDuration = Duration.ZERO
                     t -> t: this.toDo = true
+                    t -> t: this.optionalDuty = false
+                    t -> t: this.duty = kitchenDuty
                 return task
                 deactivate t
                 ss ->tasks: add(task)

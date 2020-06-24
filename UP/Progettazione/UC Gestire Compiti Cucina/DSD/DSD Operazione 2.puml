@@ -22,11 +22,13 @@ else
     deactivate kdList
 
     participant "task: Task" as t
-    ss -->> t**: create(kitchenDuty)
+    ss -->> t**: create(kitchenDuty, true)
     activate t
     t -> t: this.amount = 0
     t -> t: this.estimatedDuration = 0
     t -> t: this.toDo = true
+    t -> t: this.optionalDuty = true
+    t -> t: this.duty = kitchenDuty
     ss <<-- t:task
     deactivate t
     

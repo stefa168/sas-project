@@ -122,8 +122,8 @@ namespace TurnManagement {
     KitchenTurn -|> Turn
     ServiceJob -> "1" ServiceTurn: turn
 '    todo
-    TimeKeeper -> UserManagement.User: cook
-    ServiceJob -> "0..n" UserManagement.User: worker
+    TimeKeeper -> "1" UserManagement.User: cook
+    ServiceJob -> "0..n" UserManagement.User: workers
 }
 
 namespace RecipeManagement {
