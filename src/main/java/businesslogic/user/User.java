@@ -6,20 +6,18 @@ import persistence.ResultHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class User {
-
     private static Map<Integer, User> loadedUsers = FXCollections.observableHashMap();
-
-    public static enum Role {SERVIZIO, CUOCO, CHEF, ORGANIZZATORE};
-
     private int id;
     private String username;
     private Set<Role> roles;
+
+    ;
 
     public User() {
         id = 0;
@@ -27,43 +25,11 @@ public class User {
         this.roles = new HashSet<>();
     }
 
-    public boolean isChef() {
-        return roles.contains(Role.CHEF);
-    }
-    public boolean isCook() {
-        return roles.contains(Role.CUOCO);
-    }
-    public boolean isOrganizer() {
-        return roles.contains(Role.ORGANIZZATORE);
-    }
-
-    public String getUserName() {
-        return username;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public String toString() {
-        String result = username;
-        if (roles.size() > 0) {
-            result += ": ";
-
-            for (User.Role r : roles) {
-                result += r.toString() + " ";
-            }
-        }
-        return result;
-    }
-
-    // STATIC METHODS FOR PERSISTENCE
-
     public static User loadUserById(int uid) {
         if (loadedUsers.containsKey(uid)) return loadedUsers.get(uid);
 
         User load = new User();
-        String userQuery = "SELECT * FROM Users WHERE id='"+uid+"'";
+        String userQuery = "SELECT * FROM Users WHERE id='" + uid + "'";
         PersistenceManager.executeQuery(userQuery, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {
@@ -99,7 +65,7 @@ public class User {
 
     public static User loadUser(String username) {
         User u = new User();
-        String userQuery = "SELECT * FROM Users WHERE username='"+username+"'";
+        String userQuery = "SELECT * FROM Users WHERE username='" + username + "'";
         PersistenceManager.executeQuery(userQuery, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {
@@ -132,4 +98,53 @@ public class User {
         }
         return u;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    public boolean isChef() {
+        return roles.contains(Role.CHEF);
+    }
+
+    public boolean isCook() {
+        return roles.contains(Role.CUOCO);
+    }
+
+    public boolean isOrganizer() {
+        return roles.contains(Role.ORGANIZZATORE);
+    }
+
+    public String getUserName() {
+        return username;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    // STATIC METHODS FOR PERSISTENCE
+
+    public String toString() {
+        String result = username;
+        if (roles.size() > 0) {
+            result += ": ";
+
+            for (User.Role r : roles) {
+                result += r.toString() + " ";
+            }
+        }
+        return result;
+    }
+
+    public static enum Role {SERVIZIO, CUOCO, CHEF, ORGANIZZATORE}
 }
