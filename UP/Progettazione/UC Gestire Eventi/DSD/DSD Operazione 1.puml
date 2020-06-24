@@ -38,10 +38,11 @@ activate em
         em -> maev: addEvent(startDate)
         activate maev
             participant "event: Event" as ev
-            maev -->> ev **: create(startDate)
+            maev -->> ev **: create(startDate, this)
             activate ev
                 ev -> ev: this.startDate = startDate
                 ev -> ev: this.state = programmed
+                ev -> ev: this.macroEvent = macroEvent
                 maev <<-- ev: event
             deactivate ev
             maev -> events: add(event)
