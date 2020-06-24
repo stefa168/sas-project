@@ -30,6 +30,12 @@ public class User {
     public boolean isChef() {
         return roles.contains(Role.CHEF);
     }
+    public boolean isCook() {
+        return roles.contains(Role.CUOCO);
+    }
+    public boolean isOrganizer() {
+        return roles.contains(Role.ORGANIZZATORE);
+    }
 
     public String getUserName() {
         return username;
