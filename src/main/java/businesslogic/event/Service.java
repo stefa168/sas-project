@@ -1,5 +1,6 @@
 package businesslogic.event;
 
+import businesslogic.kitchentask.SummarySheet;
 import businesslogic.menu.Menu;
 import businesslogic.turn.ServiceJob;
 
@@ -19,7 +20,7 @@ public class Service {
     private State state;
     private static enum State {INPREPARAZIONE, CONFERMATO, ANNULLATO, TERMINATO};
     private ArrayList<ServiceJob> serviceJobs;
-    //TODO private CurrentSheet sheet;
+    private SummarySheet sheet;
 
     public Service(String name, int startOffset, int startHour, int endHour, int diners, String place, String details){
         this.name = name;
