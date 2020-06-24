@@ -70,11 +70,12 @@ namespace KitchenTaskManagement {
         + assignCook(user: User)
     }
 
-    KitchenTaskManager --> "0..1" SummarySheet: currentSheet
+    KitchenTaskManager ---> "0..1" SummarySheet: currentSheet
     KitchenTaskManager -> "0..n" KitchenTaskReceiver: eventReceivers
     SummarySheet --> "1..n" Task: tasks
+    Task --> "0..n" KitchenJob: jobs
+'    todo 4
     SummarySheet --> "0..n" RecipeManagement.KitchenDuty: extraDuties
-    Task -> "0..n" KitchenJob: jobs
     Task -left-> "0..1" RecipeManagement.KitchenDuty: optionalDuty
     KitchenJob --> "0..1"  UserManagement.User: cook
     KitchenJob --> "1" TurnManagement.KitchenTurn: turn
@@ -96,6 +97,7 @@ namespace TurnManagement {
     ' Classe utilitaria suggerita dalle Prof; questa diventerà parte di una HashMap
     class TimeKeeper {
         - usedTime: int
+        --
         + create(user: User, startDuration: int)
     }
 
@@ -103,8 +105,8 @@ namespace TurnManagement {
 
     class Turn{
         - day: LocalDate
-        -startHour: Instant
-        -endHour: Instant
+        - startHour: Instant
+        - endHour: Instant
     }
 
     class TurnManager
@@ -114,11 +116,13 @@ namespace TurnManagement {
     }
 
     KitchenTurn -> "0..n" TimeKeeper: assignedCooks
-    TimeKeeper -> UserManagement.User: cook
     TurnManager -> "0..n" KitchenTurn: turns
+    TurnManager -> "0..n" ServiceTurn: serviceTurns
     ServiceTurn -|> Turn
     KitchenTurn -|> Turn
     ServiceJob -> "1" ServiceTurn: turn
+'    todo
+    TimeKeeper -> UserManagement.User: cook
     ServiceJob -> "0..n" UserManagement.User: worker
 }
 
@@ -130,12 +134,13 @@ namespace RecipeManagement {
         - resultingAmount: int
         - constantConcreteActivityTime: int
         - variableConcreteActivityTime: int
+        --
         + getSubDuties(): ArrayList<KitchenDuty>
     }
 
     ' Ricetta
     class Recipe {
-        -name
+        - name
         --
         + getSubDuties(): ArrayList<KitchenDuty>
     }
@@ -148,27 +153,29 @@ namespace RecipeManagement {
     class RecipeManager{
         --<b>event sender methods</b>--
         --<b>operation methods</b>--
-        +getRecipeBook(): ArrayList<Recipe>
+        + getRecipeBook(): ArrayList<Recipe>
     }
 
     Recipe -left|> KitchenDuty
     Recipe -up> "0..n" Preparation: subDuties
     Preparation -left|> KitchenDuty
-    KitchenDuty --> "1" UserManagement.User: author
+    Preparation -> Preparation
     RecipeManager-->"0..n" Recipe: recipes
+'    todo
+    KitchenDuty --> "1" UserManagement.User: author
 }
 
 namespace EventManagement {
     ' Servizio
     class Service {
-        -name: String
-        -offsetDay: int
-        -startHour: Instant
-        -endHour: Instant
-        -typology: String
-        -place: String
-        -diners: int
-        -state: String
+        - name: String
+        - offsetDay: int
+        - startHour: Instant
+        - endHour: Instant
+        - typology: String
+        - place: String
+        - diners: int
+        - state: String
         --
         + getMenu(): Menu
         + createSummarySheet(): SummarySheet
@@ -196,12 +203,12 @@ namespace EventManagement {
 
     class EventManager{
         --<b>event sender methods</b>--
-        +addReceiver(er: EventEventReceivers)
-        +removeReceiver(er: EventEventReceivers)
-        -notifyCreateEvent(ev: Event)
-        -notifyCancelEvent(ev: Event)
-        -notifyEditEvent(ev: Event)
-        -notifyDeleteEvent(ev: Event)
+        + addReceiver(er: EventEventReceivers)
+        + removeReceiver(er: EventEventReceivers)
+        - notifyCreateEvent(ev: Event)
+        - notifyCancelEvent(ev: Event)
+        - notifyEditEvent(ev: Event)
+        - notifyDeleteEvent(ev: Event)
         --<b>operation methods</b>--
         + createEvent(startDate: LocalDate, client: String): Event
         + cancelEvent(strategy: String): ArrayList<Event>
@@ -215,55 +222,55 @@ namespace EventManagement {
         + getDates(macroEvent: MacroEvent, baseDate: LocalDate): ArrayList<LocalDate>
     }
 
-    class "FrequencyCondition\n{interface}" as FrequencyCondition {
+    class "FrequencyGenerator\n{abstract}" as FrequencyGenerator {
         - baseFrequency: int
         --
         + <i>nextDate(from: LocalDate): LocalDate</i>
     }
 
-    class DailyFrequency {
+    class DailyFrequencyGenerator {
         + nextDate(from: LocalDate): LocalDate
     }
 
-    class WeeklyFrequency {
+    class WeeklyFrequencyGenerator {
         - weekdays: List<String>
         --
         + nextDate(from: LocalDate): LocalDate
     }
 
-    class MonthlyFrequency {
+    class MonthlyFrequencyGenerator {
         + nextDate(from: LocalDate): LocalDate
     }
 
-    class YearlyFrequency {
+    class YearlyFrequencyGenerator {
         + nextDate(from: LocalDate): LocalDate
     }
 
-    DailyFrequency -|> FrequencyCondition
-    WeeklyFrequency -|> FrequencyCondition
-    MonthlyFrequency -|> FrequencyCondition
-    YearlyFrequency -|> FrequencyCondition
+    DailyFrequencyGenerator -|> FrequencyGenerator
+    WeeklyFrequencyGenerator -|> FrequencyGenerator
+    MonthlyFrequencyGenerator -|> FrequencyGenerator
+    YearlyFrequencyGenerator -|> FrequencyGenerator
 
-    EventFrequency -> "1" FrequencyCondition: condition
+    EventFrequency -> "1" FrequencyGenerator: generator
 
-    class "FrequencyStopCondition\n{interface}" as FrequencyStopCondition {
+    class "FrequencyStopCondition\n{abstract}" as FrequencyStopCondition {
         + <i>shouldContinue(macroEvent: MacroEvent, baseDate: LocalDate, newDates: ArrayList<LocalDate>): boolean</i>
     }
 
-    class ForNTimes {
+    class SpecificAmountStopCondition {
         - wantedOccurrencesCount: int
         --
         + shouldContinue(macroEvent: MacroEvent, baseDate: LocalDate, newDates: ArrayList<LocalDate>): boolean
     }
 
-    class UntilDate {
+    class UntilDateStopCondition {
         - endDate: LocalDate
         --
         + shouldContinue(macroEvent: MacroEvent, baseDate: LocalDate, newDates: ArrayList<LocalDate>): boolean
     }
 
-    ForNTimes -|> FrequencyStopCondition
-    UntilDate -|> FrequencyStopCondition
+    SpecificAmountStopCondition -|> FrequencyStopCondition
+    UntilDateStopCondition -|> FrequencyStopCondition
 
     EventFrequency -> "1" FrequencyStopCondition: stopCondition
 
@@ -288,20 +295,20 @@ namespace EventManagement {
     }
 
     Event --> "1..n" Service: "services"
-    Event -left> "1" UserManagement.User: "assignedChef"
-    Service -up> "0..1" MenuManagement.Menu: menu
     RemovalPatch -|> Patch
     AdditionPatch -|> Patch
-    AdditionPatch --> "1" RecipeManagement.kitchenDuty: duty
-    RemovalPatch -> "1" MenuManagement.MenuItem : menuItem
     Service ->  "0..n" Patch: patches
-    MacroEvent -> "0..1" EventFrequency: frequency
-    Service -> "0..n" TurnManagement.ServiceJob: serviceJobs
-    MacroEvent -> "1" UserManagement.User: organizer
-    MacroEvent -> "1" Event: defaultEvent
+    MacroEvent --> "0..1" EventFrequency: frequency
     MacroEvent -> "1..n" Event: events
     Event -> "1" MacroEvent: macroEvent
     EventManager -> "0..n" EventEventReceivers: eventReceivers
+'    todo
+    Event -left> "0..1" UserManagement.User: "assignedChef"
+    Service -up> "0..1" MenuManagement.Menu: menu
+    AdditionPatch --> "1" RecipeManagement.kitchenDuty: duty
+    RemovalPatch -> "1" MenuManagement.MenuItem : menuItem
+    Service -> "0..n" TurnManagement.ServiceJob: serviceJobs
+    MacroEvent -> "1" UserManagement.User: organizer
     Service -> "0..1" KitchenTaskManagement.SummarySheet: sheet
 }
 
@@ -310,12 +317,13 @@ namespace UserManagement {
     class User {
         + isChef(): boolean
         + isCook(): boolean
+        + isOrganizer(): boolean
     }
 
     class UserManager {
         --<b>event sender methods</b>--
         --<b>operation methods</b>--
-        +getCurrentUser(): User
+        + getCurrentUser(): User
     }
 
     UserManager -> "0..1" User: currentUser
@@ -323,37 +331,37 @@ namespace UserManagement {
 
 namespace MenuManagement {
     class Menu{
-        -title: String
-        -published: boolean
-        -inUse: boolean
-        -features: String[]
-        -featureValues: boolean[]
+        - title: String
+        - published: boolean
+        - inUse: boolean
+        - features: String[]
+        - featureValues: boolean[]
         --
-        +create(owner: User, title: String, features: String[])
-        +addSection(name: String)
-        +addItem(r: Recipe, sec?: Section, desc?: String)
-        +isOwner(user: User): boolean
-        +isinUse(): boolean
-        +hasSection(sec: Section): boolean
-        +sectionsSize(): int
-        +moveSection(sec: Section, pos: int)
+        + create(owner: User, title: String, features: String[])
+        + addSection(name: String)
+        + addItem(r: Recipe, sec?: Section, desc?: String)
+        + isOwner(user: User): boolean
+        + isinUse(): boolean
+        + hasSection(sec: Section): boolean
+        + sectionsSize(): int
+        + moveSection(sec: Section, pos: int)
     }
 
     ' Sezione
     class Section{
-        name: String
+        - name: String
         --
-        +create(name: String)
-        +create(sec: Section)
-        +addItem(mi: MenuItem)
+        + create(name: String)
+        + create(sec: Section)
+        + addItem(mi: MenuItem)
     }
 
     ' Voce (del menù)
     class MenuItem{
-        description: String
+        - description: String
         --
-        +create(rec: Recipe, desc?: String)
-        +create(mi: MenuItem)
+        + create(rec: Recipe, desc?: String)
+        + create(mi: MenuItem)
     }
 
     class "MenuEventReceiver \n {interface}" as MenuEventReceiver{
@@ -368,27 +376,27 @@ namespace MenuManagement {
     class MenuManager{
         - menuFeatures: String[]
         --<b>event sender methods</b>--
-        +addReceiver(er: MenuEventReceiver)
-        +removeReceiver(er: MenuEventReceiver)
-        -notifySectionAdded(sec: Section)
-        -notifyMenuItemAdded(mi: MenuItem)
-        -notifyMenuCreated(m: Menu)
-        -notifyMenuDeleted(m: Menu)
-        -notifySectionsRearranged(m: Menu)
+        + addReceiver(er: MenuEventReceiver)
+        + removeReceiver(er: MenuEventReceiver)
+        - notifySectionAdded(sec: Section)
+        - notifyMenuItemAdded(mi: MenuItem)
+        - notifyMenuCreated(m: Menu)
+        - notifyMenuDeleted(m: Menu)
+        - notifySectionsRearranged(m: Menu)
         --<b>operation methods</b>--
-        +defineSection(name: String)
-        +insertItem(r: Recipe, sec?: Section, desc?: String)
-        +createMenu(title: String): Menu
-        +getRecipeBook():ArrayList<Recipe>
+        + defineSection(name: String)
+        + insertItem(r: Recipe, sec?: Section, desc?: String)
+        + createMenu(title: String): Menu
+        + getRecipeBook():ArrayList<Recipe>
     }
 
     MenuManager ->"0..n" MenuEventReceiver: eventReceivers
     MenuManager--left> "0..1" Menu: currentMenu
     Section -left> "0..n" MenuItem: sectionItems
-    Menu --> "0..n" Section: sections
+    Menu -> "0..n" Section: sections
     Menu -> "0..n" MenuItem: freeItems
     Menu -> "1" UserManagement.User: owner
-    MenuItem -> RecipeManagement.Recipe: itemRecipe
+    MenuItem -> "1" RecipeManagement.Recipe: itemRecipe
 }
 
 namespace GeneralModule {
