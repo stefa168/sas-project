@@ -21,7 +21,7 @@ else
     ktm -> turn: hasUserEnoughTime(user, job.estimatedDuration)
     activate turn
 
-    turn -> cooks: get(job.cook)
+    turn -> cooks: get(user)
     activate cooks
     turn <<--cooks: time
     deactivate cooks
