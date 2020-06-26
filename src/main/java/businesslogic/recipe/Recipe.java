@@ -7,21 +7,30 @@ import persistence.ResultHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.util.*;
 
-public class Recipe {
+public class Recipe extends KitchenDuty{
     private static Map<Integer, Recipe> all = new HashMap<>();
+    private ArrayList<Preparation> subDuties;
 
     private int id;
-    private String name;
 
-    private Recipe() {
-
+    public Recipe(String name, String instruction, int resultingAmount, Duration constantConcreteActivityTime, Duration variableConcreteActivityTime){
+        super(name,instruction,resultingAmount,constantConcreteActivityTime,variableConcreteActivityTime);
+        subDuties = new ArrayList<>();
     }
 
+    //Questi 2 costruttori vengono usati sotto per l'accesso al DB
     public Recipe(String name) {
+        super(name);
         id = 0;
-        this.name = name;
+        subDuties = new ArrayList<>();
+    }
+
+    private Recipe(){
+        super();
+        subDuties = new ArrayList<>();
     }
 
     public String getName() {
@@ -84,4 +93,9 @@ public class Recipe {
     }
 
 
+    @Override
+    public ArrayList<KitchenDuty> getSubDuties() {
+        //TODO
+        return null;
+    }
 }
