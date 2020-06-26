@@ -149,7 +149,7 @@ m1=0..n</panel_attributes>
       <h>48</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
-appartiene &gt;
+&lt; appartiene
 m2=0..n
 m1=0..1
 </panel_attributes>
@@ -473,7 +473,7 @@ TU: numero</panel_attributes>
     <panel_attributes>lt=-
 m1=0..n
 m2=0..n
-fa parte di &gt;</panel_attributes>
+&lt; fa parte di</panel_attributes>
     <additional_attributes>130.0;20.0;10.0;20.0</additional_attributes>
   </element>
   <element>
@@ -905,7 +905,7 @@ modifica v</panel_attributes>
     <panel_attributes>lt=-
 m1=0..n
 m2=1
-aggiunge v</panel_attributes>
+aggiunge &gt;</panel_attributes>
     <additional_attributes>10.0;160.0;10.0;220.0;260.0;220.0;260.0;10.0;370.0;10.0</additional_attributes>
   </element>
   <element>
