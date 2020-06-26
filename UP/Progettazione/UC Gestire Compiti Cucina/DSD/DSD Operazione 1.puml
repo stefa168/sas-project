@@ -26,7 +26,7 @@ else
     tm -->> service: createSummarySheet()
     activate service
 
-        service -->>ss**: create(this.getMenu())
+        service -->>ss**: create(this.getMenu(), service.removalPatches, service.additionPatches)
         activate ss
 
             participant "kitchenDuties: ArrayList<KitchenDuty>" as kdList
@@ -36,7 +36,7 @@ else
             deactivate kdList
     
             loop ""for all"" section ""in"" menu.sections
-                loop ""for all"" menuItem ""in"" section.sectionItems
+                loop ""for all"" menuItem ""in"" section.sectionItems where !removalPatches.contains(menuItem.itemRecipe))
                     ss -> kdList: add(menuItem.itemRecipe)
                     activate kdList
                     deactivate kdList
@@ -54,7 +54,7 @@ else
                 end
             end
 
-            loop ""for all"" freeItem ""in"" menu.freeItems
+            loop ""for all"" freeItem ""in"" menu.freeItems where !removalPatches.contains(freeItem.itemRecipe))
                 ss -> kdList: add(freeItem.itemRecipe)
                 activate kdList
                 deactivate kdList
@@ -69,6 +69,23 @@ else
                 activate kdList
                 deactivate kdList
             end
+            participant "recipe: Recipe" as rec
+            loop ""for all"" recipe ""in"" additionPatches
+                ss -> kdList: add(recipe)
+                activate kdList
+                deactivate kdList
+
+                participant "freeItem.itemRecipe: Recipe" as recipe
+                ss -> rec: getSubDuties()
+                activate rec
+                    ss <<-- rec: subRecipes
+                deactivate rec
+
+                ss -> kdList: addAll(subRecipes)
+                activate kdList
+                deactivate kdList
+            end
+
 
             participant "tasks: ArrayList<Task>" as tasks
             ss -->> tasks**: create()
