@@ -9,6 +9,51 @@ import java.util.ArrayList;
 
 public class Service {
     private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public int getOffsetDay() {
+        return offsetDay;
+    }
+
+    public int getStartHour() {
+        return startHour;
+    }
+
+    public int getEndHour() {
+        return endHour;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public int getDiners() {
+        return diners;
+    }
+
+    public String getTypology() {
+        return typology;
+    }
+
+    public ArrayList<Patch> getPatches() {
+        return patches;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public ArrayList<ServiceJob> getServiceJobs() {
+        return serviceJobs;
+    }
+
+    public SummarySheet getSheet() {
+        return sheet;
+    }
+
     private int offsetDay;
     private int startHour;
     private int endHour;
@@ -34,4 +79,11 @@ public class Service {
     }
 
     public Menu getMenu(){return this.menu;}
+
+    public SummarySheet createSummarySheet(){
+        SummarySheet sheet = new SummarySheet(this.getMenu());
+        this.sheet = sheet;
+        return sheet;
+    }
+
 }

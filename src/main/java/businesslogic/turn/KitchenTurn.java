@@ -4,13 +4,22 @@ import businesslogic.user.User;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 public class KitchenTurn extends Turn {
     private boolean complete;
     private HashMap<User, Duration> assignedCooks;
 
-    public KitchenTurn(Instant start, Instant end) {
+    public boolean isComplete() {
+        return complete;
+    }
+
+    public HashMap<User, Duration> getAssignedCooks() {
+        return assignedCooks;
+    }
+
+    public KitchenTurn(LocalDate start, LocalDate end) {
         super(start, end);
         assignedCooks = new HashMap<>();
         complete = false;

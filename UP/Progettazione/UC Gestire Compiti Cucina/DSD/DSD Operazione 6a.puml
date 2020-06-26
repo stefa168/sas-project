@@ -21,7 +21,7 @@ else
     activate task
     task -> t: freeTime(job.cook, job.estimatedDuration)
     activate t
-    return turn
+    deactivate t
 
     task -> jl: remove(job)
     activate jl

@@ -14,7 +14,7 @@ participant "ktr: KitchenTaskEventReceiver" as ktr
 
 alt currentSheet == null || Date.now() > turn.endDate || turn.complete
     UI <<-- tm: throw UseCaseLogicException
-else task.amount <= 0 || task.estimatedDuration == 0 || task.estimatedDuration < 0 || toDo == false
+else task.amount <= 0 || task.estimatedDuration == 0 ||  task.toDo == false
     UI <<-- tm: throw TaskException
 else
 
@@ -29,8 +29,12 @@ else
         job -> job: this.duration = estimatedDuration
         job -> job: this.turn = turn
         job -> job: this.cook = null
-
     return job
+
+    participant "task.jobs: ArrayList<KitchenJob>" as jobs
+    task -> jobs: add(job)
+    activate jobs
+    deactivate jobs
 
     tm <<-- task: job
     deactivate task

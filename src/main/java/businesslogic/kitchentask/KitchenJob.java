@@ -27,4 +27,20 @@ public class KitchenJob {
             this.cook = user;
         }
     }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public Duration getEstimatedDuration() {
+        return estimatedDuration;
+    }
+
+    public KitchenTurn getTurn() {
+        return turn;
+    }
+
+    public User getCook() {
+        return cook;
+    }
 }

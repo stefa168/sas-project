@@ -17,6 +17,16 @@ public class EventManager {
         currentEvent = event;
     }
 
+    public EventManager(){
+        receivers = new ArrayList<>();
+    }
+
+    public void setCurrentEvent(Event event){
+        if(event!=null){
+            this.currentEvent = event;
+        }
+    }
+
     public Event createEvent(LocalDate startDate, String client){
         //TODO
         return  null;
