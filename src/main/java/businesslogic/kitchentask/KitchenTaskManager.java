@@ -103,7 +103,7 @@ public class KitchenTaskManager {
         if(currentSheet == null || LocalDate.now().compareTo(kitchenTurn.getEnd()) >0 || kitchenTurn.isComplete()){
             throw new UseCaseLogicException();
         }
-        if(task.getAmount()<=0 || task.getEstimatedDuration() == Duration.ZERO || !task.isToDo() ){
+        if(task.getAmount()<=0 || task.getEstimatedDuration().isNegative() || task.getEstimatedDuration() == Duration.ZERO || !task.isToDo() ){
             throw  new TaskException();
         }
 

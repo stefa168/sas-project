@@ -14,7 +14,7 @@ participant "ktr: KitchenTaskEventReceiver" as ktr
 
 alt currentSheet == null || Date.now() > turn.endDate || turn.complete
     UI <<-- tm: throw UseCaseLogicException
-else task.amount <= 0 || task.estimatedDuration == 0 ||  task.toDo == false
+else task.amount <= 0 || task.estimatedDuration.isNegative() || task.estimatedDuration == 0 ||  task.toDo == false
     UI <<-- tm: throw TaskException
 else
 
