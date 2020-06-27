@@ -34,15 +34,15 @@ public class EventInfo implements EventItemInfo {
     }
 
     // STATIC METHODS FOR PERSISTENCE
-
+/*
     public static ObservableList<EventInfo> loadAllEventInfo() {
-        ObservableList<EventInfo> all = FXCollections.observableArrayList();
-        String query = "SELECT * FROM Events WHERE true";
+        ObservableList<Event> all = FXCollections.observableArrayList();
+        String query = "SELECT * FROM Event WHERE true";
         PersistenceManager.executeQuery(query, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {
                 String n = rs.getString("name");
-                EventInfo e = new EventInfo(n);
+                Event e = new Event(n);
                 e.id = rs.getInt("id");
                 e.dateStart = rs.getDate("date_start");
                 e.dateEnd = rs.getDate("date_end");
@@ -54,8 +54,8 @@ public class EventInfo implements EventItemInfo {
         });
 
         for (EventInfo e : all) {
-            e.services = ServiceInfo.loadServiceInfoForEvent(e.id);
+            e.services = Service.loadServiceForEvent(e.id);
         }
         return all;
-    }
+    }*/
 }

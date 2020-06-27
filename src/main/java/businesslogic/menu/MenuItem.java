@@ -126,6 +126,22 @@ public class MenuItem {
         return result;
     }
 
+    public static MenuItem getMenuItemById(int id){
+        String query = "SELECT * FROM MenuItems WHERE menu_id = " + id;
+        ArrayList<MenuItem> menuItems = new ArrayList<>();
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                MenuItem mi = new MenuItem();
+                mi.description = rs.getString("description");
+                mi.id = rs.getInt("id");
+                menuItems.add(mi);
+            }
+        });
+        return menuItems.get(0);
+
+    }
+
     public static void saveSection(int sec_id, MenuItem mi) {
         String upd = "UPDATE MenuItems SET section_id = " + sec_id +
                 " WHERE id = " + mi.id;

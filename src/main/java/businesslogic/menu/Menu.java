@@ -33,6 +33,12 @@ public class Menu {
         this.featuresMap = FXCollections.observableHashMap();
     }
 
+    private Menu(String title, boolean published) {
+        this.title = title;
+        this.published = published;
+        this.featuresMap = FXCollections.observableHashMap();
+    }
+
     public Menu(User user, String title, String[] menuFeatures) {
         id = 0;
 
@@ -301,6 +307,10 @@ public class Menu {
 
     // STATIC METHODS FOR PERSISTENCE
 
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
     public static void saveNewMenu(Menu m) {
         String menuInsert = "INSERT INTO catering.Menus (title, owner_id, published) VALUES (?, ?, ?);";
         int[] result = PersistenceManager.executeBatchUpdate(menuInsert, 1, new BatchUpdateHandler() {
@@ -395,6 +405,48 @@ public class Menu {
         String del = "DELETE FROM Menus WHERE id = " + m.getId();
         PersistenceManager.executeUpdate(del);
         loadedMenus.remove(m);
+    }
+
+    public static Menu loadMenuById(int id){
+        String queryMenu = "SELECT * FROM Menus WHERE id =" + id;
+        ArrayList<Menu> menus = new ArrayList<>();
+
+        PersistenceManager.executeQuery(queryMenu, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                String title = rs.getString("title");
+                int owner_id = rs.getInt("owner_id");
+                boolean published = rs.getBoolean("published");
+                Menu menu = new Menu(title, published);
+                menu.setOwner(User.loadUserById(owner_id));
+
+                String featQ = "SELECT * FROM MenuFeatures WHERE menu_id = " + menu.id;
+                PersistenceManager.executeQuery(featQ, new ResultHandler() {
+                    @Override
+                    public void handle(ResultSet rs) throws SQLException {
+                        menu.featuresMap.put(rs.getString("name"), rs.getBoolean("value"));
+                    }
+                });
+
+                menu.sections = Section.loadSectionsFor(menu.id);
+
+                // load free items
+                menu.freeItems = MenuItem.loadItemsFor(menu.id, 0);
+
+                String inuseQ = "SELECT * FROM Services WHERE approved_menu_id = " + menu.id;
+                PersistenceManager.executeQuery(inuseQ, new ResultHandler() {
+                    @Override
+                    public void handle(ResultSet rs) throws SQLException {
+                        // se c'è anche un solo risultato vuol dire che il menù è in uso
+                        menu.inUse = true;
+                    }
+                });
+
+                menus.add(menu);
+
+            }
+        });
+        return menus.get(0);
     }
 
     public static ObservableList<Menu> loadAllMenus() {

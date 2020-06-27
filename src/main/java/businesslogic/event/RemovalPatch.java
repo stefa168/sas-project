@@ -2,10 +2,12 @@ package businesslogic.event;
 
 import businesslogic.menu.MenuItem;
 
-class RemovalPatch implements Patch {
+class RemovalPatch extends Patch {
     private MenuItem menuItem;
 
-    RemovalPatch(MenuItem menuItem){
-        this.menuItem = menuItem;
+
+    RemovalPatch(MenuItem menuItem, int patch_id){
+        super(patch_id);
+        this.patch_id = patch_id;
     }
 }
