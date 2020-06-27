@@ -154,10 +154,12 @@ public class Service implements EventItemInfo{
                 Service service = new Service(name,offsetDay,startHour,endHour,diners,place,typology);
                 service.setService_id(serviceId);
                 service.setState(state);
-                //Menu menu = Menu.loadMenuById(menuId);
-                //service.setMenu(menu);
-                //service.getAllAdditionPatches();
-                //service.getAllRemovalPatches();
+                /* messi come commentati per risolvere problema in eventsinfo
+
+                Menu menu = Menu.loadMenuById(menuId);
+                service.setMenu(menu);
+                service.getAllAdditionPatches();
+                service.getAllRemovalPatches();  */
                 result.add(service);
             }
         });
