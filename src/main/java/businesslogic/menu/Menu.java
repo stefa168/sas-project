@@ -407,8 +407,7 @@ public class Menu {
         loadedMenus.remove(m);
     }
 
-    public Menu loadMenuById(int id){
-        System.out.println("SONO ESEGUITO");
+    public static Menu loadMenuById(int id){
         String queryMenu = "SELECT * FROM Menus WHERE id =" + id;
         ArrayList<Menu> menus = new ArrayList<>();
 

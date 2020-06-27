@@ -1,5 +1,6 @@
 package businesslogic.event;
 
+import businesslogic.UseCaseLogicException;
 import businesslogic.kitchentask.SummarySheet;
 import businesslogic.menu.Menu;
 import businesslogic.menu.MenuItem;
@@ -138,28 +139,27 @@ public class Service implements EventItemInfo{
                 String typology = rs.getString("typology");
                 String place = rs.getString("place");
                 int s = rs.getInt("state");
-                State state;
-                if(s == 0){
-                    state = State.INPREPARAZIONE;
-                }
-                else if(s==1){
+                State state = State.INPREPARAZIONE;
+                if(s==1){
                     state = State.CONFERMATO;
                 }
                 else if(s==2){
                     state = State.ANNULLATO;
                 }
-                else {
+                else if (s==3){
                     state = State.TERMINATO;
                 }
+
                 Service service = new Service(name,offsetDay,startHour,endHour,diners,place,typology);
                 service.setService_id(serviceId);
                 service.setState(state);
-                /* messi come commentati per risolvere problema in eventsinfo
+                if(s == 1 || s== 3){
+                    Menu menu = Menu.loadMenuById(menuId);
+                    service.setMenu(menu);
+                    service.getAllAdditionPatches();
+                    service.getAllRemovalPatches();
+                }
 
-                Menu menu = Menu.loadMenuById(menuId);
-                service.setMenu(menu);
-                service.getAllAdditionPatches();
-                service.getAllRemovalPatches();  */
                 result.add(service);
             }
         });
@@ -190,7 +190,7 @@ public class Service implements EventItemInfo{
     }
 
     public void getAllRemovalPatches(){
-        String query = "SELECT * FROM `Patch` WHERE `menuItem_id` IS NOT NULL AND `service_id` = `" + this.service_id + "`";
+        String query = "SELECT * FROM Patch WHERE menuItem_id IS NOT NULL AND service_id =" + this.service_id ;
         ArrayList<RemovalPatch> removalPatches = new ArrayList<>();
 
         PersistenceManager.executeQuery(query, new ResultHandler() {
