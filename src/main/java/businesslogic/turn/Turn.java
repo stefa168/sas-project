@@ -18,4 +18,6 @@ public abstract class Turn {
     public Instant getEnd() {
         return end;
     }
+
+    public abstract boolean hasConcluded();
 }

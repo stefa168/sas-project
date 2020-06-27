@@ -1,5 +1,6 @@
 package businesslogic.event;
 
+import businesslogic.event.frequency.EventFrequency;
 import businesslogic.user.User;
 import javafx.util.Pair;
 

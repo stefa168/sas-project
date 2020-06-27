@@ -11,8 +11,9 @@ import businesslogic.turn.KitchenTurn;
 import businesslogic.user.User;
 
 import java.time.Duration;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 
 public class KitchenTaskManager {
     private SummarySheet currentSheet;
@@ -33,6 +34,10 @@ public class KitchenTaskManager {
         for (KitchenTaskEventReceiver eventReceiver : eventReceivers) {
             eventReceiver.updateSheetCreate(sheet);
         }
+    }
+
+    private void notifyTaskOrderChanged(List<Task> involvedTasks) {
+        eventReceivers.forEach(er -> er.updateTaskOrderChanged(involvedTasks));
     }
 
     private void notifyAddExtraDuty(KitchenDuty kitchenDuty, Task task) {
@@ -71,12 +76,17 @@ public class KitchenTaskManager {
         }
     }
 
+    private void notifyEditTurn(KitchenTurn turn) {
+        eventReceivers.forEach(er -> er.updateEditTurn(turn));
+    }
+
     public SummarySheet createSummarySheet(Event event, Service service) throws UseCaseLogicException, EventException {
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
+        // todo fixare terza condizione
         if (!user.isChef() || event.getAssignedChef() != user || event.containsService(service)) {
             throw new UseCaseLogicException();
         }
-        if (!event.isActive()) {
+        if (!service.isConfirmed()) {
             throw new EventException();
         }
 
@@ -84,6 +94,27 @@ public class KitchenTaskManager {
         notifySheetCreate(currentSheet);
 
         return currentSheet;
+    }
+
+    public SummarySheet openSummarySheetForEditing(Event event, Service associatedService) throws UseCaseLogicException, EventException {
+        User user = CatERing.getInstance().getUserManager().getCurrentUser();
+        if (!user.isChef() || !event.containsService(associatedService) || associatedService.getSheet() == null) {
+            throw new UseCaseLogicException();
+        }
+
+        if (!event.isAssignedTo(user) || !associatedService.isConfirmed()) {
+            throw new EventException();
+        }
+
+        return associatedService.getSheet();
+    }
+
+    public SummarySheet openSummarySheetForViewing(Service service) throws UseCaseLogicException {
+        if (service.getSheet() == null) {
+            throw new UseCaseLogicException();
+        }
+
+        return service.getSheet();
     }
 
     public Task addExtraDuty(KitchenDuty kitchenDuty) throws UseCaseLogicException {
@@ -104,8 +135,46 @@ public class KitchenTaskManager {
         return currentSheet;
     }
 
+    public void changeTaskOrder(Task a, Task b) throws UseCaseLogicException {
+        if (currentSheet == null) {
+            throw new UseCaseLogicException();
+        }
+
+        currentSheet.changeTaskOrder(a, b);
+
+        notifyTaskOrderChanged(List.of(a, b));
+    }
+
+    public void editTask(Task taskToEdit, Integer newAmount, Duration newDuration, Boolean toDo) throws UseCaseLogicException, TaskException {
+        if (currentSheet == null || !currentSheet.containsTask(taskToEdit)) {
+            throw new UseCaseLogicException();
+        }
+
+        if (newAmount != null) {
+            taskToEdit.setAmount(newAmount);
+        }
+
+        if (newDuration != null && !newDuration.isNegative()) {
+            taskToEdit.setDuration(newDuration);
+        }
+
+        if (toDo != null) {
+            if (toDo) {
+                taskToEdit.setToDo(true);
+            } else {
+                if (taskToEdit.getJobs().size() > 0) {
+                    throw new TaskException();
+                }
+
+                taskToEdit.setToDo(false);
+            }
+        }
+
+        notifyEditTask(taskToEdit);
+    }
+
     public KitchenJob createKitchenJob(Task task, KitchenTurn kitchenTurn, int amount, Duration estimatedDuration) throws TaskException, UseCaseLogicException {
-        if (currentSheet == null || LocalDate.now().compareTo(kitchenTurn.getEnd()) > 0 || kitchenTurn.isComplete()) {
+        if (currentSheet == null || Instant.now().compareTo(kitchenTurn.getEnd()) > 0 || kitchenTurn.isComplete()) {
             throw new UseCaseLogicException();
         }
         if (task.getAmount() <= 0 ||
@@ -130,16 +199,42 @@ public class KitchenTaskManager {
         return task;
     }
 
+    public KitchenJob editKitchenJob(KitchenJob job, Integer newAmount, Duration newDuration) throws TaskException {
+        KitchenTurn turn = job.getTurn();
+
+        if (!turn.hasConcluded()) {
+            if (job.getCook() != null) {
+                if (turn.hasUserEnoughTime(job.getCook(), job.getDuration(), newDuration)) {
+                    turn.freeTime(job.getCook(), job.getDuration());
+                    turn.takeTime(job.getCook(), newDuration);
+                    job.setDuration(newDuration);
+                }
+            } else {
+                job.setDuration(newDuration);
+            }
+
+            if (newAmount != null) {
+                job.setAmount(newAmount);
+            }
+        } else {
+            throw new TaskException();
+        }
+
+        notifyEditKitchenJob(job);
+
+        return job;
+    }
+
     public KitchenJob assignCook(KitchenJob job, User user) throws UseCaseLogicException, TaskException {
-        if (user == null || !user.isCook() || LocalDate.now().compareTo(job.getTurn().getEnd()) > 0) {
+        if (user == null || !user.isCook() || Instant.now().compareTo(job.getTurn().getEnd()) > 0) {
             throw new UseCaseLogicException();
         }
         if (job.getCook() != user) {
-            if (job.getTurn().hasUserEnoughTime(user, job.getEstimatedDuration())) {
+            if (job.getTurn().hasUserEnoughTime(user, job.getDuration())) {
                 if (job.getCook() != null) {
-                    job.getTurn().freeTime(job.getCook(), job.getEstimatedDuration());
+                    job.getTurn().freeTime(job.getCook(), job.getDuration());
                 }
-                job.getTurn().takeTime(user, job.getEstimatedDuration());
+                job.getTurn().takeTime(user, job.getDuration());
                 job.assignCook(user);
                 notifyEditKitchenJob(job);
             } else {
@@ -149,5 +244,16 @@ public class KitchenTaskManager {
         return job;
     }
 
+    public KitchenTurn changeKitchenTurnState(KitchenTurn turn, boolean complete) throws TaskException {
+        if (turn.hasConcluded()) {
+            throw new TaskException();
+        }
+
+        turn.setComplete(complete);
+
+        notifyEditTurn(turn);
+
+        return turn;
+    }
 
 }

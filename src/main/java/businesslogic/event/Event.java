@@ -8,12 +8,11 @@ import java.util.ArrayList;
 public class Event {
     private LocalDate startDate;
     private State state;
-    private static enum State {PROGRAMMATO, ATTIVO, TERMINATO, ANNULLATO};
     private MacroEvent macroEvent;
     private ArrayList<Service> services;
     private User assignedChef;
 
-    public Event(LocalDate startDate, MacroEvent macroEvent){
+    public Event(LocalDate startDate, MacroEvent macroEvent) {
         this.startDate = startDate;
         this.macroEvent = macroEvent;
         this.state = State.PROGRAMMATO;
@@ -36,21 +35,28 @@ public class Event {
         return assignedChef;
     }
 
-    public Event cancel(){
+    public Event cancel() {
         //TODO
         return null;
     }
 
-    public Event delete(){
+    public Event delete() {
         //TODO
         return null;
     }
-    public boolean isActive(){
-        return this.state==State.ATTIVO;
+
+    public boolean isActive() {
+        return this.state == State.ATTIVO;
     }
 
-    public boolean containsService(Service service){
+    public boolean containsService(Service service) {
         return services.contains(service);
     }
+
+    public boolean isAssignedTo(User user) {
+        return assignedChef.equals(user);
+    }
+
+    private static enum State {PROGRAMMATO, ATTIVO, TERMINATO, ANNULLATO}
 
 }

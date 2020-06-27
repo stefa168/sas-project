@@ -9,6 +9,28 @@ import java.util.ArrayList;
 
 public class Service {
     private String name;
+    private int offsetDay;
+    private int startHour;
+    private int endHour;
+    private String place;
+    private int diners;
+    private String typology;
+    private Menu menu;
+    private ArrayList<Patch> patches;
+    private State state;
+    private ArrayList<ServiceJob> serviceJobs;
+    private SummarySheet sheet;
+
+    public Service(String name, int startOffset, int startHour, int endHour, int diners, String place, String details) {
+        this.name = name;
+        this.offsetDay = startOffset;
+        this.startHour = startHour;
+        this.endHour = endHour;
+        this.diners = diners;
+        this.place = place;
+        this.typology = details;
+        this.state = State.INPREPARAZIONE;
+    }
 
     public String getName() {
         return name;
@@ -54,36 +76,23 @@ public class Service {
         return sheet;
     }
 
-    private int offsetDay;
-    private int startHour;
-    private int endHour;
-    private String place;
-    private int diners;
-    private String typology;
-    private Menu menu;
-    private ArrayList<Patch> patches;
-    private State state;
-    private static enum State {INPREPARAZIONE, CONFERMATO, ANNULLATO, TERMINATO};
-    private ArrayList<ServiceJob> serviceJobs;
-    private SummarySheet sheet;
+    public Menu getMenu() {return this.menu;}
 
-    public Service(String name, int startOffset, int startHour, int endHour, int diners, String place, String details){
-        this.name = name;
-        this.offsetDay = startOffset;
-        this.startHour = startHour;
-        this.endHour = endHour;
-        this.diners = diners;
-        this.place = place;
-        this.typology = details;
-        this.state = State.INPREPARAZIONE;
-    }
-
-    public Menu getMenu(){return this.menu;}
-
-    public SummarySheet createSummarySheet(){
+    public SummarySheet createSummarySheet() {
         SummarySheet sheet = new SummarySheet(this.getMenu());
         this.sheet = sheet;
         return sheet;
     }
+
+    public SummarySheet loadSummarySheet(Service linkedService) {
+        //todo durante sql
+        return null;
+    }
+
+    public boolean isConfirmed() {
+        return state == State.CONFERMATO;
+    }
+
+    private static enum State {INPREPARAZIONE, CONFERMATO, ANNULLATO, TERMINATO}
 
 }

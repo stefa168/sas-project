@@ -4,7 +4,6 @@ import businesslogic.user.User;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.HashMap;
 
 public class KitchenTurn extends Turn {
@@ -20,14 +19,17 @@ public class KitchenTurn extends Turn {
         return complete;
     }
 
+    public void setComplete(boolean complete) {
+        this.complete = complete;
+    }
+
     public HashMap<User, Duration> getAssignedCooks() {
         return assignedCooks;
     }
 
-    public KitchenTurn(LocalDate start, LocalDate end) {
-        super(start, end);
-        assignedCooks = new HashMap<>();
-        complete = false;
+    @Override
+    public boolean hasConcluded() {
+        return end.compareTo(Instant.now()) <= 0;
     }
 
     public boolean hasUserEnoughTime(User user, Duration estimatedDuration) {
@@ -38,6 +40,11 @@ public class KitchenTurn extends Turn {
         Duration occupiedTime = assignedCooks.get(user);
 
         return this.start.plus(occupiedTime).plus(estimatedDuration).compareTo(this.end) <= 0;
+    }
+
+    public boolean hasUserEnoughTime(User user, Duration oldDuration, Duration newDuration) {
+        //todo
+        throw new RuntimeException("Not Implemented");
     }
 
     public void takeTime(User cook, Duration estimatedDuration) {
