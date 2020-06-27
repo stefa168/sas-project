@@ -1,22 +1,21 @@
 package businesslogic.turn;
 
 import java.time.Instant;
-import java.time.LocalDate;
 
 public abstract class Turn {
-    protected LocalDate start;
-    protected LocalDate end;
+    protected Instant start;
+    protected Instant end;
 
-    public Turn(LocalDate start, LocalDate end) {
+    public Turn(Instant start, Instant end) {
         this.start = start;
         this.end = end;
     }
 
-    public LocalDate getStart() {
+    public Instant getStart() {
         return start;
     }
 
-    public LocalDate getEnd() {
+    public Instant getEnd() {
         return end;
     }
 }

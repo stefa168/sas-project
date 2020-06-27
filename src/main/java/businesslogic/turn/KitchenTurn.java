@@ -10,6 +10,11 @@ import java.util.HashMap;
 public class KitchenTurn extends Turn {
     private boolean complete;
     private HashMap<User, Duration> assignedCooks;
+    public KitchenTurn(Instant start, Instant end) {
+        super(start, end);
+        assignedCooks = new HashMap<>();
+        complete = false;
+    }
 
     public boolean isComplete() {
         return complete;
