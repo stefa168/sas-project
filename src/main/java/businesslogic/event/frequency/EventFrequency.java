@@ -1,6 +1,8 @@
-package businesslogic.event;
+package businesslogic.event.frequency;
 
-import jdk.jfr.Frequency;
+import businesslogic.event.MacroEvent;
+import businesslogic.event.frequency.conditions.FrequencyStopCondition;
+import businesslogic.event.frequency.generators.FrequencyGenerator;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -1,4 +1,6 @@
-package businesslogic.event;
+package businesslogic.event.frequency.conditions;
+
+import businesslogic.event.MacroEvent;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

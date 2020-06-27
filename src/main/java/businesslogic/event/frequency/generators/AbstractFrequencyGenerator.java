@@ -1,6 +1,4 @@
-package businesslogic.event;
-
-import java.time.LocalDate;
+package businesslogic.event.frequency.generators;
 
 public abstract class  AbstractFrequencyGenerator implements FrequencyGenerator{
    private int baseFrequency;

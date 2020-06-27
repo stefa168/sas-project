@@ -1,4 +1,4 @@
-package businesslogic.event;
+package businesslogic.event.frequency.generators;
 
 import java.time.LocalDate;
 import java.util.Set;

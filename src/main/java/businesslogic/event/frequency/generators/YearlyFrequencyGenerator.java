@@ -1,10 +1,10 @@
-package businesslogic.event;
+package businesslogic.event.frequency.generators;
 
 import java.time.LocalDate;
 
-public class MonthlyFrequencyGenerator extends AbstractFrequencyGenerator{
+public class YearlyFrequencyGenerator extends AbstractFrequencyGenerator{
 
-    MonthlyFrequencyGenerator(int baseFrequency){
+    YearlyFrequencyGenerator(int baseFrequency){
         super(baseFrequency);
     }
     @Override
