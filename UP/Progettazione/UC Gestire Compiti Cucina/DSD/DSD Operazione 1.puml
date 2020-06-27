@@ -36,7 +36,7 @@ else
             deactivate kdList
     
             loop ""for all"" section ""in"" menu.sections
-                loop ""for all"" menuItem ""in"" section.sectionItems where !removalPatches.contains(menuItem.itemRecipe))
+                loop ""for all"" menuItem ""in"" section.sectionItems ""where"" !removalPatches.contains(menuItem.itemRecipe))
                     ss -> kdList: add(menuItem.itemRecipe)
                     activate kdList
                     deactivate kdList
@@ -54,7 +54,7 @@ else
                 end
             end
 
-            loop ""for all"" freeItem ""in"" menu.freeItems where !removalPatches.contains(freeItem.itemRecipe))
+            loop ""for all"" freeItem ""in"" menu.freeItems
                 ss -> kdList: add(freeItem.itemRecipe)
                 activate kdList
                 deactivate kdList
