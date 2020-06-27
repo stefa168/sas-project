@@ -1,9 +1,7 @@
 package ui.general;
 
 import businesslogic.CatERing;
-import businesslogic.event.EventInfo;
-import businesslogic.event.EventItemInfo;
-import businesslogic.event.ServiceInfo;
+import businesslogic.event.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
@@ -18,15 +16,15 @@ public class EventsInfoDialog {
     TreeView<EventItemInfo> eventTree;
 
     public void initialize() {
-        ObservableList<EventInfo> all = CatERing.getInstance().getEventManager().getEventInfo();
+        ObservableList<Event> all = CatERing.getInstance().getEventManager().getEventInfo();
         eventTree.setShowRoot(false);
         TreeItem<EventItemInfo> root = new TreeItem<>(null);
 
-        for (EventInfo e: all) {
+        for (Event e: all) {
             TreeItem<EventItemInfo> node = new TreeItem<>(e);
             root.getChildren().add(node);
-            ObservableList<ServiceInfo> serv = e.getServices();
-            for (ServiceInfo s: serv) {
+            ObservableList<Service> serv = e.getServices();
+            for (Service s: serv) {
                 node.getChildren().add(new TreeItem<>(s));
             }
         }

@@ -18,7 +18,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Service {
+public class Service implements EventItemInfo{
     private String name;
     private int offsetDay;
     private Time startHour;
@@ -154,10 +154,10 @@ public class Service {
                 Service service = new Service(name,offsetDay,startHour,endHour,diners,place,typology);
                 service.setService_id(serviceId);
                 service.setState(state);
-                Menu menu = Menu.loadMenuById(menuId);
-                service.setMenu(menu);
-                service.getAllAdditionPatches();
-                service.getAllRemovalPatches();
+                //Menu menu = Menu.loadMenuById(menuId);
+                //service.setMenu(menu);
+                //service.getAllAdditionPatches();
+                //service.getAllRemovalPatches();
                 result.add(service);
             }
         });
@@ -170,7 +170,7 @@ public class Service {
     }
 
     public void getAllAdditionPatches(){
-        String query = "SELECT * FROM `Patch` WHERE `menuItem_id` IS NULL AND `service_id` = `" + this.service_id + "`";
+        String query = "SELECT * FROM Patch WHERE menuItem_id IS NULL AND service_id =" + this.service_id;
         ArrayList<AdditionPatch> additionPatches = new ArrayList<>();
 
         PersistenceManager.executeQuery(query, new ResultHandler() {
@@ -209,5 +209,9 @@ public class Service {
     }
 
     private static enum State {INPREPARAZIONE, CONFERMATO, ANNULLATO, TERMINATO}
+
+    public String toString() {
+        return name + ": " + offsetDay + " (" + startHour + "-" + endHour + "), " + diners + " pp.";
+    }
 
 }

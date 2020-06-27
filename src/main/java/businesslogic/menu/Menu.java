@@ -407,7 +407,8 @@ public class Menu {
         loadedMenus.remove(m);
     }
 
-    public static Menu loadMenuById(int id){
+    public Menu loadMenuById(int id){
+        System.out.println("SONO ESEGUITO");
         String queryMenu = "SELECT * FROM Menus WHERE id =" + id;
         ArrayList<Menu> menus = new ArrayList<>();
 
@@ -433,12 +434,13 @@ public class Menu {
                 // load free items
                 menu.freeItems = MenuItem.loadItemsFor(menu.id, 0);
 
-                String inuseQ = "SELECT * FROM Services WHERE approved_menu_id = " + menu.id;
+                String inuseQ = "SELECT * FROM Service WHERE menu_id = " + menu.id;
                 PersistenceManager.executeQuery(inuseQ, new ResultHandler() {
                     @Override
                     public void handle(ResultSet rs) throws SQLException {
                         // se c'è anche un solo risultato vuol dire che il menù è in uso
-                        menu.inUse = true;
+                        int state = rs.getInt("state");
+                        menu.inUse = (state == 1 || state == 3);
                     }
                 });
 
@@ -497,12 +499,13 @@ public class Menu {
             m.freeItems = MenuItem.loadItemsFor(m.id, 0);
 
             // find if "in use"
-            String inuseQ = "SELECT * FROM Services WHERE approved_menu_id = " + m.id;
+            String inuseQ = "SELECT * FROM Service WHERE menu_id = " + m.id;
             PersistenceManager.executeQuery(inuseQ, new ResultHandler() {
                 @Override
                 public void handle(ResultSet rs) throws SQLException {
                     // se c'è anche un solo risultato vuol dire che il menù è in uso
-                    m.inUse = true;
+                    int state = rs.getInt("state");
+                    m.inUse = (state == 1 || state == 3);
                 }
             });
         }
@@ -528,14 +531,13 @@ public class Menu {
             m.updateFreeItems(MenuItem.loadItemsFor(m.id, 0));
 
             // find if "in use"
-            String inuseQ = "SELECT * FROM Services WHERE approved_menu_id = " + m.id +
-                    " OR " +
-                    "proposed_menu_id = "+ m.id;
+            String inuseQ = "SELECT * FROM Service WHERE menu_id = " + m.id;
             PersistenceManager.executeQuery(inuseQ, new ResultHandler() {
                 @Override
                 public void handle(ResultSet rs) throws SQLException {
                     // se c'è anche un solo risultato vuol dire che il menù è in uso
-                    m.inUse = true;
+                    int state = rs.getInt("state");
+                    m.inUse = (state == 1 || state == 3);
                 }
             });
         }

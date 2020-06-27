@@ -48,8 +48,8 @@ public class EventManager {
         return null;
     }
 
-    public ObservableList<EventInfo> getEventInfo() {
-        return EventInfo.loadAllEventInfo();
+    public ObservableList<Event> getEventInfo() {
+        return Event.loadAllEventInfo();
     }
 
     public void addReceiver(EventEventReceivers er) {this.receivers.add(er);}

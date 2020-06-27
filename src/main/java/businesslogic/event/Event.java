@@ -80,6 +80,10 @@ public class Event implements EventItemInfo{
         return assignedChef.equals(user);
     }
 
+    public ObservableList<Service> getServices() {
+        return services;
+    }
+
     private static enum State {PROGRAMMATO, ATTIVO, TERMINATO, ANNULLATO}
 
     //database
