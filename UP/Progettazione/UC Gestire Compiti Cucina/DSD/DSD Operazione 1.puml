@@ -19,7 +19,7 @@ deactivate um
 
 alt !user.isChef() || event.assignedChef != user || !event.containsService(service)
     UI <<-- tm: throw UseCaseLogicException
-else !event.isConfirmed()
+else !service.isConfirmed()
     UI <<-- tm: throw EventException
 else
     participant "sheet: SummarySheet" as ss
