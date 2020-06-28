@@ -11,13 +11,12 @@ import businesslogic.kitchentask.SummarySheet;
 import businesslogic.user.User;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import ui.Main;
+
+import java.util.Optional;
 
 public class TaskManagement {
     private Stage window;
@@ -43,7 +42,7 @@ public class TaskManagement {
                     apriButton.setDisable(selection == null ||
                                           selection instanceof Event ||
                                           ((Service) selection).getParentEvent().getAssignedChef() != u ||
-                                          ((Service)selection).getState() != Service.State.CONFERMATO);
+                                          ((Service) selection).getState() != Service.State.CONFERMATO);
                 });
     }
 
@@ -60,7 +59,15 @@ public class TaskManagement {
 
         try {
             if (sheet == null) {
-                ktm.createSummarySheet(service.getParentEvent(), service);
+
+                Optional<ButtonType> choice = new Alert(Alert.AlertType.CONFIRMATION,
+                                                        "Al momento non esiste un foglio riepilogativo per questo " +
+                                                        "Servizio.\nVuoi crearlo?")
+                        .showAndWait();
+
+                if (choice.isPresent() && choice.orElseThrow().equals(ButtonType.OK)) {
+                    ktm.createSummarySheet(service.getParentEvent(), service);
+                }
             } else {
                 ktm.openSummarySheetForEditing(service.getParentEvent(), service);
             }
