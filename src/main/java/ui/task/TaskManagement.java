@@ -1,9 +1,13 @@
 package ui.task;
 
 import businesslogic.CatERing;
+import businesslogic.EventException;
+import businesslogic.UseCaseLogicException;
 import businesslogic.event.Event;
 import businesslogic.event.EventItemInfo;
 import businesslogic.event.Service;
+import businesslogic.kitchentask.KitchenTaskManager;
+import businesslogic.kitchentask.SummarySheet;
 import businesslogic.user.User;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -50,9 +54,19 @@ public class TaskManagement {
     }
 
     public void clickSuBottoneApri() {
-        // try {
-        //
-        // }
+        KitchenTaskManager ktm = CatERing.getInstance().getKitchenTaskManager();
+        Service service = (Service) getSelectedTreeItem();
+        SummarySheet sheet = service.getSheet();
+
+        try {
+            if (sheet == null) {
+                ktm.createSummarySheet(service.getParentEvent(), service);
+            } else {
+                ktm.openSummarySheetForEditing(service.getParentEvent(), service);
+            }
+        } catch (UseCaseLogicException | EventException e) {
+            e.printStackTrace();
+        }
     }
 
     public void startMenuManagement() {
