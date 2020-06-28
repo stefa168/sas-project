@@ -119,9 +119,11 @@ public class Task {
 
     //Metodi per il db
     public static void createTask(Task task, int service_id){
-        String itemInsert = "INSERT INTO catering.Task (id, kitchenDuty_id, service_id, estimatedDuration, toDo, optionalDuty, order_number) VALUES ("
-                + task.task_id + "," + task.getDuty().getKitchenDutyId() + "," + service_id + "," + task.estimatedDuration + "," + task.toDo + ","
-                + task.optionalDuty + "," + task.order_numer +")";
+        String itemInsert = "INSERT INTO catering.Task " +
+                            "(id, kitchenDuty_id, service_id, estimatedDuration, toDo, optionalDuty, order_number, isRecipe) " +
+                            "VALUES ("
+                + task.task_id + "," + task.getDuty().getKitchenDutyId() + "," + service_id + "," + task.estimatedDuration.toSeconds() + "," + task.toDo + ","
+                + task.optionalDuty + "," + task.order_numer + ","+ (task.duty instanceof Recipe) +")";
 
         PersistenceManager.executeUpdate(itemInsert);
     }
