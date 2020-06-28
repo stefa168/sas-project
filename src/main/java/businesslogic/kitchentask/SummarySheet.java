@@ -39,6 +39,7 @@ public class SummarySheet {
             i++;
         }
         this.tasks = tasks;
+        this.extraDuties = new ArrayList<>();
     }
 
     public boolean containsRemoval(ArrayList<RemovalPatch> removalPatches, MenuItem menuItem){
@@ -59,9 +60,10 @@ public class SummarySheet {
         return extraDuties;
     }
 
-    public Task addExtraDuty(KitchenDuty kitchenDuty) {
+    public Task addExtraDuty(KitchenDuty kitchenDuty, int service_id) {
         extraDuties.add(kitchenDuty);
         Task task = new Task(true, kitchenDuty);
+        Task.createTaskNoOrder(task,service_id);
         tasks.add(task);
         return task;
     }
@@ -79,6 +81,9 @@ public class SummarySheet {
             }
         }
         extraDuties.remove(kitchenDuty);
+        if(deletedTask != null){
+            Task.deleteTask(deletedTask.getTask_id());
+        }
         return deletedTask;
     }
 
@@ -96,6 +101,9 @@ public class SummarySheet {
 
         tasks.set(oldAIndex, b);
         tasks.set(oldBIndex, a);
+
+        Task.changeOrderTask(a.getTask_id(),oldBIndex);
+        Task.changeOrderTask(b.getTask_id(),oldAIndex);
     }
 
     public boolean containsTask(Task task) {

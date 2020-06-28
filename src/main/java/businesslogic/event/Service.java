@@ -70,6 +70,8 @@ public class Service implements EventItemInfo{
         return offsetDay;
     }
 
+    public int getService_id() { return service_id;}
+
     public void service_id(int id){ this.service_id = id;}
 
     public Time getStartHour() {

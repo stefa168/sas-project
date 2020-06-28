@@ -88,6 +88,23 @@ public class Recipe extends KitchenDuty{
         return FXCollections.observableArrayList(all.values());
     }
 
+    public static Recipe getRecipeById(int id) {
+        String query = "SELECT * FROM Recipes WHERE id =" + id;
+        Recipe recipe = new Recipe();
+
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                recipe.id = rs.getInt("id");
+                recipe.name = rs.getString("name");
+                ArrayList<KitchenDuty> kitchenDuties = new ArrayList<>();
+                kitchenDuties = KitchenDuty.loadAllSubKitchenDuty(recipe.id);
+                recipe.subDuties = KitchenDuty.loadAllSubKitchenDuty(recipe.id);
+            }
+        });
+        return recipe;
+    }
+
     public static Recipe loadRecipeById(int id) {
         if (all.containsKey(id)) return all.get(id);
         Recipe rec = new Recipe();

@@ -39,9 +39,9 @@ public abstract class KitchenDuty {
             @Override
             public void handle(ResultSet rs) throws SQLException {
                 int subKitchenDuty_id = rs.getInt("subKitchenDuty_id");
-                boolean subIsRecipe = rs.getBoolean("subIsRecipe");
+                int subIsRecipe = rs.getInt("subIsRecipe");
                 KitchenDuty kitchenDuty;
-                if(subIsRecipe){
+                if(subIsRecipe == 1){
                     kitchenDuty = Recipe.loadRecipeById(subKitchenDuty_id);
                 }
                 else{
