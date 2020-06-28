@@ -85,11 +85,12 @@ public class TaskManagement {
     }
 
     private void startSummarySheetManagement() {
-        summarySheetWindowController.startSummarySheetManagement()
-                                    .showAndWait();
+        summarySheetWindowController.showWindow();
     }
 
+    // Questo metodo implicitamente chiama l'initialize() di SummarySheetWindow
     private void initSummarySheetScreen() throws IOException {
+
         Stage sheetWindow = new Stage();
 
         FXMLLoader rootLoader = new FXMLLoader(getClass().getResource("summary-sheet-screen.fxml"));
@@ -101,7 +102,7 @@ public class TaskManagement {
         sheetWindow.setTitle("Gestione Compiti - Foglio riepilogativo");
         sheetWindow.setScene(primaryScene);
 
-        sheetWindow.setOnCloseRequest(event -> controller.endSummarySheetManagement());
+        sheetWindow.setOnCloseRequest(event -> controller.closeWindow());
 
         this.summarySheetWindowController = controller;
     }

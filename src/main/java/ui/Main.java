@@ -96,9 +96,9 @@ public class Main {
 
         taskWindow.setOnCloseRequest(event -> taskManagementPaneController.endMenuManagement());
 
-        taskManagementPaneController.setWindow(taskWindow);
-
         taskManagementPaneController = controller;
+
+        taskManagementPaneController.setWindow(taskWindow);
     }
 
     public void manageTasks() {
