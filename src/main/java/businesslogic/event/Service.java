@@ -127,7 +127,7 @@ public class Service implements EventItemInfo{
     private static enum State {INPREPARAZIONE, CONFERMATO, ANNULLATO, TERMINATO}
 
     public String toString() {
-        return name + ": " + offsetDay + " (" + startHour + "-" + endHour + "), " + diners + " pp.";
+        return name + ", " + state+ ", previsto per il " + offsetDay  + " (" + startHour + "-" + endHour + "), " + diners + " pp. " + typology;
     }
 
     //metodi per il db

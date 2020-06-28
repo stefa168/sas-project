@@ -68,6 +68,11 @@ public class Event implements EventItemInfo{
         return null;
     }
 
+    public String toString() {
+
+        return name + ": "  + state+ "-" + startDate + "-"  + endDate + ", " + participants + " pp. ( Organizzatore: " + organizer.getUserName() + ", Chef: " + assignedChef.getUserName() +")";
+    }
+
     public boolean isActive() {
         return this.state == State.ATTIVO;
     }
