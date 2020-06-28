@@ -56,30 +56,31 @@ public class Login {
     }
 
     public void loginButtonPreessed(ActionEvent actionEvent) {
-        String[] valori = (loginComboBox.getValue()).split(":");
-        //System.out.println(valori[0]);
+        if (loginComboBox.getValue()!=null) {
+            String[] valori = (loginComboBox.getValue()).split(":");
+            //System.out.println(valori[0]);
 
-        try {
+            try {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
-            Scene root = new Scene(loader.load(), 1080, 720);
-            Stage stage = new Stage();
-            stage.setTitle("Cat&Ring");
-            stage.setScene(root);
-            // Questa riga è necessaria per poter passare una reference della finestra creata qui, dato che questa
-            // classe non è raggiungibile per ragioni sconosciute. E' un workaround per il codice molto convoluto.
-            ((Main) loader.getController()).setUsernameUserLogin(usersMap.get(valori[0]));
-            ((Main) loader.getController()).passMainWindowStage(stage);
-            stage.show();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+                Scene root = new Scene(loader.load(), 1080, 720);
+                Stage stage = new Stage();
+                stage.setTitle("Cat&Ring");
+                stage.setScene(root);
+                // Questa riga è necessaria per poter passare una reference della finestra creata qui, dato che questa
+                // classe non è raggiungibile per ragioni sconosciute. E' un workaround per il codice molto convoluto.
+                ((Main) loader.getController()).setUsernameUserLogin(usersMap.get(valori[0]));
+                ((Main) loader.getController()).passMainWindowStage(stage);
+                stage.show();
 
 
-            Stage current = (Stage) anchorPaneLogin.getScene().getWindow();
-            current.close();
+                Stage current = (Stage) anchorPaneLogin.getScene().getWindow();
+                current.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-
     }
 
 }
