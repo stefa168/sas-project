@@ -30,6 +30,10 @@ public class KitchenTaskManager {
 
     public void setCurrentSheet(SummarySheet sheet) { this.currentSheet = sheet;}
 
+    public SummarySheet getCurrentSheet() {
+        return currentSheet;
+    }
+
     private void notifySheetCreate(SummarySheet sheet) {
         for (KitchenTaskEventReceiver eventReceiver : eventReceivers) {
             eventReceiver.updateSheetCreate(sheet);
