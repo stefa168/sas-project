@@ -122,7 +122,7 @@ public class Task {
         String itemInsert = "INSERT INTO catering.Task " +
                             "(id, kitchenDuty_id, service_id, estimatedDuration, toDo, optionalDuty, order_number, isRecipe) " +
                             "VALUES ("
-                + task.task_id + "," + task.getDuty().getKitchenDutyId() + "," + service_id + "," + task.estimatedDuration.toSeconds() + "," + task.toDo + ","
+                + task.task_id + "," + task.getDuty().getKitchenDutyId() + "," + service_id + "," + task.estimatedDuration.toMinutes() + "," + task.toDo + ","
                 + task.optionalDuty + "," + task.order_numer + ","+ (task.duty instanceof Recipe) +")";
 
         PersistenceManager.executeUpdate(itemInsert);
