@@ -86,7 +86,7 @@ public class Main {
         Stage taskWindow = new Stage();
 
         FXMLLoader rootLoader = new FXMLLoader(getClass().getResource("task/task-management.fxml"));
-        Scene primaryScene = new Scene(rootLoader.load(), 600, 400);
+        Scene primaryScene = new Scene(rootLoader.load());
 
         TaskManagement controller = rootLoader.getController();
         controller.setStage(taskWindow);
