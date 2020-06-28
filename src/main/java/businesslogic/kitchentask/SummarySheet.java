@@ -2,22 +2,30 @@ package businesslogic.kitchentask;
 
 import businesslogic.event.AdditionPatch;
 import businesslogic.event.RemovalPatch;
+import businesslogic.event.Service;
 import businesslogic.menu.Menu;
 import businesslogic.menu.MenuItem;
 import businesslogic.menu.Section;
 import businesslogic.recipe.KitchenDuty;
+import persistence.PersistenceManager;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class SummarySheet {
     private ArrayList<Task> tasks;
     private ArrayList<KitchenDuty> extraDuties;
 
-    public SummarySheet(Menu menu, ArrayList<AdditionPatch> additionPatches, ArrayList<RemovalPatch> removalPatches, int service_id) {
+    public SummarySheet() {
+
+    }
+
+    public SummarySheet(Menu menu, ArrayList<AdditionPatch> additionPatches, ArrayList<RemovalPatch> removalPatches,
+                        int service_id) {
         ArrayList<KitchenDuty> kitchenDuties = new ArrayList<>();
         for (Section section : menu.getSections()) {
             for (MenuItem menuItem : section.getItems()) {
-                if(!containsRemoval(removalPatches, menuItem)) {
+                if (!containsRemoval(removalPatches, menuItem)) {
                     kitchenDuties.add(menuItem.getItemRecipe());
                     kitchenDuties.addAll(menuItem.getItemRecipe().getSubDuties());
                 }
@@ -27,7 +35,7 @@ public class SummarySheet {
             kitchenDuties.add(freeItem.getItemRecipe());
             kitchenDuties.addAll(freeItem.getItemRecipe().getSubDuties());
         }
-        for(AdditionPatch additionPatch: additionPatches){
+        for (AdditionPatch additionPatch : additionPatches) {
             kitchenDuties.add(additionPatch.getDuty());
             kitchenDuties.addAll(additionPatch.getDuty().getSubDuties());
         }
@@ -41,15 +49,42 @@ public class SummarySheet {
         this.tasks = tasks;
     }
 
-    public boolean containsRemoval(ArrayList<RemovalPatch> removalPatches, MenuItem menuItem){
-        for (RemovalPatch removalPatch: removalPatches){
-            if(removalPatch.getMenuItem().equals(menuItem)){
+    // metodi db
+    public static SummarySheet loadSummarySheetForService(Service s) {
+        if (SummarySheet.hasSummarySheet(s)) {
+            SummarySheet result = new SummarySheet();
+
+            result.tasks = Task.getAllTasks(s.getService_id());
+            result.extraDuties = result.tasks.stream()
+                                             .filter(Task::isOptionalDuty)
+                                             .map(Task::getDuty)
+                                             .collect(Collectors.toCollection(ArrayList::new));
+
+            return result;
+        } else {
+            return null;
+        }
+    }
+
+    public static boolean hasSummarySheet(Service s) {
+        // uso un array perchè non posso passare una variabile singola all'interno di una classe anonima/lambda
+        boolean[] foundOne = new boolean[1];
+
+        //language=MySQL
+        String query = "SELECT exists(SELECT * FROM task WHERE service_id = " + +s.getService_id() + ")";
+        PersistenceManager.executeQuery(query, rs -> foundOne[0] = rs.getBoolean(1));
+
+        return foundOne[0];
+    }
+
+    public boolean containsRemoval(ArrayList<RemovalPatch> removalPatches, MenuItem menuItem) {
+        for (RemovalPatch removalPatch : removalPatches) {
+            if (removalPatch.getMenuItem().equals(menuItem)) {
                 return true;
             }
         }
         return false;
     }
-
 
     public ArrayList<Task> getTasks() {
         return tasks;
