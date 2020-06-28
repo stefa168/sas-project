@@ -76,7 +76,7 @@ public class Event implements EventItemInfo {
         });
 
         for (Event event : all) {
-            event.services = Service.loadServiceForEvent(event.event_id, event);
+            event.services = Service.loadServiceForEvent(event);
         }
         return all;
     }
@@ -127,6 +127,10 @@ public class Event implements EventItemInfo {
 
     public ObservableList<Service> getServices() {
         return services;
+    }
+
+    public int getId() {
+        return event_id;
     }
 
     private static enum State {PROGRAMMATO, ATTIVO, TERMINATO, ANNULLATO}
