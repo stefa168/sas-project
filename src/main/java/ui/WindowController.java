@@ -26,6 +26,9 @@ public abstract class WindowController {
     }
 
     public final void setParentWindow(Stage parentWindow) {
+        if (parentWindow == null) {
+            throw new RuntimeException("Received null as the parent. This should NOT happen.");
+        }
         window.initOwner(parentWindow);
         window.initModality(Modality.WINDOW_MODAL);
     }
