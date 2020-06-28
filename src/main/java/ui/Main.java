@@ -36,7 +36,6 @@ public class Main {
     MenuManagement menuManagementPaneController;
 
     TaskManagement taskManagementPaneController;
-    private static Stage taskManagementWindow;
 
     public static void showMainWindow() {
         mainStage.show();
@@ -44,10 +43,6 @@ public class Main {
 
     public static void hideMainWindow() {
         mainStage.hide();
-    }
-
-    public static Stage getTaskManagementWindow() {
-        return taskManagementWindow;
     }
 
     public void initialize() throws Exception {
@@ -90,7 +85,6 @@ public class Main {
 
     private void initTaskManagementWindow() throws IOException {
         Stage taskWindow = new Stage();
-        this.taskManagementWindow = taskWindow;
 
         FXMLLoader rootLoader = new FXMLLoader(getClass().getResource("task/task-management.fxml"));
         Scene primaryScene = new Scene(rootLoader.load());
@@ -101,6 +95,8 @@ public class Main {
         taskWindow.setScene(primaryScene);
 
         taskWindow.setOnCloseRequest(event -> taskManagementPaneController.endMenuManagement());
+
+        taskManagementPaneController.setWindow(taskWindow);
 
         taskManagementPaneController = controller;
     }

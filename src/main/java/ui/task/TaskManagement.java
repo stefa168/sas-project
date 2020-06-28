@@ -16,7 +16,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ui.Main;
 
@@ -34,11 +33,9 @@ public class TaskManagement {
     @FXML
     private Text userNameField;
 
-    private SummarySheetScreen summarySheetScreenController;
+    private SummarySheetWindow summarySheetWindowController;
 
     public void initialize() throws IOException {
-        window = Main.getTaskManagementWindow();
-
         eventServiceTree.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         eventServiceTree.getSelectionModel().selectedItemProperty().addListener(
                 (observableValue, oldSelection, newSelection) -> {
@@ -88,7 +85,7 @@ public class TaskManagement {
     }
 
     private void startSummarySheetManagement() {
-        summarySheetScreenController.startSummarySheetManagement()
+        summarySheetWindowController.startSummarySheetManagement()
                                     .showAndWait();
     }
 
@@ -98,18 +95,15 @@ public class TaskManagement {
         FXMLLoader rootLoader = new FXMLLoader(getClass().getResource("summary-sheet-screen.fxml"));
         Scene primaryScene = new Scene(rootLoader.load());
 
-        SummarySheetScreen controller = rootLoader.getController();
-        controller.setStage(sheetWindow);
+        SummarySheetWindow controller = rootLoader.getController();
+        controller.setWindow(sheetWindow);
 
         sheetWindow.setTitle("Gestione Compiti - Foglio riepilogativo");
         sheetWindow.setScene(primaryScene);
 
         sheetWindow.setOnCloseRequest(event -> controller.endSummarySheetManagement());
 
-        sheetWindow.initOwner(window);
-        sheetWindow.initModality(Modality.APPLICATION_MODAL);
-
-        this.summarySheetScreenController = controller;
+        this.summarySheetWindowController = controller;
     }
 
     public void startMenuManagement() {
@@ -143,5 +137,10 @@ public class TaskManagement {
         }
 
         eventServiceTree.setRoot(root);
+    }
+
+    public void setWindow(Stage taskWindow) {
+        this.window = taskWindow;
+        summarySheetWindowController.setParentWindow(window);
     }
 }
