@@ -1,7 +1,5 @@
 package persistence;
 
-import com.sun.javafx.binding.StringFormatter;
-
 import java.sql.*;
 
 public class PersistenceManager {
@@ -19,6 +17,7 @@ public class PersistenceManager {
         input = input.replace("\t", "\\t");
         return input;
     }
+
     public static void testSQLConnection() {
         try (Connection conn = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users");

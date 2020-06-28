@@ -85,8 +85,8 @@ public class KitchenTaskManager {
 
     public SummarySheet createSummarySheet(Event event, Service service) throws UseCaseLogicException, EventException {
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
-        // todo fixare terza condizione
-        if (!user.isChef() || event.getAssignedChef() != user || event.containsService(service)) {
+
+        if (!user.isChef() || event.getAssignedChef() != user || !event.containsService(service)) {
             throw new UseCaseLogicException();
         }
         if (!service.isConfirmed()) {
