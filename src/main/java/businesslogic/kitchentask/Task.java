@@ -10,7 +10,7 @@ import ui.task.TaskItemInfo;
 import java.time.Duration;
 import java.util.ArrayList;
 
-public class Task implements TaskItemInfo {
+public class Task implements TaskItemInfo, Comparable<Task> {
     private int amount;
     private Duration estimatedDuration;
     private boolean toDo;
@@ -154,5 +154,21 @@ public class Task implements TaskItemInfo {
         //TODO
     }
 
+    @Override
+    public String toString() {
+        String taskString = this.toDo ?
+                String.format("Compito per %s, da %d porzioni con una durata di %d minuti.",
+                              duty.getName(),
+                              amount,
+                              estimatedDuration.toMinutes()) :
+                String.format("Compito per %s, indicato come non necessario da preparare.",
+                              duty.getName());
 
+        return taskString.concat(optionalDuty ? " (Fuori Menù)" : "");
+    }
+
+    @Override
+    public int compareTo(Task o) {
+        return Integer.compare(this.order_numer, o.order_numer);
+    }
 }
