@@ -36,8 +36,6 @@ public class Main {
     MenuManagement menuManagementPaneController;
 
     TaskManagement taskManagementPaneController;
-    Stage taskManagementWindow;
-
     public static void showMainWindow() {
         mainStage.show();
     }
@@ -98,13 +96,11 @@ public class Main {
 
         taskWindow.setOnCloseRequest(event -> taskManagementPaneController.endMenuManagement());
 
-        taskManagementWindow = taskWindow;
         taskManagementPaneController = controller;
     }
 
     public void manageTasks() {
-        hideMainWindow();
-        taskManagementWindow.show();
+        taskManagementPaneController.startMenuManagement();
     }
 
     public void passMainWindowStage(Stage primaryStage) {
