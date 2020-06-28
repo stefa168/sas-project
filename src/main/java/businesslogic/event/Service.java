@@ -44,9 +44,9 @@ public class Service implements EventItemInfo {
         this.state = State.INPREPARAZIONE;
     }
 
-    public static ObservableList<Service> loadServiceForEvent(int event_id, Event event) {
+    public static ObservableList<Service> loadServiceForEvent(Event event) {
         ObservableList<Service> result = FXCollections.observableArrayList();
-        String query = "SELECT * FROM Service WHERE event_id = " + event_id;
+        String query = "SELECT * FROM Service WHERE event_id = " + event.getId();
         PersistenceManager.executeQuery(query, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {
@@ -81,6 +81,8 @@ public class Service implements EventItemInfo {
 
                 service.parentEvent = event;
 
+                service.sheet = loadSummarySheet(service);
+
                 result.add(service);
             }
         });
@@ -88,8 +90,16 @@ public class Service implements EventItemInfo {
         return result;
     }
 
+    public static SummarySheet loadSummarySheet(Service linkedService) {
+        return SummarySheet.loadSummarySheetForService(linkedService);
+    }
+
     public Event getParentEvent() {
         return parentEvent;
+    }
+
+    public int getService_id() {
+        return service_id;
     }
 
     public void setService_id(int service_id) {
@@ -160,11 +170,6 @@ public class Service implements EventItemInfo {
         SummarySheet sheet = new SummarySheet(this.getMenu(), additionPatches, removalPatches, this.service_id);
         this.sheet = sheet;
         return sheet;
-    }
-
-    public SummarySheet loadSummarySheet(Service linkedService) {
-        //todo durante sql
-        return null;
     }
 
     public boolean isConfirmed() {
