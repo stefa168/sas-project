@@ -129,7 +129,7 @@ public class MenuItem {
     }
 
     public static MenuItem getMenuItemById(int id){
-        String query = "SELECT * FROM MenuItems WHERE menu_id = " + id;
+        String query = "SELECT * FROM MenuItems WHERE id = " + id;
         ArrayList<MenuItem> menuItems = new ArrayList<>();
         PersistenceManager.executeQuery(query, new ResultHandler() {
             @Override
