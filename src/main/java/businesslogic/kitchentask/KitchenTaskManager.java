@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KitchenTaskManager {
-    private SummarySheet currentSheet;
+    public SummarySheet currentSheet;
     private ArrayList<KitchenTaskEventReceiver> eventReceivers;
 
     public KitchenTaskManager() {
@@ -110,7 +110,8 @@ public class KitchenTaskManager {
             throw new EventException();
         }
 
-        return associatedService.getSheet();
+        this.currentSheet = associatedService.getSheet();
+        return this.currentSheet;
     }
 
     public SummarySheet openSummarySheetForViewing(Service service) throws UseCaseLogicException {

@@ -34,6 +34,6 @@
         </FlowPane>
     </top>
     <center>
-        <TreeView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
+        <TreeView fx:id="contentTree" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
     </center>
 </BorderPane>
