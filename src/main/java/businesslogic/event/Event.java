@@ -6,14 +6,12 @@ import javafx.collections.ObservableList;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
 
-import java.nio.file.LinkOption;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 
-public class Event implements EventItemInfo{
+public class Event implements EventItemInfo {
     private LocalDate startDate;
     private LocalDate endDate;
     private State state;
@@ -31,7 +29,8 @@ public class Event implements EventItemInfo{
         this.state = State.PROGRAMMATO;
     }
 
-    public Event(int event_id, String name, LocalDate startDate, LocalDate endDate, int participants, User organizer, State state, User assignedChef){
+    public Event(int event_id, String name, LocalDate startDate, LocalDate endDate, int participants, User organizer,
+                 State state, User assignedChef) {
         this.event_id = event_id;
         this.startDate = startDate;
         this.name = name;
@@ -40,6 +39,47 @@ public class Event implements EventItemInfo{
         this.organizer = organizer;
         this.state = state;
         this.assignedChef = assignedChef;
+    }
+
+    //database
+    public static ObservableList<Event> loadAllEventInfo() {
+        ObservableList<Event> all = FXCollections.observableArrayList();
+        String query = "SELECT * FROM Event WHERE true";
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                String n = rs.getString("name");
+                int event_id = rs.getInt("event_id");
+                Date sqlDateStart = rs.getDate("date_start");
+                Date sqlDateEnd = rs.getDate("date_end");
+                LocalDate dateStart = sqlDateStart.toLocalDate();
+                LocalDate dateEnd = sqlDateEnd.toLocalDate();
+                int participants = rs.getInt("expected_participants");
+                int org = rs.getInt("organizer_id");
+                int chef = rs.getInt("chef_id");
+                int s = rs.getInt("state");
+                State state;
+                if (s == 0) {
+                    state = State.PROGRAMMATO;
+                } else if (s == 1) {
+                    state = State.ATTIVO;
+                } else if (s == 2) {
+                    state = State.TERMINATO;
+                } else {
+                    state = State.ANNULLATO;
+                }
+
+                Event event = new Event(event_id, n, dateStart, dateEnd, participants, User.loadUserById(org), state,
+                                        User
+                        .loadUserById(chef));
+                all.add(event);
+            }
+        });
+
+        for (Event event : all) {
+            event.services = Service.loadServiceForEvent(event.event_id);
+        }
+        return all;
     }
 
     public LocalDate getStartDate() {
@@ -70,7 +110,8 @@ public class Event implements EventItemInfo{
 
     public String toString() {
 
-        return name + ": "  + state+ "-" + startDate + "-"  + endDate + ", " + participants + " pp. ( Organizzatore: " + organizer.getUserName() + ", Chef: " + assignedChef.getUserName() +")";
+        return name + ": " + state + "-" + startDate + "-" + endDate + ", " + participants + " pp. ( Organizzatore: " + organizer
+                .getUserName() + ", Chef: " + assignedChef.getUserName() + ")";
     }
 
     public boolean isActive() {
@@ -90,47 +131,5 @@ public class Event implements EventItemInfo{
     }
 
     private static enum State {PROGRAMMATO, ATTIVO, TERMINATO, ANNULLATO}
-
-    //database
-    public static ObservableList<Event> loadAllEventInfo() {
-        ObservableList<Event> all = FXCollections.observableArrayList();
-        String query = "SELECT * FROM Event WHERE true";
-        PersistenceManager.executeQuery(query, new ResultHandler() {
-            @Override
-            public void handle(ResultSet rs) throws SQLException {
-                String n = rs.getString("name");
-                int event_id = rs.getInt("event_id");
-                Date sqlDateStart = rs.getDate("date_start");
-                Date sqlDateEnd = rs.getDate("date_end");
-                LocalDate dateStart = sqlDateStart.toLocalDate();
-                LocalDate dateEnd = sqlDateEnd.toLocalDate();
-                int participants = rs.getInt("expected_participants");
-                int org = rs.getInt("organizer_id");
-                int chef = rs.getInt("chef_id");
-                int s = rs.getInt("state");
-                State state;
-                if(s == 0){
-                    state = State.PROGRAMMATO;
-                }
-                else if(s==1){
-                    state = State.ATTIVO;
-                }
-                else if(s==2){
-                    state = State.TERMINATO;
-                }
-                else {
-                    state = State.ANNULLATO;
-                }
-
-                Event event = new Event(event_id,n, dateStart,dateEnd,participants,User.loadUserById(org),state, User.loadUserById(chef));
-                all.add(event);
-            }
-        });
-
-        for (Event event : all) {
-            event.services = Service.loadServiceForEvent(event.event_id);
-        }
-        return all;
-    }
 
 }
