@@ -7,23 +7,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.Login">
+<AnchorPane fx:id="anchorPaneLogin" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.Login">
    <children>
-      <GridPane layoutY="-2.0" prefHeight="400.0" prefWidth="600.0">
+      <GridPane layoutY="-2.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="204.0" minHeight="10.0" prefHeight="181.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="204.0" minHeight="10.0" prefHeight="181.0" vgrow="ALWAYS" />
             <RowConstraints maxHeight="204.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="129.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="138.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="129.0" minHeight="10.0" prefHeight="61.0" vgrow="ALWAYS" />
+          <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="138.0" vgrow="ALWAYS" />
         </rowConstraints>
          <children>
-            <ComboBox prefHeight="27.0" prefWidth="356.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-            <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="155.0" text="Accedi" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-            <Label text="Login" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <ComboBox fx:id = "loginComboBox" prefHeight="27.0" prefWidth="356.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <Button fx:id = "loginButton" mnemonicParsing="false" prefHeight="27.0" prefWidth="155.0" text="Accedi" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" onAction="#loginButtonPreessed"/>
+            <Label text="Login" GridPane.halignment="CENTER" GridPane.valignment="CENTER" >
                <font>
                   <Font size="50.0" />
                </font>

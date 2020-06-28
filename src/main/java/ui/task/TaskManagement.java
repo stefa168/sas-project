@@ -43,7 +43,7 @@ public class TaskManagement {
     }
 
     public void startMenuManagement() {
-        CatERing.getInstance().getUserManager().fakeLogin("Marinella");
+        CatERing.getInstance().getUserManager().login("Marinella");
 
         Main.hideMainWindow();
         window.show();

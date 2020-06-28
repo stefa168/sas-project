@@ -5,12 +5,12 @@
 <?import javafx.scene.text.Font?>
 <FlowPane alignment="CENTER" columnHalignment="CENTER" orientation="VERTICAL" prefHeight="408.0" prefWidth="679.0" vgap="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.Start">
    <children>
-      <Button mnemonicParsing="false" onAction="#beginMenuManagement" text="Gestire menu">
+      <Button fx:id="gestireMenuButton" mnemonicParsing="false" onAction="#beginMenuManagement" text="Gestire menu">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
-       <Button mnemonicParsing="false" onAction="#manageTasks" text="Gestire Compiti della Cucina">
+       <Button fx:id="gestireCompitiCucinaButton" mnemonicParsing="false" disable="true" onAction="#manageTasks" text="Gestire Compiti della Cucina">
          <font>
             <Font size="15.0" />
          </font>

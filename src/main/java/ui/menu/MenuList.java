@@ -8,15 +8,25 @@ import businesslogic.user.User;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public class MenuList {
+    @FXML
+    public Button logoutButton;
+    @FXML
+    public BorderPane borderPaneMenuList;
     private MenuManagement menuManagementController;
 
     @FXML
@@ -113,4 +123,5 @@ public class MenuList {
         if (m != null) this.menuList.getSelectionModel().select(m);
         else this.menuList.getSelectionModel().select(-1);
     }
+
 }
