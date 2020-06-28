@@ -1,18 +1,17 @@
 package businesslogic.kitchentask;
 
-import businesslogic.recipe.KitchenDuty;
 import businesslogic.turn.KitchenTurn;
-import businesslogic.turn.Turn;
 import businesslogic.user.User;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
+import ui.task.TaskItemInfo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.util.ArrayList;
 
-public class KitchenJob {
+public class KitchenJob implements TaskItemInfo {
     private int amount;
     private Duration estimatedDuration;
     private KitchenTurn turn;

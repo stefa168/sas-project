@@ -5,11 +5,12 @@ import businesslogic.recipe.Preparation;
 import businesslogic.recipe.Recipe;
 import businesslogic.turn.KitchenTurn;
 import persistence.PersistenceManager;
+import ui.task.TaskItemInfo;
 
 import java.time.Duration;
 import java.util.ArrayList;
 
-public class Task {
+public class Task implements TaskItemInfo {
     private int amount;
     private Duration estimatedDuration;
     private boolean toDo;
