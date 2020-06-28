@@ -37,14 +37,6 @@ public class Main {
 
     TaskManagement taskManagementPaneController;
 
-    public static void showMainWindow() {
-        mainStage.show();
-    }
-
-    public static void hideMainWindow() {
-        mainStage.hide();
-    }
-
     public void initialize() throws Exception {
 
         startPaneController.setParent(this);
@@ -94,18 +86,18 @@ public class Main {
         taskWindow.setTitle("Gestione Compiti - Selezione Servizio");
         taskWindow.setScene(primaryScene);
 
-        taskWindow.setOnCloseRequest(event -> taskManagementPaneController.endMenuManagement());
+        taskWindow.setOnCloseRequest(event -> taskManagementPaneController.closeWindow());
 
         taskManagementPaneController = controller;
-
         taskManagementPaneController.setWindow(taskWindow);
     }
 
     public void manageTasks() {
-        taskManagementPaneController.startMenuManagement();
+        taskManagementPaneController.showWindow();
     }
 
     public void passMainWindowStage(Stage primaryStage) {
         mainStage = primaryStage;
+        taskManagementPaneController.setParentWindow(mainStage);
     }
 }

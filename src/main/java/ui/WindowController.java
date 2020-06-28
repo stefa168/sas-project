@@ -3,13 +3,14 @@ package ui;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class WindowController {
     protected Stage window;
     protected ArrayList<WindowController> childrenWindows = new ArrayList<>();
 
-    protected abstract void initialize();
+    protected abstract void initialize() throws IOException;
 
     public void showWindow() {
         window.showAndWait();

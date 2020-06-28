@@ -13,7 +13,7 @@
         <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="10.0" prefHeight="53.0" BorderPane.alignment="CENTER">
             <children>
                 <Button fx:id="apriButton" disable="true" onAction="#clickSuBottoneApri" text="Apri" />
-                <Button onAction="#endMenuManagement" text="Fine" />
+                <Button onAction="#closeWindow" text="Fine"/>
             </children>
         </FlowPane>
     </bottom>

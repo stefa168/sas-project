@@ -17,12 +17,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import ui.Main;
+import ui.WindowController;
 
 import java.io.IOException;
 import java.util.Optional;
 
-public class TaskManagement {
+public class TaskManagement extends WindowController {
     private Stage window;
     @FXML
     private BorderPane containerPane;
@@ -78,14 +78,10 @@ public class TaskManagement {
                 ktm.openSummarySheetForEditing(service.getParentEvent(), service);
             }
 
-            startSummarySheetManagement();
+            summarySheetWindowController.showWindow();
         } catch (UseCaseLogicException | EventException e) {
             e.printStackTrace();
         }
-    }
-
-    private void startSummarySheetManagement() {
-        summarySheetWindowController.showWindow();
     }
 
     // Questo metodo implicitamente chiama l'initialize() di SummarySheetWindow
@@ -105,22 +101,18 @@ public class TaskManagement {
         sheetWindow.setOnCloseRequest(event -> controller.closeWindow());
 
         this.summarySheetWindowController = controller;
+        this.childrenWindows.add(summarySheetWindowController);
     }
 
-    public void startMenuManagement() {
+    @Override
+    public void showWindow() {
         CatERing.getInstance().getUserManager().fakeLogin("Marinella");
 
         userNameField.setText(CatERing.getInstance().getUserManager().getCurrentUser().getUserName());
 
-        Main.hideMainWindow();
-        window.show();
-
         loadEventInfo();
-    }
 
-    public void endMenuManagement() {
-        Main.showMainWindow();
-        window.hide();
+        super.showWindow();
     }
 
     private void loadEventInfo() {
@@ -138,10 +130,5 @@ public class TaskManagement {
         }
 
         eventServiceTree.setRoot(root);
-    }
-
-    public void setWindow(Stage taskWindow) {
-        this.window = taskWindow;
-        summarySheetWindowController.setParentWindow(window);
     }
 }
