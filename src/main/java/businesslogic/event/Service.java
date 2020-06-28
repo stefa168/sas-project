@@ -1,6 +1,5 @@
 package businesslogic.event;
 
-import businesslogic.UseCaseLogicException;
 import businesslogic.kitchentask.SummarySheet;
 import businesslogic.menu.Menu;
 import businesslogic.menu.MenuItem;
@@ -11,15 +10,12 @@ import javafx.collections.ObservableList;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
 
-import javax.sound.midi.Patch;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.time.Duration;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Service implements EventItemInfo{
+public class Service implements EventItemInfo {
     private String name;
     private int offsetDay;
     private Time startHour;
@@ -34,16 +30,10 @@ public class Service implements EventItemInfo{
     private ArrayList<ServiceJob> serviceJobs;
     private SummarySheet sheet;
     private int service_id;
+    private Event parentEvent;
 
-    public void setState(State state) {
-        this.state = state;
-    }
-
-    public void setService_id(int service_id) {
-        this.service_id = service_id;
-    }
-
-    public Service(String name, int startOffset, Time startHour, Time endHour, int diners, String place, String details) {
+    public Service(String name, int startOffset, Time startHour, Time endHour, int diners, String place,
+                   String details) {
         this.name = name;
         this.offsetDay = startOffset;
         this.startHour = startHour;
@@ -52,6 +42,58 @@ public class Service implements EventItemInfo{
         this.place = place;
         this.typology = details;
         this.state = State.INPREPARAZIONE;
+    }
+
+    public static ObservableList<Service> loadServiceForEvent(int event_id, Event event) {
+        ObservableList<Service> result = FXCollections.observableArrayList();
+        String query = "SELECT * FROM Service WHERE event_id = " + event_id;
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                String name = rs.getString("name");
+                int serviceId = rs.getInt("service_id");
+                int menuId = rs.getInt("menu_id");
+                int offsetDay = rs.getInt("offsetDay");
+                Time startHour = rs.getTime("startHour");
+                Time endHour = rs.getTime("endHour");
+                int diners = rs.getInt("diners");
+                String typology = rs.getString("typology");
+                String place = rs.getString("place");
+                int s = rs.getInt("state");
+                State state = State.INPREPARAZIONE;
+                if (s == 1) {
+                    state = State.CONFERMATO;
+                } else if (s == 2) {
+                    state = State.ANNULLATO;
+                } else if (s == 3) {
+                    state = State.TERMINATO;
+                }
+
+                Service service = new Service(name, offsetDay, startHour, endHour, diners, place, typology);
+                service.setService_id(serviceId);
+                service.setState(state);
+                if (s == 1 || s == 3) {
+                    Menu menu = Menu.loadMenuById(menuId);
+                    service.setMenu(menu);
+                    service.getAllAdditionPatches();
+                    service.getAllRemovalPatches();
+                }
+
+                service.parentEvent = event;
+
+                result.add(service);
+            }
+        });
+
+        return result;
+    }
+
+    public Event getParentEvent() {
+        return parentEvent;
+    }
+
+    public void setService_id(int service_id) {
+        this.service_id = service_id;
     }
 
     public ArrayList<AdditionPatch> getAdditionPatches() {
@@ -70,7 +112,7 @@ public class Service implements EventItemInfo{
         return offsetDay;
     }
 
-    public void service_id(int id){ this.service_id = id;}
+    public void service_id(int id) { this.service_id = id;}
 
     public Time getStartHour() {
         return startHour;
@@ -96,6 +138,10 @@ public class Service implements EventItemInfo{
         return state;
     }
 
+    public void setState(State state) {
+        this.state = state;
+    }
+
     public ArrayList<ServiceJob> getServiceJobs() {
         return serviceJobs;
     }
@@ -105,6 +151,10 @@ public class Service implements EventItemInfo{
     }
 
     public Menu getMenu() {return this.menu;}
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
 
     public SummarySheet createSummarySheet() {
         SummarySheet sheet = new SummarySheet(this.getMenu(), additionPatches, removalPatches, this.service_id);
@@ -121,63 +171,13 @@ public class Service implements EventItemInfo{
         return state == State.CONFERMATO;
     }
 
-    public void setMenu(Menu menu) {
-        this.menu = menu;
-    }
-    private static enum State {INPREPARAZIONE, CONFERMATO, ANNULLATO, TERMINATO}
-
     public String toString() {
-        return name + ", " + state+ ", previsto per il " + offsetDay  + " (" + startHour + "-" + endHour + "), " + diners + " pp. " + typology;
+        return name + ", " + state + ", previsto per il " + offsetDay + " (" + startHour + "-" + endHour + "), " + diners + " pp. " + typology;
     }
 
     //metodi per il db
 
-    public static ObservableList<Service> loadServiceForEvent(int event_id) {
-        ObservableList<Service> result = FXCollections.observableArrayList();
-        String query = "SELECT * FROM Service WHERE event_id = " + event_id;
-        PersistenceManager.executeQuery(query, new ResultHandler() {
-            @Override
-            public void handle(ResultSet rs) throws SQLException {
-                String name = rs.getString("name");
-                int serviceId = rs.getInt("service_id");
-                int menuId = rs.getInt("menu_id");
-                int offsetDay = rs.getInt("offsetDay");
-                Time startHour = rs.getTime  ("startHour");
-                Time endHour = rs.getTime("endHour");
-                int diners = rs.getInt("diners");
-                String typology = rs.getString("typology");
-                String place = rs.getString("place");
-                int s = rs.getInt("state");
-                State state = State.INPREPARAZIONE;
-                if(s==1){
-                    state = State.CONFERMATO;
-                }
-                else if(s==2){
-                    state = State.ANNULLATO;
-                }
-                else if (s==3){
-                    state = State.TERMINATO;
-                }
-
-                Service service = new Service(name,offsetDay,startHour,endHour,diners,place,typology);
-                service.setService_id(serviceId);
-                service.setState(state);
-                if(s == 1 || s== 3){
-                    Menu menu = Menu.loadMenuById(menuId);
-                    service.setMenu(menu);
-                    service.getAllAdditionPatches();
-                    service.getAllRemovalPatches();
-                }
-
-                result.add(service);
-            }
-        });
-
-        return result;
-    }
-
-
-    public void getAllAdditionPatches(){
+    public void getAllAdditionPatches() {
         String query = "SELECT * FROM Patch WHERE menuItem_id IS NULL AND service_id =" + this.service_id;
         ArrayList<AdditionPatch> additionPatches = new ArrayList<>();
 
@@ -187,7 +187,7 @@ public class Service implements EventItemInfo{
                 int recipeId = rs.getInt("recipe_id");
                 int idPatch = rs.getInt("patch_id");
                 Recipe recipe = Recipe.loadRecipeById(recipeId);
-                AdditionPatch additionPatch = new AdditionPatch(recipe,idPatch);
+                AdditionPatch additionPatch = new AdditionPatch(recipe, idPatch);
                 additionPatches.add(additionPatch);
 
             }
@@ -195,8 +195,8 @@ public class Service implements EventItemInfo{
         this.additionPatches = additionPatches;
     }
 
-    public void getAllRemovalPatches(){
-        String query = "SELECT * FROM Patch WHERE menuItem_id IS NOT NULL AND service_id =" + this.service_id ;
+    public void getAllRemovalPatches() {
+        String query = "SELECT * FROM Patch WHERE menuItem_id IS NOT NULL AND service_id =" + this.service_id;
         ArrayList<RemovalPatch> removalPatches = new ArrayList<>();
 
         PersistenceManager.executeQuery(query, new ResultHandler() {
@@ -216,6 +216,7 @@ public class Service implements EventItemInfo{
         this.removalPatches = removalPatches;
     }
 
+    public static enum State {INPREPARAZIONE, CONFERMATO, ANNULLATO, TERMINATO}
 
 
 }
