@@ -16,11 +16,6 @@ import java.io.IOException;
 public class Main {
 
 
-    // Necessario per poter nascondere la finestra di base.
-    // Normalmente la finestra verrebbe riciclata, ma il codice fornito è molto complesso ed è decisamente più
-    // semplice adattarlo per funzionare come siamo abituati. Questo solo perchè non funziona correttamente
-    // showAndWait, che avrebbe facilmente risolto le cose. (sospetto che il malfunzionamento sia causato da come è
-    // inizializzata la finestra)
     private static Stage mainStage;
 
     @FXML

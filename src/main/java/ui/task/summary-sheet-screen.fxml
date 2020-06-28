@@ -12,12 +12,4 @@
             </children>
         </FlowPane>
     </bottom>
-<!--    <top>
-        <AnchorPane prefHeight="53" BorderPane.alignment="BOTTOM_LEFT">
-            <Text fx:id="summarySheetDetails" layoutX="19.0" layoutY="36.8671875" text="Nome Utente" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="24.0">
-                <font>
-                    <Font size="24.0" />
-                </font></Text>
-        </AnchorPane>
-    </top>-->
 </BorderPane>

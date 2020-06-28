@@ -41,6 +41,12 @@ public class TaskManagement extends WindowController {
                 (observableValue, oldSelection, newSelection) -> {
                     User u = CatERing.getInstance().getUserManager().getCurrentUser();
 
+                    // Fix per un problema che occorre quando si apre una seconda volta la lista dei servizi e ce
+                    // n'era uno che era rimasto selezionato
+                    if (newSelection == null) {
+                        return;
+                    }
+
                     EventItemInfo selection = newSelection.getValue();
 
                     apriButton.setDisable(selection == null ||
