@@ -21,4 +21,9 @@ public abstract class Turn {
     }
 
     public abstract boolean hasConcluded();
+
+    @Override
+    public String toString() {
+        return String.format("Inizio: %s; Fine: %s", start.toString(), end.toString());
+    }
 }
