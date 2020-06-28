@@ -107,7 +107,7 @@ public class Service implements EventItemInfo{
     public Menu getMenu() {return this.menu;}
 
     public SummarySheet createSummarySheet() {
-        SummarySheet sheet = new SummarySheet(this.getMenu());
+        SummarySheet sheet = new SummarySheet(this.getMenu(), additionPatches, removalPatches, this.service_id);
         this.sheet = sheet;
         return sheet;
     }
@@ -119,6 +119,15 @@ public class Service implements EventItemInfo{
 
     public boolean isConfirmed() {
         return state == State.CONFERMATO;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+    private static enum State {INPREPARAZIONE, CONFERMATO, ANNULLATO, TERMINATO}
+
+    public String toString() {
+        return name + ": " + offsetDay + " (" + startHour + "-" + endHour + "), " + diners + " pp.";
     }
 
     //metodi per il db
@@ -167,9 +176,6 @@ public class Service implements EventItemInfo{
         return result;
     }
 
-    public void setMenu(Menu menu) {
-        this.menu = menu;
-    }
 
     public void getAllAdditionPatches(){
         String query = "SELECT * FROM Patch WHERE menuItem_id IS NULL AND service_id =" + this.service_id;
@@ -210,10 +216,6 @@ public class Service implements EventItemInfo{
         this.removalPatches = removalPatches;
     }
 
-    private static enum State {INPREPARAZIONE, CONFERMATO, ANNULLATO, TERMINATO}
 
-    public String toString() {
-        return name + ": " + offsetDay + " (" + startHour + "-" + endHour + "), " + diners + " pp.";
-    }
 
 }

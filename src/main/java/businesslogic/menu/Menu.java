@@ -409,15 +409,14 @@ public class Menu {
 
     public static Menu loadMenuById(int id){
         String queryMenu = "SELECT * FROM Menus WHERE id =" + id;
-        ArrayList<Menu> menus = new ArrayList<>();
+        Menu menu = new Menu();
 
         PersistenceManager.executeQuery(queryMenu, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {
-                String title = rs.getString("title");
+                menu.title = rs.getString("title");
                 int owner_id = rs.getInt("owner_id");
-                boolean published = rs.getBoolean("published");
-                Menu menu = new Menu(title, published);
+                menu.published = rs.getBoolean("published");
                 menu.setOwner(User.loadUserById(owner_id));
 
                 String featQ = "SELECT * FROM MenuFeatures WHERE menu_id = " + menu.id;
@@ -443,11 +442,11 @@ public class Menu {
                     }
                 });
 
-                menus.add(menu);
+
 
             }
         });
-        return menus.get(0);
+        return menu;
     }
 
     public static ObservableList<Menu> loadAllMenus() {

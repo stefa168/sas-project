@@ -12,7 +12,7 @@ import java.util.*;
 
 public class Recipe extends KitchenDuty{
     private static Map<Integer, Recipe> all = new HashMap<>();
-    private ArrayList<Preparation> subDuties;
+    private ArrayList<KitchenDuty> subDuties;
 
     private int id;
 
@@ -45,6 +45,16 @@ public class Recipe extends KitchenDuty{
         return name;
     }
 
+    @Override
+    public ArrayList<KitchenDuty> getSubDuties() {
+        return subDuties;
+    }
+
+    @Override
+    public int getKitchenDutyId() {
+        return getId();
+    }
+
     // STATIC METHODS FOR PERSISTENCE
 
     public static ObservableList<Recipe> loadAllRecipes() {
@@ -59,6 +69,7 @@ public class Recipe extends KitchenDuty{
                 } else {
                     Recipe rec = new Recipe(rs.getString("name"));
                     rec.id = id;
+                    rec.subDuties = KitchenDuty.loadAllSubKitchenDuty(rec.id);
                     all.put(rec.id, rec);
                 }
             }
@@ -86,16 +97,10 @@ public class Recipe extends KitchenDuty{
             public void handle(ResultSet rs) throws SQLException {
                     rec.name = rs.getString("name");
                     rec.id = id;
+                    rec.subDuties = KitchenDuty.loadAllSubKitchenDuty(rec.id);
                     all.put(rec.id, rec);
             }
         });
         return rec;
-    }
-
-
-    @Override
-    public ArrayList<KitchenDuty> getSubDuties() {
-        //TODO
-        return null;
     }
 }

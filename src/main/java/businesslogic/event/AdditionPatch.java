@@ -12,5 +12,7 @@ public class AdditionPatch extends Patch{
 
     }
 
-
+    public Recipe getDuty() {
+        return duty;
+    }
 }

@@ -64,6 +64,8 @@ public class MenuItem {
         this.itemRecipe = itemRecipe;
     }
 
+    public boolean equals(MenuItem menuItem){ return this.id == menuItem.id;}
+
 
 
     // STATIC METHODS FOR PERSISTENCE

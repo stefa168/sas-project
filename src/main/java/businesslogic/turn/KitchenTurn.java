@@ -1,9 +1,14 @@
 package businesslogic.turn;
 
 import businesslogic.user.User;
+import persistence.PersistenceManager;
+import persistence.ResultHandler;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class KitchenTurn extends Turn {
@@ -14,6 +19,8 @@ public class KitchenTurn extends Turn {
         assignedCooks = new HashMap<>();
         complete = false;
     }
+
+    public KitchenTurn(){}
 
     public boolean isComplete() {
         return complete;
@@ -77,5 +84,42 @@ public class KitchenTurn extends Turn {
         } else {
             assignedCooks.put(cook, cookOccupiedTime);
         }
+    }
+
+    //metodi db
+
+    public static ArrayList<KitchenTurn> getAllKitchenTurn(){
+        String query = "SELECT * FROM Turn WHERE " + true;
+        ArrayList<KitchenTurn> kitchenTurns = new ArrayList<>();
+
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                KitchenTurn turn = new KitchenTurn();
+                turn.complete = rs.getBoolean("complete");
+                turn.start = rs.getTimestamp("startDate").toInstant();
+                turn.end = rs.getTimestamp("endDate").toInstant();
+                kitchenTurns.add(turn);
+            }
+        });
+
+        return kitchenTurns;
+    }
+
+    public static KitchenTurn loadKitchenTurnById(int turn_id){
+        String query = "SELECT * FROM Turn WHERE turn_id = " + turn_id;
+        KitchenTurn turn = new KitchenTurn();
+
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                turn.complete = rs.getBoolean("complete");
+                turn.start = rs.getTimestamp("startDate").toInstant();
+                turn.end = rs.getTimestamp("endDate").toInstant();
+
+            }
+        });
+
+        return turn;
     }
 }

@@ -1,5 +1,7 @@
 package businesslogic.kitchentask;
 
+import businesslogic.event.AdditionPatch;
+import businesslogic.event.RemovalPatch;
 import businesslogic.menu.Menu;
 import businesslogic.menu.MenuItem;
 import businesslogic.menu.Section;
@@ -11,24 +13,41 @@ public class SummarySheet {
     private ArrayList<Task> tasks;
     private ArrayList<KitchenDuty> extraDuties;
 
-    public SummarySheet(Menu menu) {
+    public SummarySheet(Menu menu, ArrayList<AdditionPatch> additionPatches, ArrayList<RemovalPatch> removalPatches, int service_id) {
         ArrayList<KitchenDuty> kitchenDuties = new ArrayList<>();
         for (Section section : menu.getSections()) {
             for (MenuItem menuItem : section.getItems()) {
-                kitchenDuties.add(menuItem.getItemRecipe());
-                kitchenDuties.addAll(menuItem.getItemRecipe().getSubDuties());
+                if(!containsRemoval(removalPatches, menuItem)) {
+                    kitchenDuties.add(menuItem.getItemRecipe());
+                    kitchenDuties.addAll(menuItem.getItemRecipe().getSubDuties());
+                }
             }
         }
         for (MenuItem freeItem : menu.getFreeItems()) {
             kitchenDuties.add(freeItem.getItemRecipe());
             kitchenDuties.addAll(freeItem.getItemRecipe().getSubDuties());
         }
+        for(AdditionPatch additionPatch: additionPatches){
+            kitchenDuties.add(additionPatch.getDuty());
+            kitchenDuties.addAll(additionPatch.getDuty().getSubDuties());
+        }
         ArrayList<Task> tasks = new ArrayList<>();
+        int i = 0;
         for (KitchenDuty kitchenDuty : kitchenDuties) {
-            Task task = new Task(false, kitchenDuty);
+            Task task = new Task(false, kitchenDuty, service_id, i);
             tasks.add(task);
+            i++;
         }
         this.tasks = tasks;
+    }
+
+    public boolean containsRemoval(ArrayList<RemovalPatch> removalPatches, MenuItem menuItem){
+        for (RemovalPatch removalPatch: removalPatches){
+            if(removalPatch.getMenuItem().equals(menuItem)){
+                return true;
+            }
+        }
+        return false;
     }
 
 

@@ -1,9 +1,16 @@
 package businesslogic.kitchentask;
 
+import businesslogic.recipe.KitchenDuty;
 import businesslogic.turn.KitchenTurn;
+import businesslogic.turn.Turn;
 import businesslogic.user.User;
+import persistence.PersistenceManager;
+import persistence.ResultHandler;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.Duration;
+import java.util.ArrayList;
 
 public class KitchenJob {
     private int amount;
@@ -15,6 +22,10 @@ public class KitchenJob {
         this.amount = amount;
         this.turn = turn;
         this.estimatedDuration = estimatedDuration;
+    }
+
+    public KitchenJob (){
+
     }
 
     public void edit(int amount, Duration estimatedDuration) {
@@ -49,5 +60,43 @@ public class KitchenJob {
 
     public void setDuration(Duration newDuration) {
         this.estimatedDuration = newDuration;
+    }
+
+    //metodi per il db
+
+    public static ArrayList<KitchenJob> getAllKitchenJobs(){
+        String query = "SELECT * FROM KitchenJob WHERE " + true;
+        ArrayList<KitchenJob> kitchenJobs = new ArrayList<>();
+
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                KitchenJob kitchenJob = new KitchenJob();
+                kitchenJob.amount = rs.getInt("amount");
+                int duration = rs.getInt("estimatedDuration");
+                kitchenJob.estimatedDuration = Duration.ofMinutes(duration);
+                kitchenJob.cook = User.loadUserById(rs.getInt("cook_id"));
+                kitchenJob.turn = KitchenTurn.loadKitchenTurnById(rs.getInt("turn_id"));
+                kitchenJobs.add(kitchenJob);
+            }
+        });
+        return kitchenJobs;
+    }
+
+    public static KitchenJob getKitchenJobById(int task_id, int cook_id, int turn_id){
+        String query = "SELECT * FROM KitchenJob WHERE task_id = " + task_id + "AND cook_id = " + cook_id + "AND turn_id = " + turn_id;
+        KitchenJob kitchenJob = new KitchenJob();
+
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                kitchenJob.amount = rs.getInt("amount");
+                int duration = rs.getInt("estimatedDuration");
+                kitchenJob.estimatedDuration = Duration.ofMinutes(duration);
+                kitchenJob.cook = User.loadUserById(rs.getInt("cook_id"));
+                kitchenJob.turn = KitchenTurn.loadKitchenTurnById(rs.getInt("turn_id"));
+            }
+        });
+        return kitchenJob;
     }
 }

@@ -10,6 +10,7 @@ public abstract class Turn {
         this.start = start;
         this.end = end;
     }
+    public Turn(){}
 
     public Instant getStart() {
         return start;

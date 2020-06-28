@@ -2,7 +2,7 @@ package businesslogic.event;
 
 import businesslogic.menu.MenuItem;
 
-class RemovalPatch extends Patch {
+public class RemovalPatch extends Patch {
     private MenuItem menuItem;
 
 
@@ -10,4 +10,10 @@ class RemovalPatch extends Patch {
         super(patch_id);
         this.patch_id = patch_id;
     }
+
+    public MenuItem getMenuItem() {
+        return menuItem;
+    }
+
+
 }
