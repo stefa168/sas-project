@@ -17,8 +17,6 @@ public class User {
     private String username;
     private Set<Role> roles;
 
-    ;
-
     public User() {
         id = 0;
         username = "";

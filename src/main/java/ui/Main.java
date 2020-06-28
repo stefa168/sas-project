@@ -36,12 +36,18 @@ public class Main {
     MenuManagement menuManagementPaneController;
 
     TaskManagement taskManagementPaneController;
+    private static Stage taskManagementWindow;
+
     public static void showMainWindow() {
         mainStage.show();
     }
 
     public static void hideMainWindow() {
         mainStage.hide();
+    }
+
+    public static Stage getTaskManagementWindow() {
+        return taskManagementWindow;
     }
 
     public void initialize() throws Exception {
@@ -84,12 +90,12 @@ public class Main {
 
     private void initTaskManagementWindow() throws IOException {
         Stage taskWindow = new Stage();
+        this.taskManagementWindow = taskWindow;
 
         FXMLLoader rootLoader = new FXMLLoader(getClass().getResource("task/task-management.fxml"));
         Scene primaryScene = new Scene(rootLoader.load());
 
         TaskManagement controller = rootLoader.getController();
-        controller.setStage(taskWindow);
 
         taskWindow.setTitle("Gestione Compiti - Selezione Servizio");
         taskWindow.setScene(primaryScene);
