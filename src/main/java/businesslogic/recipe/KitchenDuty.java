@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public abstract class KitchenDuty {
     protected String name;
@@ -53,6 +54,23 @@ public abstract class KitchenDuty {
             }
         });
         return subDuties;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        KitchenDuty duty = (KitchenDuty) o;
+        return resultingAmount == duty.resultingAmount &&
+               name.equals(duty.name) &&
+               constantConcreteActivityTime.equals(duty.constantConcreteActivityTime) &&
+               variableConcreteActivityTime.equals(duty.variableConcreteActivityTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, instruction, resultingAmount, constantConcreteActivityTime,
+                            variableConcreteActivityTime);
     }
 
     public abstract ArrayList<KitchenDuty> getSubDuties();

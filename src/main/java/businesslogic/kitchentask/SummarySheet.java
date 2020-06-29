@@ -118,16 +118,21 @@ public class SummarySheet {
 
     public Task deleteExtraDuty(KitchenDuty kitchenDuty) {
         Task deletedTask = null;
-        for (Task task : tasks) {
-            if (task.isOptionalDuty() && kitchenDuty == task.getDuty()) {
+        for (int i = 0, tasksSize = tasks.size(); i < tasksSize; i++) {
+            Task task = tasks.get(i);
+            if (task.isOptionalDuty() && kitchenDuty.equals(task.getDuty())) {
                 for (KitchenJob job : task.getJobs()) {
                     job.getTurn().freeTime(job.getCook(), job.getDuration());
                     task.getJobs().remove(job);
                 }
                 deletedTask = task;
                 tasks.remove(task);
+
+                // Lo so che non è il massimo, ma senza finiamo in una OutOfBoundsException
+                break;
             }
         }
+
         extraDuties.remove(kitchenDuty);
         if (deletedTask != null) {
             Task.deleteTask(deletedTask.getTask_id());

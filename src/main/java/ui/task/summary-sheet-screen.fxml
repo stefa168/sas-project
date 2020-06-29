@@ -9,9 +9,9 @@
         <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="10.0" prefHeight="53.0"
                   BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="addRecipeButton" text="Aggiungi Ricetta Fuori Menù" onAction="#addRecipe"/>
+                <Button fx:id="addRecipeButton" text="Aggiungi Ricetta Fuori Menù" onAction="#addExtraDuty"/>
                 <Button fx:id="deleteRecipeButton" layoutX="234.0" layoutY="24.0" text="Rimuovi Ricetta Fuori Menù"
-                        onAction="#deleteRecipe"/>
+                        onAction="#deleteExtraDuty"/>
                 <Button fx:id="upTaskButton" layoutX="531.0" layoutY="24.0" text="Sposta Su" onAction="#goUpTask"/>
                 <Button fx:id="downTaskButton" layoutX="581.0" layoutY="24.0" text="Sposta Giù" onAction="#goDownTask"/>
                 <Button fx:id="changeDetailsButton" layoutX="701.0" layoutY="24.0" text="Modifica Dettagli"

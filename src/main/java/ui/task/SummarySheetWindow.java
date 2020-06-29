@@ -101,7 +101,7 @@ public class SummarySheetWindow extends WindowController {
                           .getValue();
     }
 
-    public void addRecipe(ActionEvent actionEvent) {
+    public void addExtraDuty(ActionEvent actionEvent) {
         List<Recipe> choices = Recipe.loadAllRecipes();
 
         ChoiceDialog<Recipe> dialog = new ChoiceDialog<>(choices.get(0), choices);
@@ -124,12 +124,27 @@ public class SummarySheetWindow extends WindowController {
         }
     }
 
-    public void deleteRecipe(ActionEvent actionEvent) {
+    public void deleteExtraDuty(ActionEvent actionEvent) {
+        TreeItem<TaskItemInfo> taskItemInfoTreeItem = getTaskItemInfoTreeItem();
+        TaskItemInfo selectedItem = getSelectedItem();
+
+        if (selectedItem instanceof Task) {
+            Task task = (Task) selectedItem;
+
+            if (task.isOptionalDuty()) {
+                try {
+                    ktm.deleteExtraDuty(task.getDuty());
+                } catch (UseCaseLogicException e) {
+                    e.printStackTrace();
+                }
+
+                contentTree.getRoot().getChildren().remove(taskItemInfoTreeItem);
+            }
+        }
     }
 
     public void goUpTask(ActionEvent actionEvent) {
-        TreeItem<TaskItemInfo> itemRow = contentTree.getSelectionModel()
-                                                    .getSelectedItem();
+        TreeItem<TaskItemInfo> itemRow = getTaskItemInfoTreeItem();
         TaskItemInfo selectedItem = itemRow.getValue();
 
 
@@ -156,9 +171,13 @@ public class SummarySheetWindow extends WindowController {
         }
     }
 
+    private TreeItem<TaskItemInfo> getTaskItemInfoTreeItem() {
+        return contentTree.getSelectionModel()
+                          .getSelectedItem();
+    }
+
     public void goDownTask(ActionEvent actionEvent) {
-        TreeItem<TaskItemInfo> itemRow = contentTree.getSelectionModel()
-                                                    .getSelectedItem();
+        TreeItem<TaskItemInfo> itemRow = getTaskItemInfoTreeItem();
         TaskItemInfo selectedItem = itemRow.getValue();
 
 
