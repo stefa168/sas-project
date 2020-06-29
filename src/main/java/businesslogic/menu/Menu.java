@@ -414,6 +414,7 @@ public class Menu {
         PersistenceManager.executeQuery(queryMenu, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {
+                menu.id = rs.getInt("id");
                 menu.title = rs.getString("title");
                 int owner_id = rs.getInt("owner_id");
                 menu.published = rs.getBoolean("published");
