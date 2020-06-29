@@ -17,15 +17,28 @@ import java.util.Comparator;
 public class SummarySheetWindow extends WindowController {
 
     @FXML
+    public Button addRecipeButton;
+    @FXML
+    public Button deleteRecipeButton;
+    @FXML
+    public Button upTaskButton;
+    @FXML
+    public Button downTaskButton;
+    @FXML
+    public Button changeDetailsButton;
+    @FXML
+    public Button addTaskButton;
+    @FXML
+    public Button deleteTaskButton;
+    @FXML
+    public Button cookButton;
+    @FXML
+    public Button endButton;
+    @FXML
     TreeView<TaskItemInfo> contentTree;
     @FXML
     private BorderPane containerPane;
-    @FXML
-    private Button aggiungiIncaricoButton;
-    @FXML
-    private Button rimuoviIncaricoButton;
-    @FXML
-    private Button cuocoButton;
+
 
     private KitchenTaskManager ktm;
     private boolean controlsEnabled;
@@ -75,15 +88,29 @@ public class SummarySheetWindow extends WindowController {
         this.controlsEnabled = b;
     }
 
-    public void aggiungiIncarico(ActionEvent actionEvent) {
 
+
+    public void addrecipe(ActionEvent actionEvent) {
     }
 
-    public void rimuoviIncarico(ActionEvent actionEvent) {
-
+    public void deleteRecipe(ActionEvent actionEvent) {
     }
 
-    public void gestisciCuocoIncarico(ActionEvent actionEvent) {
+    public void goUpTask(ActionEvent actionEvent) {
+    }
 
+    public void goDownTask(ActionEvent actionEvent) {
+    }
+
+    public void changeDetailsTask(ActionEvent actionEvent) {
+    }
+
+    public void addTask(ActionEvent actionEvent) {
+    }
+
+    public void deleteTask(ActionEvent actionEvent) {
+    }
+
+    public void cookOperations(ActionEvent actionEvent) {
     }
 }
