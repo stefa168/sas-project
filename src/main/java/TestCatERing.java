@@ -1,9 +1,7 @@
 import businesslogic.CatERing;
 import businesslogic.UseCaseLogicException;
 import businesslogic.event.Event;
-import businesslogic.event.EventInfo;
 import businesslogic.event.Service;
-import businesslogic.event.ServiceInfo;
 import businesslogic.menu.Menu;
 import businesslogic.menu.Section;
 import businesslogic.recipe.Recipe;
@@ -18,7 +16,7 @@ public class TestCatERing {
             /* System.out.println("TEST DATABASE CONNECTION");
             PersistenceManager.testSQLConnection();*/
             System.out.println("TEST FAKE LOGIN");
-            CatERing.getInstance().getUserManager().login("Lidia");
+            CatERing.getInstance().getUserManager().loginWithUsername("Lidia");
             System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
 
             System.out.println("\nTEST CREATE MENU");

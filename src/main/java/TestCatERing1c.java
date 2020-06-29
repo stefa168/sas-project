@@ -1,7 +1,6 @@
 import businesslogic.CatERing;
 import businesslogic.UseCaseLogicException;
 import businesslogic.menu.Menu;
-import businesslogic.menu.MenuException;
 import businesslogic.menu.Section;
 import businesslogic.recipe.Recipe;
 import javafx.collections.ObservableList;
@@ -11,7 +10,7 @@ public class TestCatERing1c {
         try {
             /* System.out.println("TEST DATABASE CONNECTION");
             PersistenceManager.testSQLConnection();*/
-            CatERing.getInstance().getUserManager().login("Lidia");
+            CatERing.getInstance().getUserManager().loginWithUsername("Lidia");
             System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
 
             Menu m = CatERing.getInstance().getMenuManager().createMenu("Menu Pinco Pallino");

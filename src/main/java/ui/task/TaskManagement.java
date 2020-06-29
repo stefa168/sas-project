@@ -148,7 +148,7 @@ public class TaskManagement extends WindowController {
 
     @Override
     public void showWindow() {
-        CatERing.getInstance().getUserManager().fakeLogin("Marinella");
+        // CatERing.getInstance().getUserManager().fakeLogin("Marinella");
 
         userNameField.setText(CatERing.getInstance().getUserManager().getCurrentUser().getUserName());
 

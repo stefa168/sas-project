@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -20,8 +19,6 @@ public class Main {
 
 
     private static Stage mainStage;
-
-    private User userLogin;
 
     @FXML
     AnchorPane paneContainer;
@@ -38,8 +35,8 @@ public class Main {
     TaskManagement taskManagementPaneController;
 
     public void setUsernameUserLogin(User user) {
-        this.userLogin = user;
-        startPaneController.setUser(userLogin);
+        CatERing.getInstance().getUserManager().login(user);
+        startPaneController.setUser(user);
     }
 
     public void initialize() throws Exception {
@@ -62,7 +59,7 @@ public class Main {
     }
 
     public void startMenuManagement() {
-        CatERing.getInstance().getUserManager().login(userLogin.getUserName());
+        // CatERing.getInstance().getUserManager().login(userLogin.getUserName());
 
         menuManagementPaneController.initialize();
         paneContainer.getChildren().remove(startPane);
