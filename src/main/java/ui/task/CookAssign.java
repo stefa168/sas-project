@@ -31,34 +31,7 @@ public class CookAssign {
     public TreeView<Object> cookTree;
 
     public void initialize() {
-        ObservableList<User> allUsers = CatERing.getInstance().getUserManager().getAllUsers();
-        cookTree.setShowRoot(false);
-        TreeItem<Object> root = new TreeItem<>(null);
 
-        for(User user: allUsers){
-            if(user.isCook()){
-
-                ArrayList<KitchenTurn> allTurns = KitchenTurn.getAllKitchenTurn();
-                for (KitchenTurn kitchenTurn: allTurns){
-                    if(kitchenTurn.equals(kitchenJob.getTurn()) && kitchenTurn.getAvailableCooks().contains(user)){
-                        TreeItem<Object> node = new TreeItem<>(user);
-                        root.getChildren().add(node);
-
-                        ArrayList<KitchenTurn> availabilities = KitchenTurn.loadTurnAvailabilitiesByCookId(user.getId());
-                        ObservableList<KitchenTurn> availabilitesObservable = FXCollections.observableArrayList(availabilities);
-                        for(KitchenTurn availability: availabilitesObservable){
-                            node.getChildren().add(new TreeItem<>(availability));
-                        }
-
-
-                    }
-                }
-
-            }
-        }
-
-
-        cookTree.setRoot(root);
     }
 
     public void okButtonPressed(ActionEvent actionEvent) {
@@ -71,6 +44,20 @@ public class CookAssign {
 
     public void setKitchenJob(KitchenJob kitchenJob) {
         this.kitchenJob = kitchenJob;
+        cookTree.setShowRoot(false);
+        TreeItem<Object> root = new TreeItem<>(null);
+
+        ArrayList<User> cooks = User.getUsersByTurnAvailabilities(kitchenJob.getTurn().getTurn_id());
+
+        ObservableList<User> allCooks = FXCollections.observableArrayList(cooks);
+
+        for(User user: allCooks){
+            TreeItem<Object> node = new TreeItem<>(user);
+            root.getChildren().add(node);
+        }
+
+
+        cookTree.setRoot(root);
     }
 
     public void optionCookButton(ActionEvent actionEvent) throws UseCaseLogicException, TaskException {
