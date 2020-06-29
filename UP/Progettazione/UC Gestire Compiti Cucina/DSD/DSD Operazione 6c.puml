@@ -10,6 +10,7 @@ participant "ktr: KitchenTaskEventReceiver" as ktr
 participant "job: KitchenJob" as job
 participant "job.turn: KitchenTurn" as turn
 participant "job.turn.assignedCooks: ArrayList<TimeKeeper>" as cooks
+participant "job.turn.availableCooks: ArrayList<User>" as availabilities
 
 UI -> ktm: assignCook(job, user)
 activate ktm
@@ -21,17 +22,22 @@ else
     ktm -> turn: hasUserEnoughTime(user, job.estimatedDuration)
     activate turn
 
+    turn -> availabilities: contains(user)
+    activate availabilities
+        turn <<-- availabilities: isAvailable
+    deactivate availabilities
+
     turn -> cooks: get(user)
     activate cooks
     turn <<--cooks: time
     deactivate cooks
 
-    turn -> turn: enoughTime = (this.start + time.usedTime + job.estimatedDuration) <= this.end
+    turn -> turn: enoughTime = isAvailable && ((this.start + time.usedTime + job.estimatedDuration) <= this.end)
 
     ktm <<-- turn: enoughTime
     deactivate turn
 
-    alt !enoughTime
+    alt user != null && !enoughTime
         UI <<-- ktm: throw TaskException
     else
         alt job.cook != null
