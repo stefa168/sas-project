@@ -17,6 +17,7 @@ public class KitchenJob implements TaskItemInfo {
     private KitchenTurn turn;
     private User cook;
     private int kitchenJob_id;
+    private int task_id;
 
     public KitchenJob(KitchenTurn turn, int amount, Duration estimatedDuration) {
         this.amount = amount;
@@ -28,25 +29,24 @@ public class KitchenJob implements TaskItemInfo {
 
     }
 
+    // attenzione metodo non aggiornato
     public static ArrayList<KitchenJob> getAllKitchenJobs() {
         String query = "SELECT * FROM KitchenJob WHERE " + true;
         ArrayList<KitchenJob> kitchenJobs = new ArrayList<>();
 
-        PersistenceManager.executeQuery(query, new ResultHandler() {
-            @Override
-            public void handle(ResultSet rs) throws SQLException {
-                KitchenJob kitchenJob = new KitchenJob();
-                kitchenJob.amount = rs.getInt("amount");
-                int duration = rs.getInt("estimatedDuration");
-                kitchenJob.estimatedDuration = Duration.ofMinutes(duration);
-                kitchenJob.cook = User.loadUserById(rs.getInt("cook_id"));
-                kitchenJob.turn = KitchenTurn.loadKitchenTurnById(rs.getInt("turn_id"));
-                kitchenJobs.add(kitchenJob);
-            }
+        PersistenceManager.executeQuery(query, rs -> {
+            KitchenJob kitchenJob = new KitchenJob();
+            kitchenJob.amount = rs.getInt("amount");
+            int duration = rs.getInt("estimatedDuration");
+            kitchenJob.estimatedDuration = Duration.ofMinutes(duration);
+            kitchenJob.cook = User.loadUserById(rs.getInt("cook_id"));
+            kitchenJob.turn = KitchenTurn.loadKitchenTurnById(rs.getInt("turn_id"));
+            kitchenJobs.add(kitchenJob);
         });
         return kitchenJobs;
     }
 
+    // attenzione metodo non aggiornato
     public static KitchenJob getKitchenJobById(int kitchenJob_id) {
         String query = "SELECT * FROM KitchenJob WHERE kitchenJob_id = " + kitchenJob_id;
         KitchenJob kitchenJob = new KitchenJob();
@@ -99,6 +99,27 @@ public class KitchenJob implements TaskItemInfo {
         String upd = "UPDATE KitchenJob SET amount = " + new_estimatedDuration +
                      "WHERE kitchenJob_id = " + kitchenJob_id;
         PersistenceManager.executeUpdate(upd);
+    }
+
+    public static ArrayList<KitchenJob> loadByTask(Task task) {
+        ArrayList<KitchenJob> jobs = new ArrayList<>();
+        //language=MySQL
+        String query = "SELECT * FROM kitchenjob WHERE task_id = " + task.getTask_id();
+        PersistenceManager.executeQuery(query, rs -> {
+            KitchenJob job = new KitchenJob();
+            job.kitchenJob_id = rs.getInt("kitchenJob_id");
+            job.task_id = rs.getInt("task_id");
+            job.turn = KitchenTurn.loadKitchenTurnById(rs.getInt("turn_id"));
+            int plausibleUserId = rs.getInt("cook_id");
+            // Questo è l'unico modo per verificare se il valore letto in precedenza era null.
+            // https://stackoverflow.com/questions/2920364/checking-for-a-null-int-value-from-a-java-resultset
+            job.cook = rs.wasNull() ? null : User.loadUserById(plausibleUserId);
+            job.amount = rs.getInt("amount");
+            job.estimatedDuration = Duration.ofMinutes(rs.getInt("estimatedDuration"));
+            jobs.add(job);
+        });
+
+        return jobs;
     }
 
     public void edit(int amount, Duration estimatedDuration) {

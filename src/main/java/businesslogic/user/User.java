@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
 
-import javax.management.relation.Role;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -21,7 +20,7 @@ public class User {
         this.roles = new HashSet<>();
     }
 
-    public static User loadUserById(int uid) {
+    public static User loadUserById(Integer uid) {
         if (loadedUsers.containsKey(uid)) return loadedUsers.get(uid);
 
         User load = new User();
@@ -131,7 +130,19 @@ public class User {
         return u;
     }
 
+    public static ArrayList<User> getUsersByTurnAvailabilities(int turn_id) {
+        ArrayList<User> cooks = new ArrayList<>();
+        String query = "SELECT * FROM Availabilities WHERE turn_id = " + turn_id;
 
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                User user = User.loadUserById(rs.getInt("user_id"));
+                cooks.add(user);
+            }
+        });
+        return cooks;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -166,11 +177,13 @@ public class User {
         return this.id;
     }
 
-    public String getLoginRoles(){
+    // STATIC METHODS FOR PERSISTENCE
+
+    public String getLoginRoles() {
         StringBuilder result = new StringBuilder();
 
-        for(Role role: roles){
-            switch (role){
+        for (Role role : roles) {
+            switch (role) {
                 case CHEF -> result.append("CHEF ");
                 case CUOCO -> result.append("CUOCO ");
                 case ORGANIZZATORE -> result.append("ORGANIZZATORE ");
@@ -180,8 +193,6 @@ public class User {
 
         return result.toString();
     }
-
-    // STATIC METHODS FOR PERSISTENCE
 
     public String toString() {
         String result = username;
@@ -193,20 +204,6 @@ public class User {
             }
         }
         return result;
-    }
-
-    public static ArrayList<User> getUsersByTurnAvailabilities(int turn_id){
-        ArrayList<User> cooks = new ArrayList<>();
-        String query = "SELECT * FROM Availabilities WHERE turn_id = " + turn_id;
-
-        PersistenceManager.executeQuery(query, new ResultHandler() {
-            @Override
-            public void handle(ResultSet rs) throws SQLException {
-                User user = User.loadUserById(rs.getInt("user_id"));
-                cooks.add(user);
-            }
-        });
-        return cooks;
     }
 
     public static enum Role {SERVIZIO, CUOCO, CHEF, ORGANIZZATORE}

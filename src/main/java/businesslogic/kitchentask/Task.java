@@ -1,6 +1,5 @@
 package businesslogic.kitchentask;
 
-import businesslogic.event.Service;
 import businesslogic.recipe.KitchenDuty;
 import businesslogic.recipe.Preparation;
 import businesslogic.recipe.Recipe;
@@ -9,12 +8,10 @@ import persistence.PersistenceManager;
 import persistence.ResultHandler;
 import ui.task.TaskItemInfo;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Task implements TaskItemInfo, Comparable<Task> {
@@ -96,6 +93,7 @@ public class Task implements TaskItemInfo, Comparable<Task> {
                     Preparation.getPreparationById(kitchenDuty_id);
 
             Task task = new Task(id, duty, amount, estimatedDuration, toDo, optionalDuty, order_number);
+            task.jobs = KitchenJob.loadByTask(task);
             tasks.add(task);
         });
 
