@@ -1656,8 +1656,22 @@ m1=1</panel_attributes>
       <h>56</h>
     </coordinates>
     <panel_attributes>*Design Class Diagram (DCD)*
-fontsize=30
-</panel_attributes>
+      fontsize=30
+    </panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1800</x>
+      <y>400</y>
+      <w>448</w>
+      <h>528</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+      r1=availableCooks
+      m1=0..n
+    </panel_attributes>
+    <additional_attributes>10.0;20.0;540.0;20.0;540.0;640.0;520.0;640.0</additional_attributes>
   </element>
 </diagram>
