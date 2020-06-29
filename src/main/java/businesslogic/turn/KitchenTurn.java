@@ -14,6 +14,7 @@ import java.util.HashMap;
 public class KitchenTurn extends Turn {
     private boolean complete;
     private HashMap<User, Duration> assignedCooks;
+    private ArrayList<User> availableCooks = new ArrayList<>();
 
     public KitchenTurn(Instant start, Instant end) {
         super(start, end);
@@ -47,6 +48,10 @@ public class KitchenTurn extends Turn {
     }
 
     public boolean hasUserEnoughTime(User user, Duration estimatedDuration) {
+        if (user == null || !availableCooks.contains(user)) {
+            return false;
+        }
+
         if (!assignedCooks.containsKey(user)) {
             return true;
         }

@@ -97,7 +97,7 @@ public class KitchenJob implements TaskItemInfo {
     }
 
     public void assignCook(User user) {
-        if (user.isCook()) {
+        if (user == null || user.isCook()) {
             this.cook = user;
         }
     }

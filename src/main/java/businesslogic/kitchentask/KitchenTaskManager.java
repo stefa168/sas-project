@@ -27,11 +27,11 @@ public class KitchenTaskManager {
         serviceOfSheet = new HashMap<>();
     }
 
-    public void setCurrentSheet(SummarySheet sheet) { this.currentSheet = sheet;}
-
     public SummarySheet getCurrentSheet() {
         return currentSheet;
     }
+
+    public void setCurrentSheet(SummarySheet sheet) { this.currentSheet = sheet;}
 
     private void notifySheetCreate(SummarySheet sheet) {
         for (KitchenTaskEventReceiver eventReceiver : eventReceivers) {
@@ -232,17 +232,22 @@ public class KitchenTaskManager {
     }
 
     public KitchenJob assignCook(KitchenJob job, User user) throws UseCaseLogicException, TaskException {
-        if (user == null || !user.isCook() || Instant.now().compareTo(job.getTurn().getEnd()) > 0) {
+        if ((user != null && !user.isCook()) || Instant.now().compareTo(job.getTurn().getEnd()) > 0) {
             throw new UseCaseLogicException();
         }
+
         if (job.getCook() != user) {
-            if (job.getTurn().hasUserEnoughTime(user, job.getDuration())) {
+            if (user == null || job.getTurn().hasUserEnoughTime(user, job.getDuration())) {
                 if (job.getCook() != null) {
                     job.getTurn().freeTime(job.getCook(), job.getDuration());
                 }
-                job.getTurn().takeTime(user, job.getDuration());
+
+                if (user != null) {
+                    job.getTurn().takeTime(user, job.getDuration());
+                }
+
                 job.assignCook(user);
-                notifyEditKitchenJob(job);
+                //notifyChangeKitchenJobCook(job);
             } else {
                 throw new TaskException();
             }
