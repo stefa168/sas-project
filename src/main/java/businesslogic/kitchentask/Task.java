@@ -212,12 +212,22 @@ public class Task implements TaskItemInfo, Comparable<Task> {
                 task.order_numer = rs.getInt("order_number") + 1;
             }
         });
-        createTask(task,service_id);
+        createTask(task, service_id);
     }
 
 
     @Override
     public int compareTo(Task o) {
         return Integer.compare(this.order_numer, o.order_numer);
+    }
+
+    public void invertOrder(Task nextTask) {
+        int t = this.order_numer;
+        this.order_numer = nextTask.order_numer;
+        nextTask.order_numer = t;
+    }
+
+    public int getOrderIndex() {
+        return order_numer;
     }
 }

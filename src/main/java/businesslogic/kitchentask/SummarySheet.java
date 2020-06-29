@@ -137,8 +137,7 @@ public class SummarySheet {
         tasks.set(oldAIndex, b);
         tasks.set(oldBIndex, a);
 
-        Task.changeOrderTask(a.getTask_id(),oldBIndex);
-        Task.changeOrderTask(b.getTask_id(),oldAIndex);
+        a.invertOrder(b);
     }
 
     public boolean containsTask(Task task) {

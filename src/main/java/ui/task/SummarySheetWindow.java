@@ -1,9 +1,11 @@
 package ui.task;
 
 import businesslogic.CatERing;
+import businesslogic.UseCaseLogicException;
 import businesslogic.kitchentask.KitchenJob;
 import businesslogic.kitchentask.KitchenTaskManager;
 import businesslogic.kitchentask.Task;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -88,7 +90,11 @@ public class SummarySheetWindow extends WindowController {
         this.controlsEnabled = b;
     }
 
-
+    public TaskItemInfo getSelectedItem() {
+        return contentTree.getSelectionModel()
+                          .getSelectedItem()
+                          .getValue();
+    }
 
     public void addrecipe(ActionEvent actionEvent) {
     }
@@ -97,9 +103,61 @@ public class SummarySheetWindow extends WindowController {
     }
 
     public void goUpTask(ActionEvent actionEvent) {
+        TreeItem<TaskItemInfo> itemRow = contentTree.getSelectionModel()
+                                                    .getSelectedItem();
+        TaskItemInfo selectedItem = itemRow.getValue();
+
+
+        if (!(selectedItem instanceof Task)) {
+            return;
+        }
+
+        ObservableList<TreeItem<TaskItemInfo>> children = contentTree.getRoot().getChildren();
+        Task task = ((Task) selectedItem);
+        int taskIndex = children.indexOf(itemRow);
+
+        if (taskIndex > 0) {
+
+            Task nextTask = (Task) children.get(taskIndex - 1).getValue();
+
+            try {
+                ktm.changeTaskOrder(task, nextTask);
+                sortTree();
+
+                contentTree.getSelectionModel().select(contentTree.getRow(itemRow));
+            } catch (UseCaseLogicException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void goDownTask(ActionEvent actionEvent) {
+        TreeItem<TaskItemInfo> itemRow = contentTree.getSelectionModel()
+                                                    .getSelectedItem();
+        TaskItemInfo selectedItem = itemRow.getValue();
+
+
+        if (!(selectedItem instanceof Task)) {
+            return;
+        }
+
+        ObservableList<TreeItem<TaskItemInfo>> children = contentTree.getRoot().getChildren();
+        Task task = ((Task) selectedItem);
+        int taskIndex = children.indexOf(itemRow);
+
+        if (children.size() - 1 > taskIndex) {
+
+            Task nextTask = (Task) children.get(taskIndex + 1).getValue();
+
+            try {
+                ktm.changeTaskOrder(task, nextTask);
+                sortTree();
+
+                contentTree.getSelectionModel().select(contentTree.getRow(itemRow));
+            } catch (UseCaseLogicException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void changeDetailsTask(ActionEvent actionEvent) {
