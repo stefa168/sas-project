@@ -6,9 +6,7 @@ import javafx.collections.ObservableList;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -224,6 +222,20 @@ public class KitchenTurn extends Turn {
             }
         });
         return availabilities;
+    }
+
+    public static ArrayList<KitchenTurn> loadTurnByDate(Instant startDate, Instant endDate){
+        String query = "SELECT * FROM Turn WHERE startDate BETWEEN `" + Timestamp.from(startDate) + "` AND `" + Timestamp.from(endDate)
+                + "` AND endDate BETWEEN `" + Timestamp.from(startDate) + "` AND `" + Timestamp.from(endDate) + "`" ;
+        ArrayList<KitchenTurn> kitchenTurns = new ArrayList<>();
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                KitchenTurn kitchenTurn = KitchenTurn.loadKitchenTurnById(rs.getInt("turn_id"));
+                kitchenTurns.add(kitchenTurn);
+            }
+        });
+        return kitchenTurns;
     }
 
 }

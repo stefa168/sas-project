@@ -7,8 +7,11 @@ import businesslogic.kitchentask.KitchenJob;
 import businesslogic.kitchentask.KitchenTaskManager;
 import businesslogic.kitchentask.Task;
 import businesslogic.recipe.Recipe;
+import businesslogic.turn.KitchenTurn;
+import businesslogic.user.User;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -25,11 +28,10 @@ import ui.general.EventsInfoDialog;
 import ui.general.TurnInfoDialog;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.time.Instant;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class SummarySheetWindow extends WindowController {
@@ -88,6 +90,19 @@ public class SummarySheetWindow extends WindowController {
                     cookButton.setDisable(controls || !(selection instanceof KitchenJob));
                 }
         );
+    }
+
+    //innner
+    static class EditValues {
+        public final int amount;
+        public final int time;
+        public final boolean toDo;
+
+        public EditValues(int amount, int time, boolean toDo) {
+            this.amount = amount;
+            this.time = time;
+            this.toDo = toDo;
+        }
     }
 
     @Override
@@ -253,17 +268,7 @@ public class SummarySheetWindow extends WindowController {
     public void changeDetailsSelectedElement(ActionEvent actionEvent) {
         TaskItemInfo selectedItem = getSelectedItem();
 
-        class EditValues {
-            public final int amount;
-            public final int time;
-            public final boolean toDo;
 
-            public EditValues(int amount, int time, boolean toDo) {
-                this.amount = amount;
-                this.time = time;
-                this.toDo = toDo;
-            }
-        }
 
         if (selectedItem instanceof Task) {
             Task task = ((Task) selectedItem);
@@ -308,8 +313,8 @@ public class SummarySheetWindow extends WindowController {
             detailsDialog.setResultConverter(buttonType -> {
                 if (buttonType == applyButton) {
                     return new EditValues(Integer.parseInt(amount.getText()),
-                                          Integer.parseInt(estimatedTime.getText()),
-                                          toDoCheckbox.isSelected());
+                            Integer.parseInt(estimatedTime.getText()),
+                            toDoCheckbox.isSelected());
                 } else {
                     return null;
                 }
@@ -373,8 +378,8 @@ public class SummarySheetWindow extends WindowController {
             detailsDialog.setResultConverter(buttonType -> {
                 if (buttonType == applyButton) {
                     return new EditValues(Integer.parseInt(amount.getText()),
-                                          Integer.parseInt(estimatedTime.getText()),
-                                          false);
+                            Integer.parseInt(estimatedTime.getText()),
+                            false);
                 } else {
                     return null;
                 }
@@ -399,7 +404,19 @@ public class SummarySheetWindow extends WindowController {
     }
 
     public void addKitchenJob(ActionEvent actionEvent) {
+        TreeItem<TaskItemInfo> itemRow = getTaskItemInfoTreeItem();
+        TaskItemInfo selectedItem = itemRow.getValue();
 
+        if (selectedItem instanceof Task) {
+            Task task = (Task) selectedItem;
+            ArrayList<Instant> dates = Task.getDatesService(task.getTask_id());
+
+            ArrayList<KitchenTurn> turniPossibili = KitchenTurn.loadTurnByDate(dates.get(0),dates.get(1));
+            ChoiceDialog turni = new ChoiceDialog(turniPossibili.get(0), turniPossibili);
+
+
+
+        }
     }
 
     public void deleteKitchenJob(ActionEvent actionEvent) {

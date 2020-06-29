@@ -1,13 +1,20 @@
 package businesslogic.kitchentask;
 
+import businesslogic.event.Service;
 import businesslogic.recipe.KitchenDuty;
 import businesslogic.recipe.Preparation;
 import businesslogic.recipe.Recipe;
 import businesslogic.turn.KitchenTurn;
 import persistence.PersistenceManager;
+import persistence.ResultHandler;
 import ui.task.TaskItemInfo;
 
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Task implements TaskItemInfo, Comparable<Task> {
@@ -217,5 +224,41 @@ public class Task implements TaskItemInfo, Comparable<Task> {
 
     public int getOrderIndex() {
         return order_numer;
+    }
+
+    public static ArrayList<Instant> getDatesService(int task_id){
+        String query = "SELECT service_id FROM Task WHERE id = "+ task_id;
+        ArrayList<Instant> dates = new ArrayList<>();
+
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                int service_id = rs.getInt("service_id");
+
+                String getOffset = "SELECT * FROM Service WHERE service_id = " + service_id;
+                PersistenceManager.executeQuery(getOffset, new ResultHandler() {
+                    @Override
+                    public void handle(ResultSet rs) throws SQLException {
+                        int event_id = rs.getInt("event_id");
+                        int offsetDay = rs.getInt("offsetDay");
+
+                        String getDate = "SELECT * FROM Event WHERE event_id = " + event_id;
+                        PersistenceManager.executeQuery(getDate, new ResultHandler() {
+                            @Override
+                            public void handle(ResultSet rs) throws SQLException {
+                                Instant dateStart = rs.getTimestamp("date_start").toInstant();
+                                Instant dateEnd = rs.getTimestamp("date_end").toInstant();
+                                dateStart = dateStart.plusSeconds(offsetDay*86400);
+                                dates.add(dateStart);
+                                dates.add(dateEnd);
+                            }
+                        });
+
+                    }
+                });
+
+            }
+        });
+        return dates;
     }
 }

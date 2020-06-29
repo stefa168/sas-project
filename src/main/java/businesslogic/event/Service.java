@@ -44,6 +44,10 @@ public class Service implements EventItemInfo {
         this.state = State.INPREPARAZIONE;
     }
 
+    public Service(){
+
+    }
+
     public static ObservableList<Service> loadServiceForEvent(Event event) {
         ObservableList<Service> result = FXCollections.observableArrayList();
         String query = "SELECT * FROM Service WHERE event_id = " + event.getId();
