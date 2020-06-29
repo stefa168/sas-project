@@ -85,6 +85,9 @@ loop #e0e0e0
             else
                 Chef <- Sistema: **6c.1b.1**. Il turno associato all'incarico si è già concluso
                 destroy Sistema
+            else
+                Chef <- Sistema: **6c.1c.1**. Il cuoco non ha dato la disponibilità per il turno
+                destroy Sistema
             end
         else
             Chef -> Sistema: **6d.1** modificaStatoTurnoCucina(turno, alCompleto)
