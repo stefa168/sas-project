@@ -9,13 +9,20 @@ import businesslogic.recipe.Recipe;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import ui.WindowController;
+import ui.general.EventsInfoDialog;
+import ui.general.TurnInfoDialog;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -41,6 +48,10 @@ public class SummarySheetWindow extends WindowController {
     public Button cookButton;
     @FXML
     public Button endButton;
+    @FXML
+    public Button eventDetails;
+    @FXML
+    public Button turnDetails;
     @FXML
     TreeView<TaskItemInfo> contentTree;
     @FXML
@@ -215,5 +226,47 @@ public class SummarySheetWindow extends WindowController {
     }
 
     public void cookOperations(ActionEvent actionEvent) {
+    }
+
+    public void showEventDetails(ActionEvent actionEvent) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../general/events-info-dialog.fxml"));
+        try {
+            BorderPane pane = loader.load();
+            EventsInfoDialog controller = loader.getController();
+
+            Stage stage = new Stage();
+
+            controller.setOwnStage(stage);
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Eventi presenti nel sistema");
+            stage.setScene(new Scene(pane, 600, 400));
+
+
+            stage.showAndWait();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showTurnDetails(ActionEvent actionEvent) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../general/turn-info-dialog.fxml"));
+        try {
+            BorderPane pane = loader.load();
+            TurnInfoDialog controller = loader.getController();
+
+            Stage stage = new Stage();
+
+            controller.setOwnStage(stage);
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Info Turni di Cucina");
+            stage.setScene(new Scene(pane, 600, 400));
+
+
+            stage.showAndWait();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }

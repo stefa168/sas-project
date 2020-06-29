@@ -28,8 +28,8 @@
     <top>
         <FlowPane alignment="CENTER_RIGHT" hgap="10.0" prefHeight="53.0" BorderPane.alignment="CENTER">
             <children>
-                <Button layoutX="1037.0" layoutY="24.0" mnemonicParsing="false" text="Scheda Evento"/>
-                <Button mnemonicParsing="false" text="Visualizza Turni">
+                <Button fx:id = "eventDetails" layoutX="1037.0" layoutY="24.0" mnemonicParsing="false" text="Scheda Evento" onAction="#showEventDetails"/>
+                <Button fx:id = "turnDetails" mnemonicParsing="false" text="Visualizza Turni" onAction="#showTurnDetails">
                     <FlowPane.margin>
                         <Insets right="10.0"/>
                     </FlowPane.margin>

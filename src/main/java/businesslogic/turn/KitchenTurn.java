@@ -1,6 +1,10 @@
 package businesslogic.turn;
 
+import businesslogic.event.Event;
 import businesslogic.user.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.util.Pair;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
 
@@ -10,21 +14,20 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class KitchenTurn extends Turn {
     private boolean complete;
-    private HashMap<User, Duration> assignedCooks;
+    private HashMap<User, Duration> assignedCooks = new HashMap<>();
     private ArrayList<User> availableCooks = new ArrayList<>();
 
     public KitchenTurn(Instant start, Instant end) {
         super(start, end);
-        assignedCooks = new HashMap<>();
         complete = false;
     }
 
     public KitchenTurn(Instant start, Instant end, int turn_id) {
         super(start, end, turn_id);
-        assignedCooks = new HashMap<>();
         complete = false;
     }
 
@@ -36,6 +39,10 @@ public class KitchenTurn extends Turn {
 
     public void setComplete(boolean complete) {
         this.complete = complete;
+    }
+
+    public String toSring(){
+        return "Inizio: " + start.toString() + ", Fine: " + end.toString() + ", completo: " + complete;
     }
 
     public HashMap<User, Duration> getAssignedCooks() {
@@ -113,7 +120,7 @@ public class KitchenTurn extends Turn {
                 turn.end = rs.getTimestamp("endDate").toInstant();
                 turn.turn_id = rs.getInt("turn_id");
 
-                String getCooks = "SELECT * FROM Availabities WHERE turn_id = " + turn.turn_id;
+                String getCooks = "SELECT * FROM Availabilities WHERE turn_id = " + turn.turn_id;
                 PersistenceManager.executeQuery(getCooks, new ResultHandler() {
                     @Override
                     public void handle(ResultSet rs) throws SQLException {
@@ -121,11 +128,11 @@ public class KitchenTurn extends Turn {
                         User user = User.loadUserById(user_id);
                         turn.availableCooks.add(user);
 
-                        String getDurationCook = "SELECT SUM(estimated_duration) AS estimated_duration FROM KitchenJob WHERE cook_id = " + user_id + " AND turn_id = " + turn.turn_id;
+                        String getDurationCook = "SELECT SUM(estimatedDuration) AS estimatedDuration FROM KitchenJob WHERE cook_id = " + user_id + " AND turn_id = " + turn.turn_id;
                         PersistenceManager.executeQuery(getDurationCook, new ResultHandler() {
                             @Override
                             public void handle(ResultSet rs) throws SQLException {
-                                Duration estimatedDuration = Duration.ofMinutes(rs.getInt("estimated_duration"));
+                                Duration estimatedDuration = Duration.ofMinutes(rs.getInt("estimatedDuration"));
                                 turn.assignedCooks.put(user,estimatedDuration);
                             }
                         });
@@ -152,7 +159,7 @@ public class KitchenTurn extends Turn {
                 turn.end = rs.getTimestamp("endDate").toInstant();
                 turn.turn_id = rs.getInt("turn_id");
 
-                String getCooks = "SELECT * FROM Availabities WHERE turn_id = " + turn.turn_id;
+                String getCooks = "SELECT * FROM Availabilities WHERE turn_id = " + turn.turn_id;
                 PersistenceManager.executeQuery(getCooks, new ResultHandler() {
                     @Override
                     public void handle(ResultSet rs) throws SQLException {
@@ -160,11 +167,11 @@ public class KitchenTurn extends Turn {
                         User user = User.loadUserById(user_id);
                         turn.availableCooks.add(user);
 
-                        String getDurationCook = "SELECT SUM(estimated_duration) AS estimated_duration FROM KitchenJob WHERE cook_id = " + user_id + " AND turn_id = " + turn.turn_id;
+                        String getDurationCook = "SELECT SUM(estimatedDuration) AS estimatedDuration FROM KitchenJob WHERE cook_id = " + user_id + " AND turn_id = " + turn.turn_id;
                         PersistenceManager.executeQuery(getDurationCook, new ResultHandler() {
                             @Override
                             public void handle(ResultSet rs) throws SQLException {
-                                Duration estimatedDuration = Duration.ofMinutes(rs.getInt("estimated_duration"));
+                                Duration estimatedDuration = Duration.ofMinutes(rs.getInt("estimatedDuration"));
                                 turn.assignedCooks.put(user,estimatedDuration);
                             }
                         });
@@ -182,4 +189,10 @@ public class KitchenTurn extends Turn {
                 "' WHERE id = " + turn_id;
         PersistenceManager.executeUpdate(upd);
     }
+
+    public static ObservableList<KitchenTurn> loadAllTurnInfo() {
+        ArrayList<KitchenTurn> kitchenTurns = KitchenTurn.getAllKitchenTurn();
+        return FXCollections.observableArrayList(kitchenTurns);
+    }
+
 }

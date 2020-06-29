@@ -2,7 +2,7 @@ package businesslogic.turn;
 
 import java.time.Instant;
 
-public abstract class Turn {
+public abstract class Turn implements TurnItemInfo{
     protected Instant start;
     protected Instant end;
     protected int turn_id;
