@@ -42,7 +42,10 @@ public class Recipe extends KitchenDuty{
     }
 
     public String toString() {
-        return name;
+        return String.format("%s (TACc %d', TACv %d')",
+                             name,
+                             constantConcreteActivityTime.toMinutes(),
+                             variableConcreteActivityTime.toMinutes());
     }
 
     @Override
