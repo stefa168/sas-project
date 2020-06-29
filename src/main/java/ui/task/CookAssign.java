@@ -66,6 +66,7 @@ public class CookAssign {
         if(obj instanceof User){
             User user = (User) obj;
             CatERing.getInstance().getKitchenTaskManager().assignCook(kitchenJob,user);
+            myStage.close();
         }
 
     }
