@@ -78,10 +78,7 @@ public class CookAssign {
         Object obj = row.getValue();
         if(obj instanceof User){
             User user = (User) obj;
-            if(kitchenJob.getCook() == null){
-                CatERing.getInstance().getKitchenTaskManager().assignCook(kitchenJob,user);
-            }
-
+            CatERing.getInstance().getKitchenTaskManager().assignCook(kitchenJob,user);
         }
 
     }

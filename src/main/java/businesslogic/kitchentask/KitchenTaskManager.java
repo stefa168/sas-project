@@ -265,6 +265,7 @@ public class KitchenTaskManager {
                 }
 
                 job.assignCook(user);
+                notifyAssignedCook(user,job);
             } else {
                 throw new TaskException();
             }
