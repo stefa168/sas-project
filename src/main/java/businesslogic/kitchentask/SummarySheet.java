@@ -121,11 +121,14 @@ public class SummarySheet {
         for (int i = 0, tasksSize = tasks.size(); i < tasksSize; i++) {
             Task task = tasks.get(i);
             if (task.isOptionalDuty() && kitchenDuty.equals(task.getDuty())) {
+                deletedTask = task;
                 for (KitchenJob job : task.getJobs()) {
                     job.getTurn().freeTime(job.getCook(), job.getDuration());
                     task.getJobs().remove(job);
+                    KitchenJob.deleteKitchenJob(deletedTask.getTask_id(),
+                                                job.getCook().getId(),
+                                                job.getTurn().getTurn_id());
                 }
-                deletedTask = task;
                 tasks.remove(task);
 
                 // Lo so che non è il massimo, ma senza finiamo in una OutOfBoundsException
