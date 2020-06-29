@@ -68,9 +68,14 @@ public class CookAssign {
         cookTree.getSelectionModel().selectedItemProperty().addListener(
                 (observableValue, oldSelection, newSelection) ->{
                     User selectedUser = (User) newSelection.getValue();
-                    if(kitchenJob.getCook().equals(selectedUser)){
-                        assegnaButton.setDisable(true);
-                        eliminaButton.setDisable(false);
+                    if(kitchenJob.getCook()!=null) {
+                        if (kitchenJob.getCook().equals(selectedUser)) {
+                            assegnaButton.setDisable(true);
+                            eliminaButton.setDisable(false);
+                        } else {
+                            eliminaButton.setDisable(true);
+                            assegnaButton.setDisable(false);
+                        }
                     }
                     else{
                         eliminaButton.setDisable(true);
