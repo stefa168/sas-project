@@ -6,7 +6,7 @@ title 2 addExtraDuty
 collections UI
 
 participant "kitchenTMgr: KitchenTaskManager" as ktm
-UI -> ktm: addExtraDuty(kitchenDuty)
+UI -> ktm: addExtraDuty(parentKitchenDuty)
 participant "ktr: KitchenTaskEventReceiver" as ktr
 
 activate ktm
@@ -15,42 +15,77 @@ alt currentSheet==null
     UI <<-- ktm: throw UseCaseLogicException
 else
     participant "kitchenTMgr.currentSheet: SummarySheet" as ss
-    ktm -> ss: addExtraDuty(kitchenDuty)
+    ktm -> ss: addExtraDuty(parentKitchenDuty)
     activate ss
-
-    participant "currentSheet.extraDuties: ArrayList<KitchenDuty>" as kdList
-    ss -> kdList: add(kitchenDuty)
+    
+    participant "newDuties: ArrayList<parentKitchenDuty>" as kdList
+    ss -->> kdList**: create()
+    activate kdList
+        return newDuties
+    deactivate kdList
+    
+    ss -> kdList: add(parentKitchenDuty)
     activate kdList
     deactivate kdList
 
-    participant "task: Task" as t
-    ss -->> t**: create(kitchenDuty, true)
-    activate t
-    t -> t: this.amount = 0
-    t -> t: this.estimatedDuration = 0
-    t -> t: this.toDo = true
-    t -> t: this.optionalDuty = true
-    t -> t: this.duty = kitchenDuty
-    ss <<-- t:task
-    deactivate t
-    
-    participant "currentSheet.tasks: ArrayList<Task>" as tasks
-    ss -> tasks: add(task)
+    participant "parentKitchenDuty: KitchenDuty" as parent
 
+    ss -> parent: getSubDuties()
+    activate parent
+    ss <<-- parent: subDuties
+    deactivate parent
+
+    ss -> kdList: addAll(subDuties)
+    activate kdList
+    deactivate kdList
+
+    participant "currentSheet.extraDuties: ArrayList<parentKitchenDuty>" as extraDuties
+    ss -> extraDuties: addAll(newDuties)
+    activate extraDuties
+    deactivate extraDuties
+
+    participant "newTasks: ArrayList<Task>" as newTasks
+    ss -->> newTasks **: create()
+    activate newTasks
+    ss <<--newTasks: newTasks
+    deactivate newTasks
+
+    loop ""for all"" duty ""in"" newDuties
+        participant "task: Task" as t
+        ss -->> t**: create(duty, true)
+        activate t
+            t -> t: this.amount = 0
+            t -> t: this.estimatedDuration = 0
+            t -> t: this.toDo = true
+            t -> t: this.optionalDuty = true
+            t -> t: this.duty = duty
+            ss <<-- t: task
+        deactivate t
+
+
+        ss -> newTasks: add(task)
+        activate newTasks
+        deactivate newTasks
+    end
+
+    participant "currentSheet.tasks: ArrayList<Task>" as tasks
+    ss -> tasks: addAll(newTasks)
     activate tasks
     deactivate tasks
 
-    ktm <<-- ss: task
+    ktm <<-- ss: newTasks
     deactivate ss
     |||
-    ktm -> ktm: notifyAddExtraDuty(kitchenDuty, task)
-    activate ktm
-    loop ""for all"" ktr ""in"" eventReceivers
-        ktm -> ktr : updateAddExtraDuty(kitchenDuty. task)
-        activate ktr
-        deactivate ktr
+    loop ""for all"" task ""in"" newTasks
+        ktm -> ktm: notifyAddExtraDuty(task)
+        activate ktm
+            loop ""for all"" ktr ""in"" eventReceivers
+                ktm -> ktr : updateAddExtraDuty(task)
+                activate ktr
+                deactivate ktr
+            end
+        deactivate ktm
     end
-    deactivate ktm
 
     UI <<-- ktm : task
     deactivate ktm
