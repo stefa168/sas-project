@@ -270,7 +270,7 @@ public class KitchenTaskManager {
                 job.assignCook(user);
                 notifyAssignedCook(user, job);
             } else {
-                throw new TaskException();
+                throw new TaskException("Il cuoco non ha più tempo a disposizione per altri incarichi");
             }
         }
         return job;

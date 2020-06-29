@@ -16,7 +16,7 @@ public class KitchenTaskPersistence implements KitchenTaskEventReceiver {
 
     @Override
     public void updateCookAssigned(User user, KitchenJob kitchenJob) {
-        KitchenJob.changeCook(kitchenJob.getKitchenJob_id(), user.getId());
+        KitchenJob.changeCook(kitchenJob.getKitchenJob_id(), user != null ? user.getId() : null);
     }
 
     @Override

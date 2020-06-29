@@ -23,11 +23,6 @@ public class KitchenTurn extends Turn {
                                                                         .withZone(ZoneId.systemDefault());
     private boolean complete;
     private HashMap<User, Duration> assignedCooks = new HashMap<>();
-
-    public ArrayList<User> getAvailableCooks() {
-        return availableCooks;
-    }
-
     private ArrayList<User> availableCooks = new ArrayList<>();
 
     public KitchenTurn(Instant start, Instant end) {
@@ -69,7 +64,7 @@ public class KitchenTurn extends Turn {
                             @Override
                             public void handle(ResultSet rs) throws SQLException {
                                 int durationMinutes = rs.getInt("estimatedDuration");
-                                if(durationMinutes > 0) {
+                                if (durationMinutes > 0) {
                                     Duration estimatedDuration = Duration.ofMinutes(durationMinutes);
                                     turn.assignedCooks.put(user, estimatedDuration);
                                 }
@@ -112,7 +107,7 @@ public class KitchenTurn extends Turn {
                             @Override
                             public void handle(ResultSet rs) throws SQLException {
                                 int durationMinutes = rs.getInt("estimatedDuration");
-                                if(durationMinutes > 0) {
+                                if (durationMinutes > 0) {
                                     Duration estimatedDuration = Duration.ofMinutes(durationMinutes);
                                     turn.assignedCooks.put(user, estimatedDuration);
                                 }
@@ -138,6 +133,37 @@ public class KitchenTurn extends Turn {
         return FXCollections.observableArrayList(kitchenTurns);
     }
 
+    public static ArrayList<KitchenTurn> loadTurnAvailabilitiesByCookId(int cook_id) {
+        String query = "SELECT * FROM Availabilities WHERE user_id = " + cook_id;
+        ArrayList<KitchenTurn> availabilities = new ArrayList<>();
+
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                KitchenTurn kitchenTurn = KitchenTurn.loadKitchenTurnById(rs.getInt("turn_id"));
+                availabilities.add(kitchenTurn);
+            }
+        });
+        return availabilities;
+    }
+
+    public static ArrayList<KitchenTurn> loadTurnByDate(Instant startDate, Instant endDate) {
+        //language=MySQL
+        String query = "SELECT * FROM Turn WHERE complete = 0 AND startDate >= '" + Timestamp.from(startDate) + "' " +
+                       "AND" +
+                       "  endDate <= '" + Timestamp.from(endDate) + "'";
+        ArrayList<KitchenTurn> kitchenTurns = new ArrayList<>();
+        PersistenceManager.executeQuery(query, rs -> {
+            KitchenTurn kitchenTurn = KitchenTurn.loadKitchenTurnById(rs.getInt("turn_id"));
+            kitchenTurns.add(kitchenTurn);
+        });
+        return kitchenTurns;
+    }
+
+    public ArrayList<User> getAvailableCooks() {
+        return availableCooks;
+    }
+
     public boolean isComplete() {
         return complete;
     }
@@ -147,8 +173,11 @@ public class KitchenTurn extends Turn {
     }
 
     public String toString() {
-        return "Inizio: " + formatter.format(start) + ", Fine: " + formatter.format(end) + ", completo: " + complete;
+        return "Inizio: " + formatter.format(start) + ", Fine: " + formatter.format(end) + ", " +
+               (complete ? "Al completo" : "Non al completo");
     }
+
+    //metodi db
 
     public HashMap<User, Duration> getAssignedCooks() {
         return assignedCooks;
@@ -158,8 +187,6 @@ public class KitchenTurn extends Turn {
     public boolean hasConcluded() {
         return end.compareTo(Instant.now()) <= 0;
     }
-
-    //metodi db
 
     public boolean hasUserEnoughTime(User user, Duration estimatedDuration) {
         if (user == null || !availableCooks.contains(user)) {
@@ -220,34 +247,6 @@ public class KitchenTurn extends Turn {
             assignedCooks.put(cook, cookOccupiedTime);
         }
     }
-
-    public static ArrayList<KitchenTurn> loadTurnAvailabilitiesByCookId(int cook_id){
-        String query = "SELECT * FROM Availabilities WHERE user_id = " + cook_id;
-        ArrayList<KitchenTurn> availabilities = new ArrayList<>();
-
-        PersistenceManager.executeQuery(query, new ResultHandler() {
-            @Override
-            public void handle(ResultSet rs) throws SQLException {
-                KitchenTurn kitchenTurn = KitchenTurn.loadKitchenTurnById(rs.getInt("turn_id"));
-                availabilities.add(kitchenTurn);
-            }
-        });
-        return availabilities;
-    }
-
-    public static ArrayList<KitchenTurn> loadTurnByDate(Instant startDate, Instant endDate){
-        String query = "SELECT * FROM Turn WHERE startDate > '" + Timestamp.from(startDate) + "' AND  endDate < '" + Timestamp.from(endDate) + "'" ;
-        ArrayList<KitchenTurn> kitchenTurns = new ArrayList<>();
-        PersistenceManager.executeQuery(query, new ResultHandler() {
-            @Override
-            public void handle(ResultSet rs) throws SQLException {
-                KitchenTurn kitchenTurn = KitchenTurn.loadKitchenTurnById(rs.getInt("turn_id"));
-                kitchenTurns.add(kitchenTurn);
-            }
-        });
-        return kitchenTurns;
-    }
-
 
 
 }

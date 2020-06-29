@@ -122,7 +122,9 @@ public class SummarySheet {
             Task task = tasks.get(i);
             if (task.isOptionalDuty() && kitchenDuty.equals(task.getDuty())) {
                 deletedTask = task;
-                for (KitchenJob job : task.getJobs()) {
+                ArrayList<KitchenJob> jobs = task.getJobs();
+                for (int i1 = 0; i1 < jobs.size(); i1++) {
+                    KitchenJob job = jobs.get(i1);
                     job.getTurn().freeTime(job.getCook(), job.getDuration());
                     task.getJobs().remove(job);
                     KitchenJob.deleteKitchenJob(job.getKitchenJob_id());

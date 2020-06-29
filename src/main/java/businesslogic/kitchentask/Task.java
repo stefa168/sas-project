@@ -61,16 +61,22 @@ public class Task implements TaskItemInfo, Comparable<Task> {
 
     //Metodi per il db
     public static void createTask(Task task, int service_id) {
+        //language=MySQL
         String itemInsert = "INSERT INTO catering.Task " +
-                            "(id, kitchenDuty_id, service_id, estimatedDuration, toDo, optionalDuty, order_number, " +
+                            "(kitchenDuty_id, service_id, estimatedDuration, toDo, optionalDuty, order_number, " +
                             "isRecipe) " +
-                            "VALUES ("
-                            + task.task_id + "," + task.getDuty()
-                                                       .getKitchenDutyId() + "," + service_id + "," + task.estimatedDuration
-                                    .toMinutes() + "," + task.toDo + ","
-                            + task.optionalDuty + "," + task.order_numer + "," + (task.duty instanceof Recipe) + ")";
+                            "VALUES (" +
+                            task.getDuty().getKitchenDutyId() + "," +
+                            service_id + "," +
+                            task.estimatedDuration.toMinutes() + "," +
+                            task.toDo + "," +
+                            task.optionalDuty + "," +
+                            task.order_numer + "," +
+                            (task.duty instanceof Recipe) + ")";
 
         PersistenceManager.executeUpdate(itemInsert);
+
+        task.task_id = PersistenceManager.getLastId();
     }
 
     public static ArrayList<Task> getAllTasks(int service_id) {
@@ -139,6 +145,42 @@ public class Task implements TaskItemInfo, Comparable<Task> {
         Task.changeAmount(task);
         Task.changeEstimatedDuration(task);
         Task.changeToDo(task);
+    }
+
+    public static ArrayList<Instant> getDatesService(int task_id) {
+        String query = "SELECT service_id FROM Task WHERE id = " + task_id;
+        ArrayList<Instant> dates = new ArrayList<>();
+
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                int service_id = rs.getInt("service_id");
+
+                String getOffset = "SELECT * FROM Service WHERE service_id = " + service_id;
+                PersistenceManager.executeQuery(getOffset, new ResultHandler() {
+                    @Override
+                    public void handle(ResultSet rs) throws SQLException {
+                        int event_id = rs.getInt("event_id");
+                        int offsetDay = rs.getInt("offsetDay");
+
+                        String getDate = "SELECT * FROM Event WHERE event_id = " + event_id;
+                        PersistenceManager.executeQuery(getDate, new ResultHandler() {
+                            @Override
+                            public void handle(ResultSet rs) throws SQLException {
+                                Instant dateStart = rs.getTimestamp("date_start").toInstant();
+                                Instant dateEnd = rs.getTimestamp("date_end").toInstant();
+                                dateStart = dateStart.plusSeconds(offsetDay * 86400);
+                                dates.add(dateStart);
+                                dates.add(dateEnd);
+                            }
+                        });
+
+                    }
+                });
+
+            }
+        });
+        return dates;
     }
 
     public KitchenJob addKitchenJob(KitchenTurn turn, int amount, Duration estimatedDuration) {
@@ -222,41 +264,5 @@ public class Task implements TaskItemInfo, Comparable<Task> {
 
     public int getOrderIndex() {
         return order_numer;
-    }
-
-    public static ArrayList<Instant> getDatesService(int task_id){
-        String query = "SELECT service_id FROM Task WHERE id = "+ task_id;
-        ArrayList<Instant> dates = new ArrayList<>();
-
-        PersistenceManager.executeQuery(query, new ResultHandler() {
-            @Override
-            public void handle(ResultSet rs) throws SQLException {
-                int service_id = rs.getInt("service_id");
-
-                String getOffset = "SELECT * FROM Service WHERE service_id = " + service_id;
-                PersistenceManager.executeQuery(getOffset, new ResultHandler() {
-                    @Override
-                    public void handle(ResultSet rs) throws SQLException {
-                        int event_id = rs.getInt("event_id");
-                        int offsetDay = rs.getInt("offsetDay");
-
-                        String getDate = "SELECT * FROM Event WHERE event_id = " + event_id;
-                        PersistenceManager.executeQuery(getDate, new ResultHandler() {
-                            @Override
-                            public void handle(ResultSet rs) throws SQLException {
-                                Instant dateStart = rs.getTimestamp("date_start").toInstant();
-                                Instant dateEnd = rs.getTimestamp("date_end").toInstant();
-                                dateStart = dateStart.plusSeconds(offsetDay*86400);
-                                dates.add(dateStart);
-                                dates.add(dateEnd);
-                            }
-                        });
-
-                    }
-                });
-
-            }
-        });
-        return dates;
     }
 }

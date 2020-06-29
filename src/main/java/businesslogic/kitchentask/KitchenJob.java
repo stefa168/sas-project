@@ -82,9 +82,11 @@ public class KitchenJob implements TaskItemInfo {
         kitchenJob.kitchenJob_id = PersistenceManager.getLastId();
     }
 
-    public static void changeCook(int kitchenJob_id, int new_cook_id) {
+    public static void changeCook(int kitchenJob_id, Integer new_cook_id) {
         //language=MySQL
-        String upd = "UPDATE KitchenJob SET cook_id = " + new_cook_id + " WHERE kitchenJob_id = " + kitchenJob_id;
+        String upd = "UPDATE KitchenJob " +
+                     "SET cook_id = " + (new_cook_id == null ? "null" : new_cook_id) +
+                     " WHERE kitchenJob_id = " + kitchenJob_id;
         PersistenceManager.executeUpdate(upd);
     }
 
@@ -167,13 +169,13 @@ public class KitchenJob implements TaskItemInfo {
     public String toString() {
         return cook != null ?
                 String.format("Incarico per %d porzioni con una durata di %d minuti.\nAssegnato nel turno %s\nCuoco " +
-                              "scelto: %s.",
+                              "scelto: %s.\nNon completato",
                               amount,
                               estimatedDuration.toMinutes(),
                               turn.toString(),
                               cook.toString()) :
                 String.format("Incarico per %d porzioni con una durata di %d minuti.\nAssegnato nel turno %s\nNessun " +
-                              "cuoco scelto.",
+                              "cuoco scelto.\nNon completato",
                               amount,
                               estimatedDuration.toMinutes(),
                               turn.toString());
