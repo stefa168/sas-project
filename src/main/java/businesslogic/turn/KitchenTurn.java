@@ -112,6 +112,27 @@ public class KitchenTurn extends Turn {
                 turn.start = rs.getTimestamp("startDate").toInstant();
                 turn.end = rs.getTimestamp("endDate").toInstant();
                 turn.turn_id = rs.getInt("turn_id");
+
+                String getCooks = "SELECT * FROM Availabities WHERE turn_id = " + turn.turn_id;
+                PersistenceManager.executeQuery(getCooks, new ResultHandler() {
+                    @Override
+                    public void handle(ResultSet rs) throws SQLException {
+                        int user_id = rs.getInt("user_id");
+                        User user = User.loadUserById(user_id);
+                        turn.availableCooks.add(user);
+
+                        String getDurationCook = "SELECT SUM(estimated_duration) AS estimated_duration FROM KitchenJob WHERE cook_id = " + user_id + " AND turn_id = " + turn.turn_id;
+                        PersistenceManager.executeQuery(getDurationCook, new ResultHandler() {
+                            @Override
+                            public void handle(ResultSet rs) throws SQLException {
+                                Duration estimatedDuration = Duration.ofMinutes(rs.getInt("estimated_duration"));
+                                turn.assignedCooks.put(user,estimatedDuration);
+                            }
+                        });
+
+                    }
+                });
+
                 kitchenTurns.add(turn);
             }
         });
@@ -130,6 +151,26 @@ public class KitchenTurn extends Turn {
                 turn.start = rs.getTimestamp("startDate").toInstant();
                 turn.end = rs.getTimestamp("endDate").toInstant();
                 turn.turn_id = rs.getInt("turn_id");
+
+                String getCooks = "SELECT * FROM Availabities WHERE turn_id = " + turn.turn_id;
+                PersistenceManager.executeQuery(getCooks, new ResultHandler() {
+                    @Override
+                    public void handle(ResultSet rs) throws SQLException {
+                        int user_id = rs.getInt("user_id");
+                        User user = User.loadUserById(user_id);
+                        turn.availableCooks.add(user);
+
+                        String getDurationCook = "SELECT SUM(estimated_duration) AS estimated_duration FROM KitchenJob WHERE cook_id = " + user_id + " AND turn_id = " + turn.turn_id;
+                        PersistenceManager.executeQuery(getDurationCook, new ResultHandler() {
+                            @Override
+                            public void handle(ResultSet rs) throws SQLException {
+                                Duration estimatedDuration = Duration.ofMinutes(rs.getInt("estimated_duration"));
+                                turn.assignedCooks.put(user,estimatedDuration);
+                            }
+                        });
+
+                    }
+                });
             }
         });
 

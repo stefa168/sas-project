@@ -44,6 +44,8 @@ public class Preparation extends KitchenDuty{
             public void handle(ResultSet rs) throws SQLException {
                 preparation.preparation_id = rs.getInt("id");
                 preparation.name = rs.getString("name");
+                preparation.constantConcreteActivityTime = Duration.ofMinutes(rs.getInt("tacc"));
+                preparation.variableConcreteActivityTime = Duration.ofMinutes(rs.getInt("tacv"));
                 preparation.subDuties = KitchenDuty.loadAllSubKitchenDuty(preparation.preparation_id);
             }
         });
@@ -61,6 +63,8 @@ public class Preparation extends KitchenDuty{
                 preparation.preparation_id = rs.getInt("id");
                 preparation.name = rs.getString("name");
                 preparation.subDuties = KitchenDuty.loadAllSubKitchenDuty(preparation.preparation_id);
+                preparation.constantConcreteActivityTime = Duration.ofMinutes(rs.getInt("tacc"));
+                preparation.variableConcreteActivityTime = Duration.ofMinutes(rs.getInt("tacv"));
                 preparations.add(preparation);
             }
         });
