@@ -23,11 +23,6 @@ public class KitchenTaskManager {
 
     public KitchenTaskManager() {
         eventReceivers = new ArrayList<>();
-    }
-
-    public KitchenTaskManager(SummarySheet sheet) {
-        currentSheet = sheet;
-        eventReceivers = new ArrayList<>();
         serviceOfSheet = new HashMap<>();
     }
 
@@ -90,7 +85,7 @@ public class KitchenTaskManager {
     public SummarySheet createSummarySheet(Event event, Service service) throws UseCaseLogicException, EventException {
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
 
-        if (!user.isChef() || event.getAssignedChef() != user || !event.containsService(service)) {
+        if (!user.isChef() || !event.getAssignedChef().equals(user) || !event.containsService(service)) {
             throw new UseCaseLogicException();
         }
         if (!service.isConfirmed()) {
