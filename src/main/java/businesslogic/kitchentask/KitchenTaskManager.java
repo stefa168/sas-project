@@ -9,6 +9,7 @@ import businesslogic.event.Service;
 import businesslogic.recipe.KitchenDuty;
 import businesslogic.turn.KitchenTurn;
 import businesslogic.user.User;
+import persistence.KitchenTaskPersistence;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -261,4 +262,7 @@ public class KitchenTaskManager {
         return turn;
     }
 
+    public void addReceiver(KitchenTaskPersistence kitchenTaskPersistence) {
+        eventReceivers.add(kitchenTaskPersistence);
+    }
 }
