@@ -58,7 +58,7 @@ public class Main {
     public void initialize() throws Exception {
 
         startPaneController.setParent(this);
-
+        startPaneController.setPrincipale(paneContainer);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("menu/menu-management.fxml"));
         try {
@@ -119,22 +119,5 @@ public class Main {
         mainStage = primaryStage;
     }
 
-    public void backToLogin(ActionEvent actionEvent) {
-        try {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
-            Scene root = new Scene(loader.load(), 700, 400);
-            Stage stage = new Stage();
-            stage.setTitle("Login");
-            stage.setScene(root);
-            stage.show();
-
-
-            Stage current = (Stage) paneContainer.getScene().getWindow();
-            current.close();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-    }
 }
