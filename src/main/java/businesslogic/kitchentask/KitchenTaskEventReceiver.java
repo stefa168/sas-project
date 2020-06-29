@@ -6,21 +6,39 @@ import businesslogic.turn.KitchenTurn;
 import java.util.List;
 
 public interface KitchenTaskEventReceiver {
-    public void updateDeleteExtraDuty(KitchenDuty kitchenDuty, Task task);
+    public default void updateDeleteExtraDuty(KitchenDuty kitchenDuty, Task task) {
 
-    public void updateSheetCreate(SummarySheet summarySheet);
+    }
 
-    public void updateAddExtraDuty(KitchenDuty kitchenDuty, Task task);
+    public default void updateSheetCreate(SummarySheet summarySheet) {
 
-    public void updateEditTask(Task task);
+    }
 
-    public void updateCreateKitchenJob(KitchenJob kitchenJob);
+    public default void updateAddExtraDuty(KitchenDuty kitchenDuty, Task task) {
 
-    public void updateDeletedKitchenJob(KitchenJob kitchenJob);
+    }
 
-    public void updateEditKitchenJob(KitchenJob kitchenJob);
+    public default void updateEditTask(Task task) {
 
-    public void updateTaskOrderChanged(List<Task> involvedTasks);
+    }
 
-    public void updateEditTurn(KitchenTurn turn);
+    public default void updateCreateKitchenJob(KitchenJob kitchenJob) {
+
+    }
+
+    public default void updateDeletedKitchenJob(KitchenJob kitchenJob) {
+
+    }
+
+    public default void updateEditKitchenJob(KitchenJob kitchenJob) {
+
+    }
+
+    public default void updateTaskOrderChanged(List<Task> involvedTasks) {
+
+    }
+
+    public default void updateEditTurn(KitchenTurn turn) {
+
+    }
 }
