@@ -8,10 +8,8 @@ import businesslogic.kitchentask.KitchenTaskManager;
 import businesslogic.kitchentask.Task;
 import businesslogic.recipe.Recipe;
 import businesslogic.turn.KitchenTurn;
-import businesslogic.user.User;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -28,10 +26,12 @@ import ui.general.EventsInfoDialog;
 import ui.general.TurnInfoDialog;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class SummarySheetWindow extends WindowController {
@@ -439,7 +439,10 @@ public class SummarySheetWindow extends WindowController {
                     Optional<String> duration = durationDialog.showAndWait();
                     if (duration.isPresent() && isInteger(duration.orElseThrow())) {
                         Duration estimatedDuration = Duration.ofMinutes(Integer.parseInt(duration.get()));
-                        KitchenJob kitchenJob= CatERing.getInstance().getKitchenTaskManager().createKitchenJob(task,turnoScelto,porzioni,estimatedDuration);
+                        KitchenJob kitchenJob = CatERing.getInstance()
+                                                        .getKitchenTaskManager()
+                                                        .createKitchenJob(task, turnoScelto, porzioni,
+                                                                          estimatedDuration);
                         itemRow.getChildren().add(new TreeItem<>(kitchenJob));
                         contentTree.refresh();
                     }
@@ -461,6 +464,21 @@ public class SummarySheetWindow extends WindowController {
     }
 
     public void deleteKitchenJob(ActionEvent actionEvent) {
+        TreeItem<TaskItemInfo> itemRow = getTaskItemInfoTreeItem();
+        TaskItemInfo selectedItem = itemRow.getValue();
+
+        if (selectedItem instanceof KitchenJob) {
+            try {
+                ktm.deleteKitchenJob(((Task) itemRow.getParent().getValue()), ((KitchenJob) selectedItem));
+
+                itemRow.getParent().getChildren().remove(itemRow);
+
+                contentTree.refresh();
+                sortTree();
+            } catch (TaskException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void cookOperations(ActionEvent actionEvent) {
