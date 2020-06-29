@@ -68,6 +68,26 @@ public class SummarySheetWindow extends WindowController {
     @Override
     protected void initialize() {
         this.ktm = CatERing.getInstance().getKitchenTaskManager();
+
+        contentTree.getSelectionModel().selectedItemProperty().addListener(
+                (observableValue, oldSelection, newSelection) -> {
+                    boolean controls = !controlsEnabled;
+                    addRecipeButton.setDisable(controls);
+                    deleteRecipeButton.setDisable(controls);
+
+                    TaskItemInfo selection = newSelection.getValue();
+
+                    boolean correctSelection = controls || !(selection instanceof Task);
+                    upTaskButton.setDisable(correctSelection);
+                    downTaskButton.setDisable(correctSelection);
+
+                    changeDetailsButton.setDisable(controls);
+
+                    addKitchenJobButton.setDisable(correctSelection);
+                    deleteKitchenJobButton.setDisable(controls || !(selection instanceof KitchenJob));
+                    cookButton.setDisable(controls || !(selection instanceof KitchenJob));
+                }
+        );
     }
 
     @Override
@@ -107,7 +127,18 @@ public class SummarySheetWindow extends WindowController {
     }
 
     public void toggleControls(boolean b) {
-        this.controlsEnabled = b;
+        controlsEnabled = b;
+
+        addRecipeButton.setDisable(!b);
+        deleteRecipeButton.setDisable(!b);
+        upTaskButton.setDisable(!b);
+        downTaskButton.setDisable(!b);
+        changeDetailsButton.setDisable(!b);
+        addKitchenJobButton.setDisable(!b);
+        cookButton.setDisable(!b);
+        eventDetails.setDisable(!b);
+        turnDetails.setDisable(!b);
+        deleteKitchenJobButton.setDisable(!b);
     }
 
     public TaskItemInfo getSelectedItem() {
