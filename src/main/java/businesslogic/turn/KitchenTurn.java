@@ -14,8 +14,15 @@ import java.util.HashMap;
 public class KitchenTurn extends Turn {
     private boolean complete;
     private HashMap<User, Duration> assignedCooks;
+
     public KitchenTurn(Instant start, Instant end) {
         super(start, end);
+        assignedCooks = new HashMap<>();
+        complete = false;
+    }
+
+    public KitchenTurn(Instant start, Instant end, int turn_id) {
+        super(start, end, turn_id);
         assignedCooks = new HashMap<>();
         complete = false;
     }
@@ -99,6 +106,7 @@ public class KitchenTurn extends Turn {
                 turn.complete = rs.getBoolean("complete");
                 turn.start = rs.getTimestamp("startDate").toInstant();
                 turn.end = rs.getTimestamp("endDate").toInstant();
+                turn.turn_id = rs.getInt("turn_id");
                 kitchenTurns.add(turn);
             }
         });
@@ -116,10 +124,16 @@ public class KitchenTurn extends Turn {
                 turn.complete = rs.getBoolean("complete");
                 turn.start = rs.getTimestamp("startDate").toInstant();
                 turn.end = rs.getTimestamp("endDate").toInstant();
-
+                turn.turn_id = rs.getInt("turn_id");
             }
         });
 
         return turn;
+    }
+
+    public static void changeComplete(int turn_id, boolean new_complete){
+        String upd = "UPDATE Turn SET complete = '" + new_complete +
+                "' WHERE id = " + turn_id;
+        PersistenceManager.executeUpdate(upd);
     }
 }

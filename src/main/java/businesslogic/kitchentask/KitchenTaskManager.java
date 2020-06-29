@@ -13,10 +13,12 @@ import businesslogic.user.User;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class KitchenTaskManager {
-    public SummarySheet currentSheet;
+    private SummarySheet currentSheet;
+    private HashMap<SummarySheet, Service> serviceOfSheet;
     private ArrayList<KitchenTaskEventReceiver> eventReceivers;
 
     public KitchenTaskManager() {
@@ -26,6 +28,7 @@ public class KitchenTaskManager {
     public KitchenTaskManager(SummarySheet sheet) {
         currentSheet = sheet;
         eventReceivers = new ArrayList<>();
+        serviceOfSheet = new HashMap<>();
     }
 
     public void setCurrentSheet(SummarySheet sheet) { this.currentSheet = sheet;}
@@ -95,6 +98,7 @@ public class KitchenTaskManager {
         }
 
         this.currentSheet = service.createSummarySheet();
+        serviceOfSheet.put(currentSheet, service);
         notifySheetCreate(currentSheet);
 
         return currentSheet;
@@ -127,7 +131,7 @@ public class KitchenTaskManager {
         if (currentSheet == null) {
             throw new UseCaseLogicException();
         }
-        Task task = currentSheet.addExtraDuty(kitchenDuty);
+        Task task = currentSheet.addExtraDuty(kitchenDuty, serviceOfSheet.get(currentSheet).getService_id());
         notifyAddExtraDuty(kitchenDuty, task);
         return task;
     }

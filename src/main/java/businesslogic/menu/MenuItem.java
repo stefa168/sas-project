@@ -130,17 +130,15 @@ public class MenuItem {
 
     public static MenuItem getMenuItemById(int id){
         String query = "SELECT * FROM MenuItems WHERE id = " + id;
-        ArrayList<MenuItem> menuItems = new ArrayList<>();
+        MenuItem menuItem = new MenuItem();
         PersistenceManager.executeQuery(query, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {
-                MenuItem mi = new MenuItem();
-                mi.description = rs.getString("description");
-                mi.id = rs.getInt("id");
-                menuItems.add(mi);
+                menuItem.description = rs.getString("description");
+                menuItem.id = rs.getInt("id");
             }
         });
-        return menuItems.get(0);
+        return menuItem;
 
     }
 

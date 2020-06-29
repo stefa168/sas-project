@@ -3,7 +3,7 @@ package businesslogic.user;
 public class UserManager {
     private User currentUser;
 
-    public void fakeLogin(String username) //TODO: bisogna implementare il login vero!
+    public void login(String username)
     {
         this.currentUser = User.loadUser(username);
     }

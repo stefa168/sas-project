@@ -18,7 +18,7 @@ public class TestCatERing {
             /* System.out.println("TEST DATABASE CONNECTION");
             PersistenceManager.testSQLConnection();*/
             System.out.println("TEST FAKE LOGIN");
-            CatERing.getInstance().getUserManager().fakeLogin("Lidia");
+            CatERing.getInstance().getUserManager().login("Lidia");
             System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
 
             System.out.println("\nTEST CREATE MENU");

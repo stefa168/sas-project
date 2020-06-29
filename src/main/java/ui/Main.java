@@ -1,9 +1,12 @@
 package ui;
 
 import businesslogic.CatERing;
+import businesslogic.user.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -18,6 +21,8 @@ public class Main {
 
     private static Stage mainStage;
 
+    private User userLogin;
+
     @FXML
     AnchorPane paneContainer;
 
@@ -31,6 +36,11 @@ public class Main {
     MenuManagement menuManagementPaneController;
 
     TaskManagement taskManagementPaneController;
+
+    public void setUsernameUserLogin(User user) {
+        this.userLogin = user;
+        startPaneController.setUser(userLogin);
+    }
 
     public void initialize() throws Exception {
 
@@ -52,7 +62,7 @@ public class Main {
     }
 
     public void startMenuManagement() {
-        CatERing.getInstance().getUserManager().fakeLogin("Tony");
+        CatERing.getInstance().getUserManager().login(userLogin.getUserName());
 
         menuManagementPaneController.initialize();
         paneContainer.getChildren().remove(startPane);
@@ -94,5 +104,22 @@ public class Main {
     public void passMainWindowStage(Stage primaryStage) {
         mainStage = primaryStage;
         taskManagementPaneController.setParentWindow(mainStage);
+    }
+
+    public void backToLogin(ActionEvent actionEvent) {
+        try {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
+            Scene root = new Scene(loader.load(), 700, 400);
+            Stage stage = new Stage();
+            stage.setTitle("Login");
+            stage.setScene(root);
+            stage.show();
+
+            mainStage.hide();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }

@@ -4,12 +4,10 @@ import javafx.collections.FXCollections;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
 
+import javax.management.relation.Role;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class User {
     private static Map<Integer, User> loadedUsers = FXCollections.observableHashMap();
@@ -61,6 +59,42 @@ public class User {
         return load;
     }
 
+    public static ArrayList<User> loadAllUsersLogin() {
+        ArrayList<User> users = new ArrayList<>();
+        String userQuery = "SELECT * FROM Users WHERE" + true;
+
+        PersistenceManager.executeQuery(userQuery, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                User u = new User();
+                u.id = rs.getInt("id");
+                u.username = rs.getString("username");
+                String roleQuery = "SELECT * FROM UserRoles WHERE user_id=" + u.id;
+                PersistenceManager.executeQuery(roleQuery, new ResultHandler() {
+                    @Override
+                    public void handle(ResultSet rs) throws SQLException {
+                        String role = rs.getString("role_id");
+                        switch (role.charAt(0)) {
+                            case 'c':
+                                u.roles.add(User.Role.CUOCO);
+                                break;
+                            case 'h':
+                                u.roles.add(User.Role.CHEF);
+                                break;
+                            case 'o':
+                                u.roles.add(User.Role.ORGANIZZATORE);
+                                break;
+                            case 's':
+                                u.roles.add(User.Role.SERVIZIO);
+                        }
+                    }
+                });
+                users.add(u);
+            }
+        });
+        return users;
+    }
+
     public static User loadUser(String username) {
         User u = new User();
         String userQuery = "SELECT * FROM Users WHERE username='" + username + "'";
@@ -97,6 +131,8 @@ public class User {
         return u;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -128,6 +164,21 @@ public class User {
 
     public int getId() {
         return this.id;
+    }
+
+    public String getLoginRoles(){
+        StringBuilder result = new StringBuilder();
+
+        for(Role role: roles){
+            switch (role){
+                case CHEF -> result.append("CHEF ");
+                case CUOCO -> result.append("CUOCO ");
+                case ORGANIZZATORE -> result.append("ORGANIZZATORE ");
+                case SERVIZIO -> result.append("SERVIZIO ");
+            }
+        }
+
+        return result.toString();
     }
 
     // STATIC METHODS FOR PERSISTENCE

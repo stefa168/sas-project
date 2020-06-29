@@ -5,12 +5,20 @@ import java.time.Instant;
 public abstract class Turn {
     protected Instant start;
     protected Instant end;
+    protected int turn_id;
+
+    public Turn(Instant start, Instant end, int turn_id) {
+        this.start = start;
+        this.end = end;
+        this.turn_id = turn_id;
+    }
 
     public Turn(Instant start, Instant end) {
         this.start = start;
         this.end = end;
     }
-    public Turn(){}
+
+    public Turn() {}
 
     public Instant getStart() {
         return start;
@@ -26,4 +34,8 @@ public abstract class Turn {
     public String toString() {
         return String.format("Inizio: %s; Fine: %s", start.toString(), end.toString());
     }
+
+    public int getTurn_id() { return turn_id; }
+
+
 }
