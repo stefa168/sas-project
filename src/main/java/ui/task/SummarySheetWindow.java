@@ -403,7 +403,7 @@ public class SummarySheetWindow extends WindowController {
         }
     }
 
-    public void addKitchenJob(ActionEvent actionEvent) {
+    public void addKitchenJob(ActionEvent actionEvent) throws TaskException, UseCaseLogicException {
         TreeItem<TaskItemInfo> itemRow = getTaskItemInfoTreeItem();
         TaskItemInfo selectedItem = itemRow.getValue();
 
@@ -421,8 +421,32 @@ public class SummarySheetWindow extends WindowController {
             KitchenTurn turnoScelto = null;
             if (result.isPresent()) {
                 turnoScelto = result.get();
-            }
 
+                TextInputDialog amountDialog = new TextInputDialog("numero porzioni");
+                amountDialog.setTitle("Numero di Porzioni");
+                amountDialog.setHeaderText("Indica un numero valido di Porzioni");
+                amountDialog.setContentText("Inserisci:");
+
+                Optional<String> amount = amountDialog.showAndWait();
+                if (result.isPresent() && isInteger(amount.orElseThrow())){
+                    int porzioni = Integer.parseInt(amount.get());
+
+                    TextInputDialog durationDialog = new TextInputDialog("durata");
+                    durationDialog.setTitle("Durata dell'incarico");
+                    durationDialog.setHeaderText("Esprimi la durata in minuti");
+                    durationDialog.setContentText("Durata:");
+
+                    Optional<String> duration = durationDialog.showAndWait();
+                    if (result.isPresent() && isInteger(duration.orElseThrow())){
+                        Duration estimatedDuration = Duration.ofMinutes(Integer.parseInt(duration.get()));
+                        KitchenJob kitchenJob= CatERing.getInstance().getKitchenTaskManager().createKitchenJob(task,turnoScelto,porzioni,estimatedDuration);
+                        itemRow.getChildren().add(new TreeItem<>(kitchenJob));
+                        contentTree.refresh();
+                    }
+
+                }
+            }
+            /*
             if(turnoScelto!=null) {
                 ArrayList<User> cooks = User.getUsersByTurnAvailabilities(turnoScelto.getTurn_id());
 
@@ -431,8 +455,10 @@ public class SummarySheetWindow extends WindowController {
                 cuochi.setHeaderText("Scegli il cuoco per l'incarico");
                 cuochi.setContentText("Scegli cuoco:");
 
-                Optional<User> cookResult = turni.showAndWait();
-            }
+                Optional<User> cookResult = cuochi.showAndWait();
+            }*/
+
+
 
 
 
