@@ -87,7 +87,7 @@ else
         deactivate ktm
     end
 
-    UI <<-- ktm : task
+    UI <<-- ktm : newTasks
     deactivate ktm
 
     
