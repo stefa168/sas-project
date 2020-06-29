@@ -49,10 +49,39 @@ public class TaskManagement extends WindowController {
 
                     EventItemInfo selection = newSelection.getValue();
 
-                    apriButton.setDisable(selection == null ||
-                                          selection instanceof Event ||
-                                          ((Service) selection).getParentEvent().getAssignedChef() != u ||
-                                          ((Service) selection).getState() != Service.State.CONFERMATO);
+                    /*
+                     * Il bottone di apertura serve per tre scopi:
+                     * 1. creare un nuovo foglio riepilogativo se non c'è
+                     * 2. aprire un foglio riepilogativo per la modifica
+                     * 3. aprire un foglio riepilogativo per visualizzare
+                     *
+                     * La prima azione richiede che il foglio non esista MA soprattutto, che l'utente sia lo chef
+                     * assegnato all'evento.
+                     * La seconda azione richiede che esista un foglio riepilogativo, e che l'utente sia lo chef
+                     * assegnato all'evento.
+                     *
+                     * Queste prime due condizioni valgono se il servizio è confermato.
+                     *
+                     * La terza azione richiede soltanto che esista un foglio riepilogativo.
+                     */
+                    if (selection == null || selection instanceof Event) {
+                        apriButton.setDisable(true);
+                    } else {
+
+                        Service s = ((Service) selection);
+
+                        boolean assignedNoSheet = s.getParentEvent().isAssignedTo(u) &&
+                                                  s.getSheet() == null &&
+                                                  s.getState() == Service.State.CONFERMATO;
+
+                        boolean assignedWithSheet = s.getParentEvent().isAssignedTo(u) &&
+                                                    s.getSheet() != null;
+
+                        boolean notAssignedButSheet = !s.getParentEvent().isAssignedTo(u) &&
+                                                      s.getSheet() != null;
+
+                        apriButton.setDisable(!(assignedNoSheet || assignedWithSheet || notAssignedButSheet));
+                    }
                 });
 
         initSummarySheetScreen();
@@ -71,17 +100,24 @@ public class TaskManagement extends WindowController {
         SummarySheet sheet = service.getSheet();
 
         try {
-            if (sheet == null) {
 
-                Optional<ButtonType> choice = new Alert(Alert.AlertType.CONFIRMATION,
-                                                        "Al momento non esiste un foglio riepilogativo per questo " +
-                                                        "Servizio.\nVuoi crearlo?").showAndWait();
+            if (service.getParentEvent().isAssignedTo(CatERing.getInstance().getUserManager().getCurrentUser()) &&
+                service.getState() == Service.State.CONFERMATO) {
+                if (sheet == null) {
+                    Optional<ButtonType> choice = new Alert(Alert.AlertType.CONFIRMATION,
+                                                            "Al momento non esiste un foglio riepilogativo per questo" +
+                                                            " Servizio.\nVuoi crearlo?").showAndWait();
 
-                if (choice.isPresent() && choice.orElseThrow().equals(ButtonType.OK)) {
-                    ktm.createSummarySheet(service.getParentEvent(), service);
+                    if (choice.isPresent() && choice.orElseThrow().equals(ButtonType.OK)) {
+                        ktm.createSummarySheet(service.getParentEvent(), service);
+                    }
+                } else {
+                    ktm.openSummarySheetForEditing(service.getParentEvent(), service);
                 }
+                summarySheetWindowController.toggleControls(true);
             } else {
-                ktm.openSummarySheetForEditing(service.getParentEvent(), service);
+                ktm.openSummarySheetForViewing(service);
+                summarySheetWindowController.toggleControls(false);
             }
 
             summarySheetWindowController.showWindow();

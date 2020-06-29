@@ -19,6 +19,7 @@ public class SummarySheetWindow extends WindowController {
     @FXML
     private BorderPane containerPane;
     private KitchenTaskManager ktm;
+    private boolean controlsEnabled;
 
     @Override
     protected void initialize() {
@@ -59,5 +60,9 @@ public class SummarySheetWindow extends WindowController {
         contentTree.getRoot()
                    .getChildren()
                    .sort(Comparator.comparing(o -> (Task) o.getValue()));
+    }
+
+    public void toggleControls(boolean b) {
+        this.controlsEnabled = b;
     }
 }

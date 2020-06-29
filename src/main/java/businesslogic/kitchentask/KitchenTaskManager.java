@@ -119,7 +119,8 @@ public class KitchenTaskManager {
             throw new UseCaseLogicException();
         }
 
-        return service.getSheet();
+        this.currentSheet = service.getSheet();
+        return currentSheet;
     }
 
     public Task addExtraDuty(KitchenDuty kitchenDuty) throws UseCaseLogicException {
