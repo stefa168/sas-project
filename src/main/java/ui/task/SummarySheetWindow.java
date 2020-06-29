@@ -266,7 +266,6 @@ public class SummarySheetWindow extends WindowController {
     public void changeDetailsSelectedElement(ActionEvent actionEvent) {
         TaskItemInfo selectedItem = getSelectedItem();
 
-
         if (selectedItem instanceof Task) {
             Task task = ((Task) selectedItem);
 
@@ -436,13 +435,18 @@ public class SummarySheetWindow extends WindowController {
                     Optional<String> duration = durationDialog.showAndWait();
                     if (duration.isPresent() && isInteger(duration.orElseThrow())) {
                         Duration estimatedDuration = Duration.ofMinutes(Integer.parseInt(duration.get()));
-                        KitchenJob kitchenJob = CatERing.getInstance()
-                                                        .getKitchenTaskManager()
-                                                        .createKitchenJob(task, turnoScelto, porzioni,
-                                                                          estimatedDuration);
-                        itemRow.getChildren().add(new TreeItem<>(kitchenJob));
-                        itemRow.setExpanded(true);
-                        contentTree.refresh();
+                        try {
+                            KitchenJob kitchenJob = CatERing.getInstance()
+                                                            .getKitchenTaskManager()
+                                                            .createKitchenJob(task, turnoScelto, porzioni,
+                                                                              estimatedDuration);
+
+                            itemRow.getChildren().add(new TreeItem<>(kitchenJob));
+                            itemRow.setExpanded(true);
+                            contentTree.refresh();
+                        } catch (UseCaseLogicException e) {
+                            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+                        }
                     }
 
                 }

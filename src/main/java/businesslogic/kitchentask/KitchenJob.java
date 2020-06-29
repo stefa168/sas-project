@@ -83,21 +83,21 @@ public class KitchenJob implements TaskItemInfo {
     }
 
     public static void changeCook(int kitchenJob_id, int new_cook_id) {
-        String upd = "UPDATE KitchenJob SET cook_id = " + new_cook_id +
-                     "WHERE kitchenJob_id = " + kitchenJob_id;
+        //language=MySQL
+        String upd = "UPDATE KitchenJob SET cook_id = " + new_cook_id + " WHERE kitchenJob_id = " + kitchenJob_id;
         PersistenceManager.executeUpdate(upd);
     }
 
-    public static void changeAmount(int kitchenJob_id, int new_amount) {
-        String upd = "UPDATE KitchenJob SET amount = " + new_amount +
-                     "WHERE kitchenJob_id = " + kitchenJob_id;
+    public static void changeAmount(KitchenJob job) {
+        //language=MySQL
+        String upd = "UPDATE KitchenJob SET amount = " + job.amount + " WHERE kitchenJob_id = " + job.kitchenJob_id;
         PersistenceManager.executeUpdate(upd);
     }
 
-    public static void changeEstimatedDuration(int kitchenJob_id, Duration estimatedDuration) {
-        int new_estimatedDuration = (int) (estimatedDuration.getSeconds()) / 60;
-        String upd = "UPDATE KitchenJob SET amount = " + new_estimatedDuration +
-                     "WHERE kitchenJob_id = " + kitchenJob_id;
+    public static void changeEstimatedDuration(KitchenJob job) {
+        //language=MySQL
+        String upd = "UPDATE KitchenJob SET estimatedDuration = " + job.getDuration().toMinutes() +
+                     " WHERE kitchenJob_id = " + job.getKitchenJob_id();
         PersistenceManager.executeUpdate(upd);
     }
 
@@ -131,7 +131,6 @@ public class KitchenJob implements TaskItemInfo {
             this.cook = user;
         }
     }
-
 
     public int getKitchenJob_id() {
         return kitchenJob_id;

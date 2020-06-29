@@ -4,6 +4,7 @@ package ui.general;
 import businesslogic.CatERing;
 import businesslogic.TaskException;
 import businesslogic.turn.KitchenTurn;
+import businesslogic.turn.Turn;
 import businesslogic.user.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -59,6 +61,9 @@ public class TurnInfoDialog {
         }
 
         turnTree.setRoot(root);
+        turnTree.getRoot()
+                .getChildren()
+                .sort(Comparator.comparing(t -> ((Turn) t.getValue()).getStart()));
     }
 
     @FXML

@@ -51,7 +51,7 @@ public class KitchenTaskManager {
 
     private void notifyAssignedCook(User user, KitchenJob kitchenJob) {
         for (KitchenTaskEventReceiver eventReceiver : eventReceivers) {
-            eventReceiver.updateCookAssigned(user,kitchenJob);
+            eventReceiver.updateCookAssigned(user, kitchenJob);
         }
     }
 
@@ -79,7 +79,7 @@ public class KitchenTaskManager {
         }
     }
 
-    public void notifyKitchenTurnComplete(KitchenTurn kitchenTurn){
+    public void notifyKitchenTurnComplete(KitchenTurn kitchenTurn) {
         for (KitchenTaskEventReceiver eventReceiver : eventReceivers) {
             eventReceiver.updateKitchenTurnComplete(kitchenTurn);
         }
@@ -199,8 +199,9 @@ public class KitchenTaskManager {
 
     public KitchenJob createKitchenJob(Task task, KitchenTurn kitchenTurn, int amount, Duration estimatedDuration) throws TaskException, UseCaseLogicException {
         if (currentSheet == null || Instant.now().compareTo(kitchenTurn.getEnd()) > 0 || kitchenTurn.isComplete()) {
-            throw new UseCaseLogicException();
+            throw new UseCaseLogicException("Il turno è indicato come al completo.");
         }
+
         if (task.getAmount() <= 0 ||
             task.getEstimatedDuration()
                 .isNegative() ||
@@ -227,14 +228,16 @@ public class KitchenTaskManager {
         KitchenTurn turn = job.getTurn();
 
         if (!turn.hasConcluded()) {
-            if (job.getCook() != null) {
-                if (turn.hasUserEnoughTime(job.getCook(), job.getDuration(), newDuration)) {
-                    turn.freeTime(job.getCook(), job.getDuration());
-                    turn.takeTime(job.getCook(), newDuration);
+            if (newDuration != null) {
+                if (job.getCook() != null) {
+                    if (turn.hasUserEnoughTime(job.getCook(), job.getDuration(), newDuration)) {
+                        turn.freeTime(job.getCook(), job.getDuration());
+                        turn.takeTime(job.getCook(), newDuration);
+                        job.setDuration(newDuration);
+                    }
+                } else {
                     job.setDuration(newDuration);
                 }
-            } else {
-                job.setDuration(newDuration);
             }
 
             if (newAmount != null) {
@@ -265,7 +268,7 @@ public class KitchenTaskManager {
                 }
 
                 job.assignCook(user);
-                notifyAssignedCook(user,job);
+                notifyAssignedCook(user, job);
             } else {
                 throw new TaskException();
             }

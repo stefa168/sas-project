@@ -6,7 +6,9 @@ import javafx.collections.ObservableList;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -174,8 +176,17 @@ public class KitchenTurn extends Turn {
     }
 
     public boolean hasUserEnoughTime(User user, Duration oldDuration, Duration newDuration) {
-        //todo
-        throw new RuntimeException("Not Implemented");
+        if (user == null || !availableCooks.contains(user)) {
+            return false;
+        }
+
+        if (!assignedCooks.containsKey(user)) {
+            return true;
+        }
+
+        Duration occupiedTime = assignedCooks.get(user);
+
+        return this.start.plus(occupiedTime).minus(oldDuration).plus(newDuration).compareTo(this.end) <= 0;
     }
 
     public void takeTime(User cook, Duration estimatedDuration) {

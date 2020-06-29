@@ -31,7 +31,7 @@ public class KitchenTaskPersistence implements KitchenTaskEventReceiver {
 
     @Override
     public void updateEditKitchenJob(KitchenJob kitchenJob) {
-        // KitchenJob.changeAmount();
-        // todo
+        KitchenJob.changeAmount(kitchenJob);
+        KitchenJob.changeEstimatedDuration(kitchenJob);
     }
 }
