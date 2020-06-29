@@ -75,34 +75,32 @@ public class SummarySheetWindow extends WindowController {
                 (observableValue, oldSelection, newSelection) -> {
                     boolean controls = !controlsEnabled;
                     addRecipeButton.setDisable(controls);
-                    deleteRecipeButton.setDisable(controls);
 
                     TaskItemInfo selection = newSelection.getValue();
-
                     boolean correctSelection = controls || !(selection instanceof Task);
+
+                    deleteRecipeButton.setDisable(correctSelection || !((Task) selection).isOptionalDuty());
+
+
                     upTaskButton.setDisable(correctSelection);
                     downTaskButton.setDisable(correctSelection);
 
                     changeDetailsButton.setDisable(controls);
 
-                    addKitchenJobButton.setDisable(correctSelection);
+                    boolean cannotCreateNewJob = false;
+                    if (selection instanceof Task) {
+                        Task task = ((Task) selection);
+                        cannotCreateNewJob = task.getAmount() <= 0 ||
+                                             task.getEstimatedDuration().isNegative() ||
+                                             task.getEstimatedDuration() == Duration.ZERO ||
+                                             !task.isToDo();
+                    }
+
+                    addKitchenJobButton.setDisable(correctSelection || cannotCreateNewJob);
                     deleteKitchenJobButton.setDisable(controls || !(selection instanceof KitchenJob));
                     cookButton.setDisable(controls || !(selection instanceof KitchenJob));
                 }
         );
-    }
-
-    //innner
-    static class EditValues {
-        public final int amount;
-        public final int time;
-        public final boolean toDo;
-
-        public EditValues(int amount, int time, boolean toDo) {
-            this.amount = amount;
-            this.time = time;
-            this.toDo = toDo;
-        }
     }
 
     @Override
@@ -269,7 +267,6 @@ public class SummarySheetWindow extends WindowController {
         TaskItemInfo selectedItem = getSelectedItem();
 
 
-
         if (selectedItem instanceof Task) {
             Task task = ((Task) selectedItem);
 
@@ -313,8 +310,8 @@ public class SummarySheetWindow extends WindowController {
             detailsDialog.setResultConverter(buttonType -> {
                 if (buttonType == applyButton) {
                     return new EditValues(Integer.parseInt(amount.getText()),
-                            Integer.parseInt(estimatedTime.getText()),
-                            toDoCheckbox.isSelected());
+                                          Integer.parseInt(estimatedTime.getText()),
+                                          toDoCheckbox.isSelected());
                 } else {
                     return null;
                 }
@@ -378,8 +375,8 @@ public class SummarySheetWindow extends WindowController {
             detailsDialog.setResultConverter(buttonType -> {
                 if (buttonType == applyButton) {
                     return new EditValues(Integer.parseInt(amount.getText()),
-                            Integer.parseInt(estimatedTime.getText()),
-                            false);
+                                          Integer.parseInt(estimatedTime.getText()),
+                                          false);
                 } else {
                     return null;
                 }
@@ -411,7 +408,7 @@ public class SummarySheetWindow extends WindowController {
             Task task = (Task) selectedItem;
             ArrayList<Instant> dates = Task.getDatesService(task.getTask_id());
 
-            ArrayList<KitchenTurn> turniPossibili = KitchenTurn.loadTurnByDate(dates.get(0),dates.get(1));
+            ArrayList<KitchenTurn> turniPossibili = KitchenTurn.loadTurnByDate(dates.get(0), dates.get(1));
             ChoiceDialog turni = new ChoiceDialog("turno", turniPossibili);
             turni.setTitle("Turni");
             turni.setHeaderText("Scegli il turno per l'incarico");
@@ -444,6 +441,7 @@ public class SummarySheetWindow extends WindowController {
                                                         .createKitchenJob(task, turnoScelto, porzioni,
                                                                           estimatedDuration);
                         itemRow.getChildren().add(new TreeItem<>(kitchenJob));
+                        itemRow.setExpanded(true);
                         contentTree.refresh();
                     }
 
@@ -562,5 +560,18 @@ public class SummarySheetWindow extends WindowController {
             return false;
         }
         return pattern.matcher(strNum).matches();
+    }
+
+    //innner
+    static class EditValues {
+        public final int amount;
+        public final int time;
+        public final boolean toDo;
+
+        public EditValues(int amount, int time, boolean toDo) {
+            this.amount = amount;
+            this.time = time;
+            this.toDo = toDo;
+        }
     }
 }
