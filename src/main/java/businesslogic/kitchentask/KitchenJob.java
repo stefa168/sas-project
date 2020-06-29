@@ -70,17 +70,21 @@ public class KitchenJob implements TaskItemInfo {
     }
 
     public static void createKitchenJob(KitchenJob kitchenJob, int task_id) {
-        String itemInsert = "INSERT INTO catering.kitchenJob (task_id, cook_id, turn_id, amount, estimatedDuration) " +
-                            "VALUES ("
-                            + task_id + "," + kitchenJob.getCook().getId() + "," + kitchenJob.getTurn()
-                                                                                             .getTurn_id() + "," + kitchenJob.amount + "," + kitchenJob.estimatedDuration + ")";
+        //language=MySQL
+        String itemInsert = "INSERT INTO catering.kitchenJob (task_id, turn_id, amount, estimatedDuration) " +
+                            "VALUES (" +
+                            task_id + "," +
+                            kitchenJob.getTurn().getTurn_id() + "," +
+                            kitchenJob.amount + "," +
+                            kitchenJob.estimatedDuration.toMinutes() + ")";
 
         PersistenceManager.executeUpdate(itemInsert);
+        kitchenJob.kitchenJob_id = PersistenceManager.getLastId();
     }
 
     public static void changeCook(int kitchenJob_id, int new_cook_id) {
         String upd = "UPDATE KitchenJob SET cook_id = " + new_cook_id +
-                "WHERE kitchenJob_id = " + kitchenJob_id;
+                     "WHERE kitchenJob_id = " + kitchenJob_id;
         PersistenceManager.executeUpdate(upd);
     }
 

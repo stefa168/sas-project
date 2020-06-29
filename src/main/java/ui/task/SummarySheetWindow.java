@@ -428,7 +428,7 @@ public class SummarySheetWindow extends WindowController {
                 amountDialog.setContentText("Inserisci:");
 
                 Optional<String> amount = amountDialog.showAndWait();
-                if (result.isPresent() && isInteger(amount.orElseThrow())){
+                if (amount.isPresent() && isInteger(amount.orElseThrow())) {
                     int porzioni = Integer.parseInt(amount.get());
 
                     TextInputDialog durationDialog = new TextInputDialog("durata");
@@ -437,7 +437,7 @@ public class SummarySheetWindow extends WindowController {
                     durationDialog.setContentText("Durata:");
 
                     Optional<String> duration = durationDialog.showAndWait();
-                    if (result.isPresent() && isInteger(duration.orElseThrow())){
+                    if (duration.isPresent() && isInteger(duration.orElseThrow())) {
                         Duration estimatedDuration = Duration.ofMinutes(Integer.parseInt(duration.get()));
                         KitchenJob kitchenJob= CatERing.getInstance().getKitchenTaskManager().createKitchenJob(task,turnoScelto,porzioni,estimatedDuration);
                         itemRow.getChildren().add(new TreeItem<>(kitchenJob));
@@ -457,19 +457,6 @@ public class SummarySheetWindow extends WindowController {
 
                 Optional<User> cookResult = cuochi.showAndWait();
             }*/
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
     }
 
