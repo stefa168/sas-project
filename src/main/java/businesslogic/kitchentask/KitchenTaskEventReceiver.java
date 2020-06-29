@@ -2,6 +2,7 @@ package businesslogic.kitchentask;
 
 import businesslogic.recipe.KitchenDuty;
 import businesslogic.turn.KitchenTurn;
+import businesslogic.user.User;
 
 import java.util.List;
 
@@ -39,6 +40,14 @@ public interface KitchenTaskEventReceiver {
     }
 
     public default void updateEditTurn(KitchenTurn turn) {
+
+    }
+
+    public default void updateKitchenTurnComplete(KitchenTurn kitchenTurn){
+
+    }
+
+    public default void updateCookAssigned(User user, KitchenJob kitchenJob){
 
     }
 }

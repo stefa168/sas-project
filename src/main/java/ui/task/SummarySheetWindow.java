@@ -6,6 +6,7 @@ import businesslogic.kitchentask.KitchenJob;
 import businesslogic.kitchentask.KitchenTaskManager;
 import businesslogic.kitchentask.Task;
 import businesslogic.recipe.Recipe;
+import businesslogic.turn.KitchenTurn;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -226,6 +227,35 @@ public class SummarySheetWindow extends WindowController {
     }
 
     public void cookOperations(ActionEvent actionEvent) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../task/cook_assign.fxml"));
+        try {
+
+            TreeItem<TaskItemInfo> itemRow = getTaskItemInfoTreeItem();
+            TaskItemInfo selectedItem = itemRow.getValue();
+
+            if (selectedItem instanceof KitchenJob) {
+                KitchenJob kitchenJob = (KitchenJob) selectedItem;
+
+
+                BorderPane pane = loader.load();
+                CookAssign controller = loader.getController();
+
+                Stage stage = new Stage();
+
+                controller.setOwnStage(stage);
+
+                controller.setKitchenJob(kitchenJob);
+
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setTitle("Cuochi disponibili");
+                stage.setScene(new Scene(pane, 600, 400));
+
+                stage.showAndWait();
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void showEventDetails(ActionEvent actionEvent) {

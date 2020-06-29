@@ -2,6 +2,7 @@ package ui.general;
 
 
 import businesslogic.CatERing;
+import businesslogic.TaskException;
 import businesslogic.event.*;
 import businesslogic.turn.KitchenTurn;
 import businesslogic.turn.TurnItemInfo;
@@ -71,12 +72,12 @@ public class TurnInfoDialog {
         myStage = stage;
     }
 
-    public void completeTurn(ActionEvent actionEvent) {
+    public void completeTurn(ActionEvent actionEvent) throws TaskException {
         TreeItem<Object> row = turnTree.getSelectionModel().getSelectedItem();
         Object turn = row.getValue();
         if(turn instanceof KitchenTurn){
-            KitchenTurn.changeComplete(((KitchenTurn) turn).getTurn_id(),1);
-            ((KitchenTurn) turn).setComplete(true);
+            KitchenTurn kitchenTurn = (KitchenTurn) turn;
+            CatERing.getInstance().getKitchenTaskManager().changeKitchenTurnState(kitchenTurn,true);
         }
     }
 }

@@ -49,6 +49,12 @@ public class KitchenTaskManager {
         }
     }
 
+    private void notifyAssignedCook(User user, KitchenJob kitchenJob) {
+        for (KitchenTaskEventReceiver eventReceiver : eventReceivers) {
+            eventReceiver.updateCookAssigned(user,kitchenJob);
+        }
+    }
+
     private void notifyDeleteExtraDuty(KitchenDuty kitchenDuty, Task task) {
         for (KitchenTaskEventReceiver eventReceiver : eventReceivers) {
             eventReceiver.updateDeleteExtraDuty(kitchenDuty, task);
@@ -70,6 +76,12 @@ public class KitchenTaskManager {
     private void notifyDeletedKitchenJob(KitchenJob kitchenJob) {
         for (KitchenTaskEventReceiver eventReceiver : eventReceivers) {
             eventReceiver.updateDeletedKitchenJob(kitchenJob);
+        }
+    }
+
+    public void notifyKitchenTurnComplete(KitchenTurn kitchenTurn){
+        for (KitchenTaskEventReceiver eventReceiver : eventReceivers) {
+            eventReceiver.updateKitchenTurnComplete(kitchenTurn);
         }
     }
 
@@ -253,7 +265,6 @@ public class KitchenTaskManager {
                 }
 
                 job.assignCook(user);
-                //notifyChangeKitchenJobCook(job);
             } else {
                 throw new TaskException();
             }
@@ -268,7 +279,7 @@ public class KitchenTaskManager {
 
         turn.setComplete(complete);
 
-        notifyEditTurn(turn);
+        notifyKitchenTurnComplete(turn);
 
         return turn;
     }

@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
@@ -209,6 +210,20 @@ public class KitchenTurn extends Turn {
         } else {
             assignedCooks.put(cook, cookOccupiedTime);
         }
+    }
+
+    public static ArrayList<KitchenTurn> loadTurnAvailabilitiesByCookId(int cook_id){
+        String query = "SELECT * FROM Availabilities WHERE user_id = " + cook_id;
+        ArrayList<KitchenTurn> availabilities = new ArrayList<>();
+
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                KitchenTurn kitchenTurn = KitchenTurn.loadKitchenTurnById(rs.getInt("turn_id"));
+                availabilities.add(kitchenTurn);
+            }
+        });
+        return availabilities;
     }
 
 }

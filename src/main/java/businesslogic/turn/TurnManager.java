@@ -8,4 +8,5 @@ public class TurnManager {
     public ObservableList<KitchenTurn> getTurnInfo() {
         return KitchenTurn.loadAllTurnInfo();
     }
+
 }

@@ -16,6 +16,7 @@ public class KitchenJob implements TaskItemInfo {
     private Duration estimatedDuration;
     private KitchenTurn turn;
     private User cook;
+    private int kitchenJob_id;
 
     public KitchenJob(KitchenTurn turn, int amount, Duration estimatedDuration) {
         this.amount = amount;
@@ -79,6 +80,12 @@ public class KitchenJob implements TaskItemInfo {
         PersistenceManager.executeUpdate(itemInsert);
     }
 
+    public static void changeCook(int kitchenJob_id, int new_cook_id) {
+        String upd = "UPDATE KitchenJob SET cook_id = " + new_cook_id +
+                "WHERE kitchenJob_id = " + kitchenJob_id;
+        PersistenceManager.executeUpdate(upd);
+    }
+
     public static void changeAmount(int task_id, int cook_id, int turn_id, int new_amount) {
         String upd = "UPDATE KitchenJob SET amount = " + new_amount +
                      "WHERE task_id = " + task_id + "AND cook_id = " + cook_id + "AND turn_id = " + turn_id;
@@ -101,6 +108,12 @@ public class KitchenJob implements TaskItemInfo {
             this.cook = user;
         }
     }
+
+
+    public int getKitchenJob_id() {
+        return kitchenJob_id;
+    }
+
 
     //metodi per il db
 
