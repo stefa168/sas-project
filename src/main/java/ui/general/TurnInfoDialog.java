@@ -78,6 +78,7 @@ public class TurnInfoDialog {
         if(turn instanceof KitchenTurn){
             KitchenTurn kitchenTurn = (KitchenTurn) turn;
             CatERing.getInstance().getKitchenTaskManager().changeKitchenTurnState(kitchenTurn,true);
+            turnTree.refresh();
         }
     }
 }

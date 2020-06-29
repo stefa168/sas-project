@@ -125,9 +125,7 @@ public class SummarySheet {
                 for (KitchenJob job : task.getJobs()) {
                     job.getTurn().freeTime(job.getCook(), job.getDuration());
                     task.getJobs().remove(job);
-                    KitchenJob.deleteKitchenJob(deletedTask.getTask_id(),
-                                                job.getCook().getId(),
-                                                job.getTurn().getTurn_id());
+                    KitchenJob.deleteKitchenJob(job.getKitchenJob_id());
                 }
                 tasks.remove(task);
 

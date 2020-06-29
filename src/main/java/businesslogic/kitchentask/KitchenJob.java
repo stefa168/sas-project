@@ -47,9 +47,8 @@ public class KitchenJob implements TaskItemInfo {
         return kitchenJobs;
     }
 
-    public static KitchenJob getKitchenJobById(int task_id, int cook_id, int turn_id) {
-        String query = "SELECT * FROM KitchenJob WHERE task_id = " + task_id + "AND cook_id = " + cook_id + "AND " +
-                       "turn_id = " + turn_id;
+    public static KitchenJob getKitchenJobById(int kitchenJob_id) {
+        String query = "SELECT * FROM KitchenJob WHERE kitchenJob_id = " + kitchenJob_id;
         KitchenJob kitchenJob = new KitchenJob();
 
         PersistenceManager.executeQuery(query, new ResultHandler() {
@@ -65,9 +64,8 @@ public class KitchenJob implements TaskItemInfo {
         return kitchenJob;
     }
 
-    public static void deleteKitchenJob(int task_id, int cook_id, int turn_id) {
-        String rem = "DELETE FROM KitchenJob WHERE task_id = " + task_id + "AND cook_id = " + cook_id + "AND turn_id " +
-                     "= " + turn_id;
+    public static void deleteKitchenJob(int kitchenJob_id) {
+        String rem = "DELETE FROM KitchenJob WHERE kitchenJob_id = " + kitchenJob_id;
         PersistenceManager.executeUpdate(rem);
     }
 
@@ -86,16 +84,16 @@ public class KitchenJob implements TaskItemInfo {
         PersistenceManager.executeUpdate(upd);
     }
 
-    public static void changeAmount(int task_id, int cook_id, int turn_id, int new_amount) {
+    public static void changeAmount(int kitchenJob_id, int new_amount) {
         String upd = "UPDATE KitchenJob SET amount = " + new_amount +
-                     "WHERE task_id = " + task_id + "AND cook_id = " + cook_id + "AND turn_id = " + turn_id;
+                     "WHERE kitchenJob_id = " + kitchenJob_id;
         PersistenceManager.executeUpdate(upd);
     }
 
-    public static void changeEstimatedDuration(int task_id, int cook_id, int turn_id, Duration estimatedDuration) {
+    public static void changeEstimatedDuration(int kitchenJob_id, Duration estimatedDuration) {
         int new_estimatedDuration = (int) (estimatedDuration.getSeconds()) / 60;
         String upd = "UPDATE KitchenJob SET amount = " + new_estimatedDuration +
-                     "WHERE task_id = " + task_id + "AND cook_id = " + cook_id + "AND turn_id = " + turn_id;
+                     "WHERE kitchenJob_id = " + kitchenJob_id;
         PersistenceManager.executeUpdate(upd);
     }
 

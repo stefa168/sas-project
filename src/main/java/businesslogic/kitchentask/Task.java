@@ -146,7 +146,7 @@ public class Task implements TaskItemInfo, Comparable<Task> {
     public void deleteKitchenJob(KitchenJob job) {
         job.getTurn().freeTime(job.getCook(), job.getDuration());
         jobs.remove(job);
-        KitchenJob.deleteKitchenJob(task_id, job.getCook().getId(), job.getTurn().getTurn_id());
+        KitchenJob.deleteKitchenJob(job.getKitchenJob_id());
     }
 
     public int getAmount() {
