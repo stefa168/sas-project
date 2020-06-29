@@ -22,6 +22,11 @@ public class KitchenTurn extends Turn {
                                                                         .withZone(ZoneId.systemDefault());
     private boolean complete;
     private HashMap<User, Duration> assignedCooks = new HashMap<>();
+
+    public ArrayList<User> getAvailableCooks() {
+        return availableCooks;
+    }
+
     private ArrayList<User> availableCooks = new ArrayList<>();
 
     public KitchenTurn(Instant start, Instant end) {
