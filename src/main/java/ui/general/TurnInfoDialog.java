@@ -42,7 +42,7 @@ public class TurnInfoDialog {
 
             for (User user : cookWithDuration) {
                 Duration duration = assignedCooks.get(user);
-                String cook = "Cuoco: " + user.getUserName() + " con tempo assegnato in minuti: " + duration.toMinutes();
+                String cook = "Cuoco assegnato: " + user.getUserName() + " con tempo in minuti: " + duration.toMinutes();
                 allCook.add(cook);
             }
 

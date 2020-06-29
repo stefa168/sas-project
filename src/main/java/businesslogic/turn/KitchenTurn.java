@@ -67,8 +67,11 @@ public class KitchenTurn extends Turn {
                         PersistenceManager.executeQuery(getDurationCook, new ResultHandler() {
                             @Override
                             public void handle(ResultSet rs) throws SQLException {
-                                Duration estimatedDuration = Duration.ofMinutes(rs.getInt("estimatedDuration"));
-                                turn.assignedCooks.put(user, estimatedDuration);
+                                int durationMinutes = rs.getInt("estimatedDuration");
+                                if(durationMinutes > 0) {
+                                    Duration estimatedDuration = Duration.ofMinutes(durationMinutes);
+                                    turn.assignedCooks.put(user, estimatedDuration);
+                                }
                             }
                         });
 
@@ -107,8 +110,11 @@ public class KitchenTurn extends Turn {
                         PersistenceManager.executeQuery(getDurationCook, new ResultHandler() {
                             @Override
                             public void handle(ResultSet rs) throws SQLException {
-                                Duration estimatedDuration = Duration.ofMinutes(rs.getInt("estimatedDuration"));
-                                turn.assignedCooks.put(user, estimatedDuration);
+                                int durationMinutes = rs.getInt("estimatedDuration");
+                                if(durationMinutes > 0) {
+                                    Duration estimatedDuration = Duration.ofMinutes(durationMinutes);
+                                    turn.assignedCooks.put(user, estimatedDuration);
+                                }
                             }
                         });
 
