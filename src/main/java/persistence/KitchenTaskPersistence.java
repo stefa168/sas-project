@@ -21,7 +21,7 @@ public class KitchenTaskPersistence implements KitchenTaskEventReceiver {
 
     @Override
     public void updateKitchenTurnComplete(KitchenTurn kitchenTurn) {
-        KitchenTurn.changeComplete(kitchenTurn.getTurn_id(), 1);
+        KitchenTurn.changeComplete(kitchenTurn.getTurn_id(), kitchenTurn.isComplete() ? 1 : 0);
     }
 
     @Override

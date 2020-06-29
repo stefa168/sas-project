@@ -3,9 +3,7 @@ package ui.general;
 
 import businesslogic.CatERing;
 import businesslogic.TaskException;
-import businesslogic.event.*;
 import businesslogic.turn.KitchenTurn;
-import businesslogic.turn.TurnItemInfo;
 import businesslogic.user.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,17 +20,16 @@ import java.util.Set;
 
 public class TurnInfoDialog {
 
-    private Stage myStage;
-
     @FXML
     TreeView<Object> turnTree;
+    private Stage myStage;
 
     public void initialize() {
         ObservableList<KitchenTurn> allKitchenTurn = CatERing.getInstance().getTurnManager().getTurnInfo();
         turnTree.setShowRoot(false);
         TreeItem<Object> root = new TreeItem<>(null);
 
-        for (KitchenTurn turn: allKitchenTurn) {
+        for (KitchenTurn turn : allKitchenTurn) {
             TreeItem<Object> node = new TreeItem<>(turn);
             root.getChildren().add(node);
 
@@ -44,18 +41,19 @@ public class TurnInfoDialog {
 
             for (User user : cookWithDuration) {
                 Duration duration = assignedCooks.get(user);
-                String cook = "Cuoco assegnato: " + user.getUserName() + " con tempo in minuti: " + duration.toMinutes();
+                String cook =
+                        "Cuoco assegnato: " + user.getUserName() + " con tempo in minuti: " + duration.toMinutes();
                 allCook.add(cook);
             }
 
-            for(User user: turn.getAvailableCooks()){
-                String cookAvailable = "Cuoco disponibile: " +user.getUserName();
+            for (User user : turn.getAvailableCooks()) {
+                String cookAvailable = "Cuoco disponibile: " + user.getUserName();
                 allCook.add(cookAvailable);
             }
 
             ObservableList<String> allCooksInformation = FXCollections.observableArrayList(allCook);
 
-            for (String s: allCooksInformation) {
+            for (String s : allCooksInformation) {
                 node.getChildren().add(new TreeItem<>(s));
             }
         }
@@ -75,9 +73,11 @@ public class TurnInfoDialog {
     public void completeTurn(ActionEvent actionEvent) throws TaskException {
         TreeItem<Object> row = turnTree.getSelectionModel().getSelectedItem();
         Object turn = row.getValue();
-        if(turn instanceof KitchenTurn){
+        if (turn instanceof KitchenTurn) {
             KitchenTurn kitchenTurn = (KitchenTurn) turn;
-            CatERing.getInstance().getKitchenTaskManager().changeKitchenTurnState(kitchenTurn,true);
+            CatERing.getInstance()
+                    .getKitchenTaskManager()
+                    .changeKitchenTurnState(kitchenTurn, !kitchenTurn.isComplete());
             turnTree.refresh();
         }
     }
