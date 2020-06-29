@@ -195,5 +195,19 @@ public class User {
         return result;
     }
 
+    public static ArrayList<User> getUsersByTurnAvailabilities(int turn_id){
+        ArrayList<User> cooks = new ArrayList<>();
+        String query = "SELECT * FROM Availabilities WHERE turn_id = " + turn_id;
+
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                User user = User.loadUserById(rs.getInt("user_id"));
+                cooks.add(user);
+            }
+        });
+        return cooks;
+    }
+
     public static enum Role {SERVIZIO, CUOCO, CHEF, ORGANIZZATORE}
 }

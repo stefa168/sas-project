@@ -225,8 +225,7 @@ public class KitchenTurn extends Turn {
     }
 
     public static ArrayList<KitchenTurn> loadTurnByDate(Instant startDate, Instant endDate){
-        String query = "SELECT * FROM Turn WHERE startDate BETWEEN `" + Timestamp.from(startDate) + "` AND `" + Timestamp.from(endDate)
-                + "` AND endDate BETWEEN `" + Timestamp.from(startDate) + "` AND `" + Timestamp.from(endDate) + "`" ;
+        String query = "SELECT * FROM Turn WHERE startDate > '" + Timestamp.from(startDate) + "' AND  endDate < '" + Timestamp.from(endDate) + "'" ;
         ArrayList<KitchenTurn> kitchenTurns = new ArrayList<>();
         PersistenceManager.executeQuery(query, new ResultHandler() {
             @Override
@@ -237,5 +236,7 @@ public class KitchenTurn extends Turn {
         });
         return kitchenTurns;
     }
+
+
 
 }

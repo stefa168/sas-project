@@ -412,7 +412,35 @@ public class SummarySheetWindow extends WindowController {
             ArrayList<Instant> dates = Task.getDatesService(task.getTask_id());
 
             ArrayList<KitchenTurn> turniPossibili = KitchenTurn.loadTurnByDate(dates.get(0),dates.get(1));
-            ChoiceDialog turni = new ChoiceDialog(turniPossibili.get(0), turniPossibili);
+            ChoiceDialog turni = new ChoiceDialog("turno", turniPossibili);
+            turni.setTitle("Turni");
+            turni.setHeaderText("Scegli il turno per l'incarico");
+            turni.setContentText("Scegli turno:");
+
+            Optional<KitchenTurn> result = turni.showAndWait();
+            KitchenTurn turnoScelto = null;
+            if (result.isPresent()) {
+                turnoScelto = result.get();
+            }
+
+            if(turnoScelto!=null) {
+                ArrayList<User> cooks = User.getUsersByTurnAvailabilities(turnoScelto.getTurn_id());
+
+                ChoiceDialog cuochi = new ChoiceDialog("cuoco", cooks);
+                cuochi.setTitle("Cuochi");
+                cuochi.setHeaderText("Scegli il cuoco per l'incarico");
+                cuochi.setContentText("Scegli cuoco:");
+
+                Optional<User> cookResult = turni.showAndWait();
+            }
+
+
+
+
+
+
+
+
 
 
 
