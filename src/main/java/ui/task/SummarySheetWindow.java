@@ -508,6 +508,7 @@ public class SummarySheetWindow extends WindowController {
                 stage.setScene(new Scene(pane, 600, 400));
 
                 stage.showAndWait();
+                contentTree.refresh();
             }
 
         } catch (IOException ex) {

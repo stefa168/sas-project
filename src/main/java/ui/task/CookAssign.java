@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.stage.Stage;
@@ -24,6 +25,10 @@ import java.util.Set;
 
 public class CookAssign {
 
+    @FXML
+    public Button assegnaButton;
+    @FXML
+    public Button eliminaButton;
     private Stage myStage;
 
     private KitchenJob kitchenJob;
@@ -57,7 +62,21 @@ public class CookAssign {
         }
 
 
+
         cookTree.setRoot(root);
+
+        cookTree.getSelectionModel().selectedItemProperty().addListener(
+                (observableValue, oldSelection, newSelection) ->{
+                    User selectedUser = (User) newSelection.getValue();
+                    if(kitchenJob.getCook().equals(selectedUser)){
+                        assegnaButton.setDisable(true);
+                        eliminaButton.setDisable(false);
+                    }
+                    else{
+                        eliminaButton.setDisable(true);
+                        assegnaButton.setDisable(false);
+                    }
+                });
     }
 
     public void optionCookButton(ActionEvent actionEvent) throws UseCaseLogicException, TaskException {
@@ -66,7 +85,17 @@ public class CookAssign {
         if(obj instanceof User){
             User user = (User) obj;
             CatERing.getInstance().getKitchenTaskManager().assignCook(kitchenJob,user);
+            myStage.close();
         }
 
+    }
+
+    public void rimuoviCuoco(ActionEvent actionEvent) throws UseCaseLogicException, TaskException {
+        TreeItem<Object> row = cookTree.getSelectionModel().getSelectedItem();
+        Object obj = row.getValue();
+        if(obj instanceof User && ((User)obj).equals(kitchenJob.getCook())){
+            CatERing.getInstance().getKitchenTaskManager().assignCook(kitchenJob,null);
+            myStage.close();
+        }
     }
 }
