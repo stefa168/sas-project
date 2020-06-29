@@ -13,7 +13,7 @@ participant "job.turn.assignedCooks: ArrayList<TimeKeeper>" as cooks
 
 UI -> ktm: assignCook(job, user)
 activate ktm
-alt user == null || !user.isCook() || Date.now() > job.turn.endDate
+alt !user.isCook() || Date.now() > job.turn.endDate
     UI <<-- ktm: throw UseCaseLogicException
 else job.cook == user
     UI <<-- ktm: job
@@ -37,55 +37,57 @@ else
         alt job.cook != null
             ktm -> turn: freeTime(job.cook, job.estimatedDuration)
             activate turn
-            turn -> cooks: get(job.cook)
-            activate cooks
-            turn <<-- cooks: time
-            deactivate cooks
-
-            turn -> turn: time.usedTime -= job.estimatedDuration
-
-            ' se per caso liberando del tempo ci accorgiamo che il TimeKeeper è vuoto, cancelliamolo.
-            alt time.usedTime == 0
-                turn -> cooks: remove(job.cook)
+                turn -> cooks: get(job.cook)
                 activate cooks
+                turn <<-- cooks: time
                 deactivate cooks
-            ' altrimenti aggiorniamo il tempo.
-            else
-                turn -> cooks: update(job.cook, time)
-                activate cooks
-                deactivate cooks
-            end
+
+                turn -> turn: time.usedTime -= job.estimatedDuration
+
+                ' se per caso liberando del tempo ci accorgiamo che il TimeKeeper è vuoto, cancelliamolo.
+                alt time.usedTime == 0
+                    turn -> cooks: remove(job.cook)
+                    activate cooks
+                    deactivate cooks
+                ' altrimenti aggiorniamo il tempo.
+                else
+                    turn -> cooks: update(job.cook, time)
+                    activate cooks
+                    deactivate cooks
+                end
             deactivate turn
             |||
         end
 
-        ktm -> turn: takeTime(user, job.estimatedDuration)
-        activate turn
+        alt user != null
+            ktm -> turn: takeTime(user, job.estimatedDuration)
+            activate turn
 
-        participant "time: TimeKeeper" as newTime
+            participant "time: TimeKeeper" as newTime
 
-        ' potrebbe trattarsi del primo incarico assegnato all cuoco in questo turno.
-        alt !assignedCooks.contains(user)
-            turn -> newTime**: create(user, job.estimatedDuration)
-            activate newTime
-            turn <<-- newTime: time
-            deactivate newTime
+            ' potrebbe trattarsi del primo incarico assegnato all cuoco in questo turno.
+            alt !assignedCooks.contains(user)
+                turn -> newTime**: create(user, job.estimatedDuration)
+                activate newTime
+                turn <<-- newTime: time
+                deactivate newTime
 
-            turn -> cooks: add(time)
-            activate cooks
-            deactivate cooks
-        else
-            turn -> cooks: get(user)
-            activate cooks
-            turn <<-- cooks: time
-            deactivate cooks
-            turn -> turn: time.usedTime += job.estimatedDuration
+                turn -> cooks: add(time)
+                activate cooks
+                deactivate cooks
+            else
+                turn -> cooks: get(user)
+                activate cooks
+                turn <<-- cooks: time
+                deactivate cooks
+                turn -> turn: time.usedTime += job.estimatedDuration
 
-            turn -> cooks: add(time)
-            activate cooks
-            deactivate cooks
+                turn -> cooks: add(time)
+                activate cooks
+                deactivate cooks
+            end
+            deactivate turn
         end
-        deactivate turn
 
         ktm -> job: assignCook(user)
         activate job
