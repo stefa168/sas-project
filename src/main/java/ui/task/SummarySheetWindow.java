@@ -4,7 +4,9 @@ import businesslogic.CatERing;
 import businesslogic.kitchentask.KitchenJob;
 import businesslogic.kitchentask.KitchenTaskManager;
 import businesslogic.kitchentask.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
@@ -18,6 +20,13 @@ public class SummarySheetWindow extends WindowController {
     TreeView<TaskItemInfo> contentTree;
     @FXML
     private BorderPane containerPane;
+    @FXML
+    private Button aggiungiIncaricoButton;
+    @FXML
+    private Button rimuoviIncaricoButton;
+    @FXML
+    private Button cuocoButton;
+
     private KitchenTaskManager ktm;
     private boolean controlsEnabled;
 
@@ -64,5 +73,17 @@ public class SummarySheetWindow extends WindowController {
 
     public void toggleControls(boolean b) {
         this.controlsEnabled = b;
+    }
+
+    public void aggiungiIncarico(ActionEvent actionEvent) {
+
+    }
+
+    public void rimuoviIncarico(ActionEvent actionEvent) {
+
+    }
+
+    public void gestisciCuocoIncarico(ActionEvent actionEvent) {
+
     }
 }

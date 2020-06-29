@@ -14,9 +14,12 @@
                 <Button layoutX="531.0" layoutY="24.0" text="Sposta Su"/>
                 <Button layoutX="581.0" layoutY="24.0" text="Sposta Giù"/>
                 <Button layoutX="701.0" layoutY="24.0" text="Modifica Dettagli"/>
-                <Button layoutX="642.0" layoutY="24.0" text="Aggiungi incarico"/>
-                <Button layoutX="779.0" layoutY="24.0" text="Rimuovi incarico"/>
-                <Button layoutX="849.0" layoutY="24.0" text="Cuoco..."/>
+                <Button fx:id="aggiungiIncaricoButton" onAction="#aggiungiIncarico" layoutX="642.0" layoutY="24.0"
+                        text="Aggiungi incarico"/>
+                <Button fx:id="rimuoviIncaricoButton" onAction="#rimuoviIncarico" layoutX="779.0" layoutY="24.0"
+                        text="Rimuovi incarico"/>
+                <Button fx:id="cuocoButton" onAction="#gestisciCuocoIncarico" layoutX="849.0" layoutY="24.0"
+                        text="Cuoco..."/>
                 <Button layoutX="620.0" layoutY="24.0" onAction="#closeWindow" text="Fine"/>
             </children>
         </FlowPane>
