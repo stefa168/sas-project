@@ -5,16 +5,20 @@ import businesslogic.UseCaseLogicException;
 import businesslogic.kitchentask.KitchenJob;
 import businesslogic.kitchentask.KitchenTaskManager;
 import businesslogic.kitchentask.Task;
+import businesslogic.recipe.Recipe;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import ui.WindowController;
 
 import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 public class SummarySheetWindow extends WindowController {
 
@@ -29,9 +33,9 @@ public class SummarySheetWindow extends WindowController {
     @FXML
     public Button changeDetailsButton;
     @FXML
-    public Button addTaskButton;
+    public Button addKitchenJobButton;
     @FXML
-    public Button deleteTaskButton;
+    public Button deleteKitchenJobButton;
     @FXML
     public Button cookButton;
     @FXML
@@ -96,7 +100,25 @@ public class SummarySheetWindow extends WindowController {
                           .getValue();
     }
 
-    public void addrecipe(ActionEvent actionEvent) {
+    public void addRecipe(ActionEvent actionEvent) {
+        List<Recipe> choices = Recipe.loadAllRecipes();
+
+        ChoiceDialog<Recipe> dialog = new ChoiceDialog<>(choices.get(0), choices);
+        dialog.setTitle("Scegli");
+        dialog.setHeaderText("Quale ricetta deve essere aggiunta al foglio riepilogativo?");
+
+        Optional<Recipe> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            try {
+                Task newTask = ktm.addExtraDuty(result.orElseThrow());
+
+                contentTree.getRoot().getChildren().add(new TreeItem<>(newTask));
+
+                sortTree();
+            } catch (UseCaseLogicException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void deleteRecipe(ActionEvent actionEvent) {
@@ -163,10 +185,11 @@ public class SummarySheetWindow extends WindowController {
     public void changeDetailsTask(ActionEvent actionEvent) {
     }
 
-    public void addTask(ActionEvent actionEvent) {
+    public void addKitchenJob(ActionEvent actionEvent) {
+
     }
 
-    public void deleteTask(ActionEvent actionEvent) {
+    public void deleteKitchenJob(ActionEvent actionEvent) {
     }
 
     public void cookOperations(ActionEvent actionEvent) {

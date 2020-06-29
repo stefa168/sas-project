@@ -9,15 +9,19 @@
         <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="10.0" prefHeight="53.0"
                   BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="addRecipeButton" text="Aggiungi Ricetta Fuori Menù" onAction="#addrecipe"/>
-                <Button fx:id="deleteRecipeButton" layoutX="234.0" layoutY="24.0" text="Rimuovi Ricetta Fuori Menù" onAction="#deleteRecipe"/>
+                <Button fx:id="addRecipeButton" text="Aggiungi Ricetta Fuori Menù" onAction="#addRecipe"/>
+                <Button fx:id="deleteRecipeButton" layoutX="234.0" layoutY="24.0" text="Rimuovi Ricetta Fuori Menù"
+                        onAction="#deleteRecipe"/>
                 <Button fx:id="upTaskButton" layoutX="531.0" layoutY="24.0" text="Sposta Su" onAction="#goUpTask"/>
                 <Button fx:id="downTaskButton" layoutX="581.0" layoutY="24.0" text="Sposta Giù" onAction="#goDownTask"/>
-                <Button fx:id="changeDetailsButton" layoutX="701.0" layoutY="24.0" text="Modifica Dettagli" onAction="#changeDetailsTask" />
-                <Button fx:id="addTaskButton" layoutX="642.0" layoutY="24.0" text="Aggiungi incarico" onAction="#addTask"/>
-                <Button fx:id="deleteTaskButton" layoutX="779.0" layoutY="24.0" text="Rimuovi incarico" onAction="#deleteTask"/>
+                <Button fx:id="changeDetailsButton" layoutX="701.0" layoutY="24.0" text="Modifica Dettagli"
+                        onAction="#changeDetailsTask"/>
+                <Button fx:id="addKitchenJobButton" layoutX="642.0" layoutY="24.0" text="Aggiungi incarico"
+                        onAction="#addKitchenJob"/>
+                <Button fx:id="deleteKitchenJobButton" layoutX="779.0" layoutY="24.0" text="Rimuovi incarico"
+                        onAction="#deleteKitchenJob"/>
                 <Button fx:id="cookButton" layoutX="849.0" layoutY="24.0" text="Cuoco..." onAction="#cookOperations"/>
-                <Button fx:id="endButton" layoutX="620.0" layoutY="24.0" onAction="#closeWindow" text="Fine" />
+                <Button fx:id="endButton" layoutX="620.0" layoutY="24.0" onAction="#closeWindow" text="Fine"/>
             </children>
         </FlowPane>
     </bottom>

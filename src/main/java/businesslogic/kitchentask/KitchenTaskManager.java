@@ -111,6 +111,7 @@ public class KitchenTaskManager {
         }
 
         this.currentSheet = associatedService.getSheet();
+        this.serviceOfSheet.put(currentSheet, associatedService);
         return this.currentSheet;
     }
 

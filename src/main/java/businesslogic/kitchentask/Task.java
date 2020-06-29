@@ -95,13 +95,49 @@ public class Task implements TaskItemInfo, Comparable<Task> {
         return tasks;
     }
 
+    public static void deleteTask(int task_id) {
+        String rem = "DELETE FROM Task WHERE id = " + task_id;
+        PersistenceManager.executeUpdate(rem);
+    }
+
+    public static void changeOrderTask(int task_id, int new_order) {
+        String upd = "UPDATE Task SET order_number = '" + new_order +
+                     "' WHERE id = " + task_id;
+        PersistenceManager.executeUpdate(upd);
+    }
+
+    public static void changeToDo(int task_id, boolean new_toDO) {
+        String upd = "UPDATE Task SET toDo = '" + new_toDO +
+                     "' WHERE id = " + task_id;
+        PersistenceManager.executeUpdate(upd);
+    }
+
+    public static void changeEstimatedDuration(int task_id, Duration estimatedDuration) {
+        int new_estimatedDuration = (int) (estimatedDuration.getSeconds()) / 60;
+        String upd = "UPDATE Task SET estimatedDuration = '" + new_estimatedDuration +
+                     "' WHERE id = " + task_id;
+        PersistenceManager.executeUpdate(upd);
+    }
+
+    public static void createTaskNoOrder(Task task, int service_id) {
+        //language=MySQL
+        String obtainPosition = "SELECT MAX(order_number) AS order_number FROM Task WHERE service_id = " + service_id;
+        PersistenceManager.executeQuery(obtainPosition, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                task.order_numer = rs.getInt("order_number") + 1;
+            }
+        });
+        createTask(task, service_id);
+    }
+
     public void editDetails(Integer newAmount, Duration newDuration, Boolean newToDo) {
         if (newAmount != null) {
             this.amount = newAmount;
         }
         if (newDuration != null) {
             this.estimatedDuration = newDuration;
-            Task.changeEstimatedDuration(this.task_id,newDuration);
+            Task.changeEstimatedDuration(this.task_id, newDuration);
         }
         if (newToDo != null) {
             this.toDo = newToDo;
@@ -112,25 +148,25 @@ public class Task implements TaskItemInfo, Comparable<Task> {
     public KitchenJob addKitchenJob(KitchenTurn turn, int amount, Duration estimatedDuration) {
         KitchenJob job = new KitchenJob(turn, amount, estimatedDuration);
         jobs.add(job);
-        KitchenJob.createKitchenJob(job,task_id);
+        KitchenJob.createKitchenJob(job, task_id);
         return job;
     }
 
     public void deleteKitchenJob(KitchenJob job) {
         job.getTurn().freeTime(job.getCook(), job.getDuration());
         jobs.remove(job);
-        KitchenJob.deleteKitchenJob(task_id, job.getCook().getId(),job.getTurn().getTurn_id());
+        KitchenJob.deleteKitchenJob(task_id, job.getCook().getId(), job.getTurn().getTurn_id());
     }
 
     public int getAmount() {
         return amount;
     }
 
-    public int getTask_id() { return task_id; }
-
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
+    public int getTask_id() { return task_id; }
 
     public Duration getEstimatedDuration() {
         return estimatedDuration;
@@ -160,8 +196,6 @@ public class Task implements TaskItemInfo, Comparable<Task> {
         return duty;
     }
 
-
-
     public void deleteAllKitchenJobs() {
         //TODO
     }
@@ -178,43 +212,6 @@ public class Task implements TaskItemInfo, Comparable<Task> {
 
         return taskString.concat(optionalDuty ? " (Fuori Menù)" : "");
     }
-
-    public static void deleteTask(int task_id){
-        String rem = "DELETE FROM Task WHERE id = " + task_id;
-        PersistenceManager.executeUpdate(rem);
-    }
-
-    public static void changeOrderTask(int task_id, int new_order){
-        String upd = "UPDATE Task SET order_number = '" + new_order +
-                "' WHERE id = " + task_id;
-        PersistenceManager.executeUpdate(upd);
-    }
-
-    public static void changeToDo(int task_id, boolean new_toDO){
-        String upd = "UPDATE Task SET toDo = '" + new_toDO +
-                "' WHERE id = " + task_id;
-        PersistenceManager.executeUpdate(upd);
-    }
-
-
-    public static void changeEstimatedDuration(int task_id, Duration estimatedDuration){
-        int new_estimatedDuration = (int)(estimatedDuration.getSeconds())/60;
-        String upd = "UPDATE Task SET estimatedDuration = '" + new_estimatedDuration +
-                "' WHERE id = " + task_id;
-        PersistenceManager.executeUpdate(upd);
-    }
-
-    public static void createTaskNoOrder(Task task, int service_id){
-        String obtainPosition = "SELECT MAX(VAL(order_number)) AS order_number FROM Task WHERE service_id = " + service_id;
-        PersistenceManager.executeQuery(obtainPosition, new ResultHandler() {
-            @Override
-            public void handle(ResultSet rs) throws SQLException {
-                task.order_numer = rs.getInt("order_number") + 1;
-            }
-        });
-        createTask(task, service_id);
-    }
-
 
     @Override
     public int compareTo(Task o) {
