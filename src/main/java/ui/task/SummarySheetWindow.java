@@ -1,22 +1,23 @@
 package ui.task;
 
 import businesslogic.CatERing;
+import businesslogic.TaskException;
 import businesslogic.UseCaseLogicException;
 import businesslogic.kitchentask.KitchenJob;
 import businesslogic.kitchentask.KitchenTaskManager;
 import businesslogic.kitchentask.Task;
 import businesslogic.recipe.Recipe;
-import businesslogic.turn.KitchenTurn;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ui.WindowController;
@@ -24,10 +25,12 @@ import ui.general.EventsInfoDialog;
 import ui.general.TurnInfoDialog;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 public class SummarySheetWindow extends WindowController {
 
@@ -216,7 +219,152 @@ public class SummarySheetWindow extends WindowController {
         }
     }
 
-    public void changeDetailsTask(ActionEvent actionEvent) {
+    public void changeDetailsSelectedElement(ActionEvent actionEvent) {
+        TaskItemInfo selectedItem = getSelectedItem();
+
+        class EditValues {
+            public final int amount;
+            public final int time;
+            public final boolean toDo;
+
+            public EditValues(int amount, int time, boolean toDo) {
+                this.amount = amount;
+                this.time = time;
+                this.toDo = toDo;
+            }
+        }
+
+        if (selectedItem instanceof Task) {
+            Task task = ((Task) selectedItem);
+
+            Dialog<EditValues> detailsDialog = new Dialog<>();
+            detailsDialog.setTitle("Modifica dettagli Compito");
+            detailsDialog.setHeaderText("Imposta i nuovi valori...");
+
+            ButtonType applyButton = new ButtonType("Applica", ButtonData.APPLY);
+            detailsDialog.getDialogPane().getButtonTypes().addAll(applyButton, ButtonType.CANCEL);
+
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            TextField amount = new TextField(Integer.toString(task.getAmount()));
+            amount.setPromptText("Quantità");
+            TextField estimatedTime = new TextField(Long.toString(task.getEstimatedDuration().toMinutes()));
+            estimatedTime.setPromptText("Tempo Stimato (minuti)");
+            CheckBox toDoCheckbox = new CheckBox("Compito da farsi?");
+            toDoCheckbox.setSelected(task.isToDo());
+
+            grid.add(new Label("Quantità:"), 0, 0);
+            grid.add(amount, 1, 0);
+            grid.add(new Label("Tempo Stimato (minuti)"), 0, 1);
+            grid.add(estimatedTime, 1, 1);
+            grid.add(toDoCheckbox, 1, 2);
+
+            Node applyNode = detailsDialog.getDialogPane().lookupButton(applyButton);
+
+            amount.textProperty().addListener((observableValue, oldValue, newValue) -> {
+                applyNode.setDisable(!isInteger(newValue) || !isInteger(estimatedTime.getText()));
+            });
+
+            estimatedTime.textProperty().addListener((observableValue, oldValue, newValue) -> {
+                applyNode.setDisable(!isInteger(newValue) || !isInteger(amount.getText()));
+            });
+
+            detailsDialog.getDialogPane().setContent(grid);
+
+            detailsDialog.setResultConverter(buttonType -> {
+                if (buttonType == applyButton) {
+                    return new EditValues(Integer.parseInt(amount.getText()),
+                                          Integer.parseInt(estimatedTime.getText()),
+                                          toDoCheckbox.isSelected());
+                } else {
+                    return null;
+                }
+            });
+
+            Optional<EditValues> result = detailsDialog.showAndWait();
+
+            if (result.isPresent()) {
+                EditValues values = result.orElseThrow();
+                try {
+                    ktm.editTask(task,
+                                 values.amount != task.getAmount() ? values.amount : null,
+                                 values.time != task.getEstimatedDuration().toMinutes() ?
+                                         Duration.ofMinutes(values.time) :
+                                         null,
+                                 values.toDo != task.isToDo() ? values.toDo : null);
+
+                    contentTree.refresh();
+                } catch (UseCaseLogicException | TaskException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } else {
+            KitchenJob job = ((KitchenJob) selectedItem);
+
+            Dialog<EditValues> detailsDialog = new Dialog<>();
+            detailsDialog.setTitle("Modifica dettagli Incarico");
+            detailsDialog.setHeaderText("Imposta i nuovi valori...");
+
+            ButtonType applyButton = new ButtonType("Applica", ButtonData.APPLY);
+            detailsDialog.getDialogPane().getButtonTypes().addAll(applyButton, ButtonType.CANCEL);
+
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            TextField amount = new TextField(Integer.toString(job.getAmount()));
+            amount.setPromptText("Quantità");
+            TextField estimatedTime = new TextField(Long.toString(job.getDuration().toMinutes()));
+            estimatedTime.setPromptText("Tempo Stimato (minuti)");
+
+            grid.add(new Label("Quantità:"), 0, 0);
+            grid.add(amount, 1, 0);
+            grid.add(new Label("Tempo Stimato (minuti)"), 0, 1);
+            grid.add(estimatedTime, 1, 1);
+
+            Node applyNode = detailsDialog.getDialogPane().lookupButton(applyButton);
+
+            amount.textProperty().addListener((observableValue, oldValue, newValue) -> {
+                applyNode.setDisable(!isInteger(newValue) || !isInteger(estimatedTime.getText()));
+            });
+
+            estimatedTime.textProperty().addListener((observableValue, oldValue, newValue) -> {
+                applyNode.setDisable(!isInteger(newValue) || !isInteger(amount.getText()));
+            });
+
+            detailsDialog.getDialogPane().setContent(grid);
+
+            detailsDialog.setResultConverter(buttonType -> {
+                if (buttonType == applyButton) {
+                    return new EditValues(Integer.parseInt(amount.getText()),
+                                          Integer.parseInt(estimatedTime.getText()),
+                                          false);
+                } else {
+                    return null;
+                }
+            });
+
+            Optional<EditValues> result = detailsDialog.showAndWait();
+
+            if (result.isPresent()) {
+                EditValues values = result.orElseThrow();
+                try {
+                    ktm.editKitchenJob(job,
+                                       values.amount != job.getAmount() ? values.amount : null,
+                                       values.time != job.getDuration().toMinutes() ?
+                                               Duration.ofMinutes(values.time) : null);
+
+                    contentTree.refresh();
+                } catch (TaskException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public void addKitchenJob(ActionEvent actionEvent) {
@@ -298,5 +446,14 @@ public class SummarySheetWindow extends WindowController {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    private boolean isInteger(String strNum) {
+        Pattern pattern = Pattern.compile("-?\\d+?");
+
+        if (strNum == null) {
+            return false;
+        }
+        return pattern.matcher(strNum).matches();
     }
 }

@@ -16,11 +16,22 @@ public class KitchenTaskPersistence implements KitchenTaskEventReceiver {
 
     @Override
     public void updateCookAssigned(User user, KitchenJob kitchenJob) {
-        KitchenJob.changeCook(kitchenJob.getKitchenJob_id(),user.getId());
+        KitchenJob.changeCook(kitchenJob.getKitchenJob_id(), user.getId());
     }
 
     @Override
     public void updateKitchenTurnComplete(KitchenTurn kitchenTurn) {
-        KitchenTurn.changeComplete(kitchenTurn.getTurn_id(),1);
+        KitchenTurn.changeComplete(kitchenTurn.getTurn_id(), 1);
+    }
+
+    @Override
+    public void updateEditTask(Task task) {
+        Task.editDetails(task);
+    }
+
+    @Override
+    public void updateEditKitchenJob(KitchenJob kitchenJob) {
+        // KitchenJob.changeAmount();
+        // todo
     }
 }

@@ -5,11 +5,8 @@ import businesslogic.recipe.Preparation;
 import businesslogic.recipe.Recipe;
 import businesslogic.turn.KitchenTurn;
 import persistence.PersistenceManager;
-import persistence.ResultHandler;
 import ui.task.TaskItemInfo;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.Duration;
 import java.util.ArrayList;
 
@@ -45,10 +42,12 @@ public class Task implements TaskItemInfo, Comparable<Task> {
         createTask(this, service_id);
     }
 
-    public Task(int task_id, KitchenDuty kitchenDuty, Duration estimatedDuration, boolean toDo, boolean optionalDuty,
+    public Task(int task_id, KitchenDuty kitchenDuty, int amount, Duration estimatedDuration, boolean toDo,
+                boolean optionalDuty,
                 int order_number) {
         this.task_id = task_id;
         this.duty = kitchenDuty;
+        this.amount = amount;
         this.estimatedDuration = estimatedDuration;
         this.toDo = toDo;
         this.optionalDuty = optionalDuty;
@@ -83,12 +82,13 @@ public class Task implements TaskItemInfo, Comparable<Task> {
             boolean optionalDuty = rs.getBoolean("optionalDuty");
             boolean isRecipe = rs.getBoolean("isRecipe");
             int order_number = rs.getInt("order_number");
+            int amount = rs.getInt("amount");
 
             KitchenDuty duty = isRecipe ?
                     Recipe.loadRecipeById(kitchenDuty_id) :
                     Preparation.getPreparationById(kitchenDuty_id);
 
-            Task task = new Task(id, duty, estimatedDuration, toDo, optionalDuty, order_number);
+            Task task = new Task(id, duty, amount, estimatedDuration, toDo, optionalDuty, order_number);
             tasks.add(task);
         });
 
@@ -106,43 +106,34 @@ public class Task implements TaskItemInfo, Comparable<Task> {
         PersistenceManager.executeUpdate(upd);
     }
 
-    public static void changeToDo(int task_id, boolean new_toDO) {
-        String upd = "UPDATE Task SET toDo = '" + new_toDO +
-                     "' WHERE id = " + task_id;
+    public static void changeToDo(Task task) {
+        String upd = "UPDATE Task SET toDo = '" + (task.toDo ? 1 : 0) + "' WHERE id = " + task.task_id;
         PersistenceManager.executeUpdate(upd);
     }
 
-    public static void changeEstimatedDuration(int task_id, Duration estimatedDuration) {
-        int new_estimatedDuration = (int) (estimatedDuration.getSeconds()) / 60;
-        String upd = "UPDATE Task SET estimatedDuration = '" + new_estimatedDuration +
-                     "' WHERE id = " + task_id;
+    public static void changeEstimatedDuration(Task task) {
+        long duration = task.estimatedDuration.toMinutes();
+        String upd = "UPDATE Task SET estimatedDuration = '" + duration + "' WHERE id = " + task.task_id;
+        PersistenceManager.executeUpdate(upd);
+    }
+
+    public static void changeAmount(Task task) {
+        //language=MySQL
+        String upd = "UPDATE task SET amount = " + task.amount + " WHERE id = " + task.task_id;
         PersistenceManager.executeUpdate(upd);
     }
 
     public static void createTaskNoOrder(Task task, int service_id) {
         //language=MySQL
         String obtainPosition = "SELECT MAX(order_number) AS order_number FROM Task WHERE service_id = " + service_id;
-        PersistenceManager.executeQuery(obtainPosition, new ResultHandler() {
-            @Override
-            public void handle(ResultSet rs) throws SQLException {
-                task.order_numer = rs.getInt("order_number") + 1;
-            }
-        });
+        PersistenceManager.executeQuery(obtainPosition, rs -> task.order_numer = rs.getInt("order_number") + 1);
         createTask(task, service_id);
     }
 
-    public void editDetails(Integer newAmount, Duration newDuration, Boolean newToDo) {
-        if (newAmount != null) {
-            this.amount = newAmount;
-        }
-        if (newDuration != null) {
-            this.estimatedDuration = newDuration;
-            Task.changeEstimatedDuration(this.task_id, newDuration);
-        }
-        if (newToDo != null) {
-            this.toDo = newToDo;
-            Task.changeToDo(this.task_id, newToDo);
-        }
+    public static void editDetails(Task task) {
+        Task.changeAmount(task);
+        Task.changeEstimatedDuration(task);
+        Task.changeToDo(task);
     }
 
     public KitchenJob addKitchenJob(KitchenTurn turn, int amount, Duration estimatedDuration) {

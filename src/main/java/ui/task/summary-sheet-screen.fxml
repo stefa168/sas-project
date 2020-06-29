@@ -15,7 +15,7 @@
                 <Button fx:id="upTaskButton" layoutX="531.0" layoutY="24.0" text="Sposta Su" onAction="#goUpTask"/>
                 <Button fx:id="downTaskButton" layoutX="581.0" layoutY="24.0" text="Sposta Giù" onAction="#goDownTask"/>
                 <Button fx:id="changeDetailsButton" layoutX="701.0" layoutY="24.0" text="Modifica Dettagli"
-                        onAction="#changeDetailsTask"/>
+                        onAction="#changeDetailsSelectedElement"/>
                 <Button fx:id="addKitchenJobButton" layoutX="642.0" layoutY="24.0" text="Aggiungi incarico"
                         onAction="#addKitchenJob"/>
                 <Button fx:id="deleteKitchenJobButton" layoutX="779.0" layoutY="24.0" text="Rimuovi incarico"
