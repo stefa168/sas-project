@@ -70,14 +70,13 @@ public class Event implements EventItemInfo {
                 }
 
                 Event event = new Event(event_id, n, dateStart, dateEnd, participants, User.loadUserById(org), state,
-                                        User
-                        .loadUserById(chef));
+                                        User.loadUserById(chef));
                 all.add(event);
             }
         });
 
         for (Event event : all) {
-            event.services = Service.loadServiceForEvent(event.event_id);
+            event.services = Service.loadServiceForEvent(event);
         }
         return all;
     }
@@ -128,6 +127,10 @@ public class Event implements EventItemInfo {
 
     public ObservableList<Service> getServices() {
         return services;
+    }
+
+    public int getId() {
+        return event_id;
     }
 
     private static enum State {PROGRAMMATO, ATTIVO, TERMINATO, ANNULLATO}

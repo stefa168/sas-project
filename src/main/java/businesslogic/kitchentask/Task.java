@@ -6,13 +6,14 @@ import businesslogic.recipe.Recipe;
 import businesslogic.turn.KitchenTurn;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
+import ui.task.TaskItemInfo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.util.ArrayList;
 
-public class Task {
+public class Task implements TaskItemInfo, Comparable<Task> {
     private int amount;
     private Duration estimatedDuration;
     private boolean toDo;
@@ -32,6 +33,7 @@ public class Task {
         amount = 0;
         estimatedDuration = Duration.ZERO;
     }
+
     public Task(boolean optionalDuty, KitchenDuty duty, int service_id, int order_numer) {
         this.optionalDuty = optionalDuty;
         this.duty = duty;
@@ -43,7 +45,8 @@ public class Task {
         createTask(this, service_id);
     }
 
-    public Task(int task_id, KitchenDuty kitchenDuty,Duration estimatedDuration,boolean toDo,boolean optionalDuty,int order_number) {
+    public Task(int task_id, KitchenDuty kitchenDuty, Duration estimatedDuration, boolean toDo, boolean optionalDuty,
+                int order_number) {
         this.task_id = task_id;
         this.duty = kitchenDuty;
         this.estimatedDuration = estimatedDuration;
@@ -53,6 +56,44 @@ public class Task {
         this.jobs = new ArrayList<>();
     }
 
+    //Metodi per il db
+    public static void createTask(Task task, int service_id) {
+        String itemInsert = "INSERT INTO catering.Task " +
+                            "(id, kitchenDuty_id, service_id, estimatedDuration, toDo, optionalDuty, order_number, " +
+                            "isRecipe) " +
+                            "VALUES ("
+                            + task.task_id + "," + task.getDuty()
+                                                       .getKitchenDutyId() + "," + service_id + "," + task.estimatedDuration
+                                    .toMinutes() + "," + task.toDo + ","
+                            + task.optionalDuty + "," + task.order_numer + "," + (task.duty instanceof Recipe) + ")";
+
+        PersistenceManager.executeUpdate(itemInsert);
+    }
+
+    public static ArrayList<Task> getAllTasks(int service_id) {
+        //language=MySQL
+        String query = "SELECT * FROM task WHERE service_id = " + service_id;
+        ArrayList<Task> tasks = new ArrayList<>();
+
+        PersistenceManager.executeQuery(query, rs -> {
+            int id = rs.getInt("id");
+            int kitchenDuty_id = rs.getInt("kitchenDuty_id");
+            Duration estimatedDuration = Duration.ofMinutes(rs.getInt("estimatedDuration"));
+            boolean toDo = rs.getBoolean("toDo");
+            boolean optionalDuty = rs.getBoolean("optionalDuty");
+            boolean isRecipe = rs.getBoolean("isRecipe");
+            int order_number = rs.getInt("order_number");
+
+            KitchenDuty duty = isRecipe ?
+                    Recipe.loadRecipeById(kitchenDuty_id) :
+                    Preparation.getPreparationById(kitchenDuty_id);
+
+            Task task = new Task(id, duty, estimatedDuration, toDo, optionalDuty, order_number);
+            tasks.add(task);
+        });
+
+        return tasks;
+    }
 
     public void editDetails(Integer newAmount, Duration newDuration, Boolean newToDo) {
         if (newAmount != null) {
@@ -125,14 +166,17 @@ public class Task {
         //TODO
     }
 
+    @Override
+    public String toString() {
+        String taskString = this.toDo ?
+                String.format("Compito per %s, da %d porzioni con una durata di %d minuti.",
+                              duty.getName(),
+                              amount,
+                              estimatedDuration.toMinutes()) :
+                String.format("Compito per %s, indicato come non necessario da preparare.",
+                              duty.getName());
 
-    //Metodi per il db
-    public static void createTask(Task task, int service_id){
-        String itemInsert = "INSERT INTO catering.Task (id, kitchenDuty_id, service_id, estimatedDuration, toDo, optionalDuty, order_number) VALUES ("
-                + task.task_id + "," + task.getDuty().getKitchenDutyId() + "," + service_id + "," + task.estimatedDuration + "," + task.toDo + ","
-                + task.optionalDuty + "," + task.order_numer +")";
-
-        PersistenceManager.executeUpdate(itemInsert);
+        return taskString.concat(optionalDuty ? " (Fuori Menù)" : "");
     }
 
     public static void deleteTask(int task_id){
@@ -171,40 +215,9 @@ public class Task {
         createTask(task,service_id);
     }
 
-    public static ArrayList<Task> getAllTasks(int service_id){
-        String query = "SELECT * FROM Menus WHERE serivice_id = " + service_id;
-        ArrayList <Task> tasks = new ArrayList<>();
 
-        PersistenceManager.executeQuery(query, new ResultHandler() {
-            @Override
-            public void handle(ResultSet rs) throws SQLException {
-                int id = rs.getInt("id");
-                int kitchenDuty_id = rs.getInt("kitchenDuty_id");
-                int duration  = rs.getInt("estimatedDuration");
-                Duration estimatedDuration = Duration.ofMinutes(duration);
-                boolean toDo = rs.getBoolean("toDo");
-                boolean optionalDuty = rs.getBoolean("optionalDuty");
-                boolean isRecipe = rs.getBoolean("isRecipe");
-                int order_number = rs.getInt("order_number");
-                KitchenDuty kitchenDuty;
-
-                if(isRecipe){
-                    kitchenDuty = Recipe.loadRecipeById(id);
-                }
-                else {
-                    kitchenDuty = Preparation.getPreparationById(id);
-                }
-
-                Task task = new Task(id,kitchenDuty,estimatedDuration,toDo,optionalDuty,order_number);
-                tasks.add(task);
-
-
-            }
-        });
-        return tasks;
+    @Override
+    public int compareTo(Task o) {
+        return Integer.compare(this.order_numer, o.order_numer);
     }
-
-
-
-
 }

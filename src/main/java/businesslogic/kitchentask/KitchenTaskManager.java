@@ -33,6 +33,10 @@ public class KitchenTaskManager {
 
     public void setCurrentSheet(SummarySheet sheet) { this.currentSheet = sheet;}
 
+    public SummarySheet getCurrentSheet() {
+        return currentSheet;
+    }
+
     private void notifySheetCreate(SummarySheet sheet) {
         for (KitchenTaskEventReceiver eventReceiver : eventReceivers) {
             eventReceiver.updateSheetCreate(sheet);
@@ -110,7 +114,8 @@ public class KitchenTaskManager {
             throw new EventException();
         }
 
-        return associatedService.getSheet();
+        this.currentSheet = associatedService.getSheet();
+        return this.currentSheet;
     }
 
     public SummarySheet openSummarySheetForViewing(Service service) throws UseCaseLogicException {
@@ -118,7 +123,8 @@ public class KitchenTaskManager {
             throw new UseCaseLogicException();
         }
 
-        return service.getSheet();
+        this.currentSheet = service.getSheet();
+        return currentSheet;
     }
 
     public Task addExtraDuty(KitchenDuty kitchenDuty) throws UseCaseLogicException {

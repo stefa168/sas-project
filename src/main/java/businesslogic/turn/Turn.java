@@ -17,7 +17,8 @@ public abstract class Turn {
         this.start = start;
         this.end = end;
     }
-    public Turn(){}
+
+    public Turn() {}
 
     public Instant getStart() {
         return start;
@@ -28,6 +29,11 @@ public abstract class Turn {
     }
 
     public abstract boolean hasConcluded();
+
+    @Override
+    public String toString() {
+        return String.format("Inizio: %s; Fine: %s", start.toString(), end.toString());
+    }
 
     public int getTurn_id() { return turn_id; }
 

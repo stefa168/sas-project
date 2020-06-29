@@ -59,4 +59,7 @@ public abstract class KitchenDuty {
 
     public abstract int getKitchenDutyId();
 
+    public String getName() {
+        return name;
+    }
 }
