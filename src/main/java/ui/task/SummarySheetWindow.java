@@ -16,6 +16,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import ui.WindowController;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -110,9 +111,11 @@ public class SummarySheetWindow extends WindowController {
         Optional<Recipe> result = dialog.showAndWait();
         if (result.isPresent()) {
             try {
-                Task newTask = ktm.addExtraDuty(result.orElseThrow());
+                ArrayList<Task> newTasks = ktm.addExtraDuty(result.orElseThrow());
 
-                contentTree.getRoot().getChildren().add(new TreeItem<>(newTask));
+                for (Task task : newTasks) {
+                    contentTree.getRoot().getChildren().add(new TreeItem<>(task));
+                }
 
                 sortTree();
             } catch (UseCaseLogicException e) {

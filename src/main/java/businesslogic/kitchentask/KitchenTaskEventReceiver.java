@@ -14,7 +14,7 @@ public interface KitchenTaskEventReceiver {
 
     }
 
-    public default void updateAddExtraDuty(KitchenDuty kitchenDuty, Task task) {
+    public default void updateAddExtraDuty(Task task) {
 
     }
 

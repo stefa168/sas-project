@@ -95,12 +95,25 @@ public class SummarySheet {
         return extraDuties;
     }
 
-    public Task addExtraDuty(KitchenDuty kitchenDuty, int service_id) {
-        extraDuties.add(kitchenDuty);
-        Task task = new Task(true, kitchenDuty);
-        Task.createTaskNoOrder(task,service_id);
-        tasks.add(task);
-        return task;
+    public ArrayList<Task> addExtraDuty(KitchenDuty kitchenDuty, int service_id) {
+        ArrayList<KitchenDuty> newDuties = new ArrayList<>();
+        newDuties.add(kitchenDuty);
+        newDuties.addAll(kitchenDuty.getSubDuties());
+
+        extraDuties.addAll(newDuties);
+
+        ArrayList<Task> newTasks = new ArrayList<>();
+
+        newDuties.stream()
+                 .map(duty -> new Task(true, duty))
+                 .forEach(task -> {
+                     Task.createTaskNoOrder(task, service_id);
+                     newTasks.add(task);
+                 });
+
+        tasks.addAll(newTasks);
+
+        return newTasks;
     }
 
     public Task deleteExtraDuty(KitchenDuty kitchenDuty) {
@@ -116,7 +129,7 @@ public class SummarySheet {
             }
         }
         extraDuties.remove(kitchenDuty);
-        if(deletedTask != null){
+        if (deletedTask != null) {
             Task.deleteTask(deletedTask.getTask_id());
         }
         return deletedTask;

@@ -18,7 +18,7 @@ else
     ktm -> ss: addExtraDuty(parentKitchenDuty)
     activate ss
     
-    participant "newDuties: ArrayList<parentKitchenDuty>" as kdList
+    participant "newDuties: ArrayList<KitchenDuty>" as kdList
     ss -->> kdList**: create()
     activate kdList
         return newDuties
@@ -39,7 +39,7 @@ else
     activate kdList
     deactivate kdList
 
-    participant "currentSheet.extraDuties: ArrayList<parentKitchenDuty>" as extraDuties
+    participant "currentSheet.extraDuties: ArrayList<KitchenDuty>" as extraDuties
     ss -> extraDuties: addAll(newDuties)
     activate extraDuties
     deactivate extraDuties

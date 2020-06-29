@@ -43,9 +43,9 @@ public class KitchenTaskManager {
         eventReceivers.forEach(er -> er.updateTaskOrderChanged(involvedTasks));
     }
 
-    private void notifyAddExtraDuty(KitchenDuty kitchenDuty, Task task) {
+    private void notifyAddExtraDuty(Task task) {
         for (KitchenTaskEventReceiver eventReceiver : eventReceivers) {
-            eventReceiver.updateAddExtraDuty(kitchenDuty, task);
+            eventReceiver.updateAddExtraDuty(task);
         }
     }
 
@@ -124,13 +124,18 @@ public class KitchenTaskManager {
         return currentSheet;
     }
 
-    public Task addExtraDuty(KitchenDuty kitchenDuty) throws UseCaseLogicException {
+    public ArrayList<Task> addExtraDuty(KitchenDuty kitchenDuty) throws UseCaseLogicException {
         if (currentSheet == null) {
             throw new UseCaseLogicException();
         }
-        Task task = currentSheet.addExtraDuty(kitchenDuty, serviceOfSheet.get(currentSheet).getService_id());
-        notifyAddExtraDuty(kitchenDuty, task);
-        return task;
+
+        ArrayList<Task> newTasks = currentSheet.addExtraDuty(kitchenDuty,
+                                                             serviceOfSheet.get(currentSheet)
+                                                                           .getService_id());
+
+        newTasks.forEach(this::notifyAddExtraDuty);
+
+        return newTasks;
     }
 
     public SummarySheet deleteExtraDuty(KitchenDuty kitchenDuty) throws UseCaseLogicException {
