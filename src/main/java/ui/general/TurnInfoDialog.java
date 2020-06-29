@@ -8,6 +8,7 @@ import businesslogic.turn.TurnItemInfo;
 import businesslogic.user.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -68,5 +69,14 @@ public class TurnInfoDialog {
 
     public void setOwnStage(Stage stage) {
         myStage = stage;
+    }
+
+    public void completeTurn(ActionEvent actionEvent) {
+        TreeItem<Object> row = turnTree.getSelectionModel().getSelectedItem();
+        Object turn = row.getValue();
+        if(turn instanceof KitchenTurn){
+            KitchenTurn.changeComplete(((KitchenTurn) turn).getTurn_id(),1);
+            ((KitchenTurn) turn).setComplete(true);
+        }
     }
 }

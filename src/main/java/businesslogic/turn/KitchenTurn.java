@@ -126,9 +126,9 @@ public class KitchenTurn extends Turn {
         return turn;
     }
 
-    public static void changeComplete(int turn_id, boolean new_complete) {
+    public static void changeComplete(int turn_id, int new_complete) {
         String upd = "UPDATE Turn SET complete = '" + new_complete +
-                     "' WHERE id = " + turn_id;
+                     "' WHERE turn_id = " + turn_id;
         PersistenceManager.executeUpdate(upd);
     }
 
