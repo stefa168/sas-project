@@ -34,18 +34,18 @@ loop #e0e0e0
     end
 
     opt #b6efb6
-        Chef -> Sistema: **5**. modificaCompito(compito, quantità?, tempoStimato?, daFarsi?)
+        Chef -> Sistema: **5**. modificaCompito(compito, quantita'?, tempoStimato?, daFarsi?)
         alt #f3a7c9
             return ok
         else
-            Chef <- Sistema: **5a.1**. compito ha degli incarichi associati e non è da farsi
+            Chef <- Sistema: **5a.1**. compito ha degli incarichi associati e non e' da farsi
             destroy Sistema
             ||10||
         end
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **6**. creaIncaricoDiCucina(compito, turno, quantità, tempoStimato)
+        Chef -> Sistema: **6**. creaIncaricoDiCucina(compito, turno, quantita', tempoStimato)
         return ok
     end
 

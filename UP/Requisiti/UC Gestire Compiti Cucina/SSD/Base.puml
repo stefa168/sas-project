@@ -34,12 +34,12 @@ loop #a3daff
     end
 
     opt #b6efb6
-        Chef -> Sistema: **5**. modificaCompito(compito, quantità?, tempoStimato?, daFarsi?)
+        Chef -> Sistema: **5**. modificaCompito(compito, quantita'?, tempoStimato?, daFarsi?)
         return ok
     end
 
     opt #b6efb6
-        Chef -> Sistema: **6**. creaIncaricoDiCucina(compito, turno, quantità, tempoStimato)
+        Chef -> Sistema: **6**. creaIncaricoDiCucina(compito, turno, quantita', tempoStimato)
         return ok
     end
 

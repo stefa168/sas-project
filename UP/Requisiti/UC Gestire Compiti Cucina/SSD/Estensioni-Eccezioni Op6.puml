@@ -34,26 +34,26 @@ loop #e0e0e0
     end
 
     opt #e0e0e0
-        Chef -> Sistema: **5**. modificaCompito(compito, quantità?, tempoStimato?)
+        Chef -> Sistema: **5**. modificaCompito(compito, quantita'?, tempoStimato?)
         return ok
     end
 
     opt #b6efb6
         alt #f3d0ff
-            Chef -> Sistema: **6**. creaIncaricoDiCucina(compito, turno, quantità, tempoStimato)
+            Chef -> Sistema: **6**. creaIncaricoDiCucina(compito, turno, quantita', tempoStimato)
             alt #f3a7c9
                 return ok
             else
-                Chef <- Sistema: **6a.1**. Il turno si è già concluso
+                Chef <- Sistema: **6a.1**. Il turno si e' gia' concluso
                 destroy Sistema
             else
-                Chef <- Sistema: **6b.1**. Il turno è segnato come al completo
+                Chef <- Sistema: **6b.1**. Il turno e' segnato come al completo
                 destroy Sistema
             else
-                Chef <- Sistema: **6c.1**. Il compito associato non è stato compilato
+                Chef <- Sistema: **6c.1**. Il compito associato non e' stato compilato
                 destroy Sistema
             else
-                Chef <- Sistema: **6d.1**. Il compito è impostato come da non farsi
+                Chef <- Sistema: **6d.1**. Il compito e' impostato come da non farsi
                 destroy Sistema
             end
         else
@@ -61,18 +61,18 @@ loop #e0e0e0
             alt #f3a7c9
                 return ok
             else
-                Chef <- Sistema: **6a.1a**. Il turno si è già concluso
+                Chef <- Sistema: **6a.1a**. Il turno si e' gia' concluso
                 destroy Sistema
             end
         else
-            Chef -> Sistema: **6b.1**. modificaDettagliIncaricoDiCucina(incarico, quantità?, tempoStimato?)
+            Chef -> Sistema: **6b.1**. modificaDettagliIncaricoDiCucina(incarico, quantita'?, tempoStimato?)
             alt #f3a7c9
                 return ok
             else
-                Chef <- Sistema: **6b.1a.1**. Se un cuoco è assegnato, non ha più tempo per eseguire l'incarico modificato
+                Chef <- Sistema: **6b.1a.1**. Se un cuoco e' assegnato, non ha più tempo per eseguire l'incarico modificato
                 destroy Sistema
             else
-                Chef <- Sistema: **6b.1b.1**. Il turno associato all'incarico si è già concluso
+                Chef <- Sistema: **6b.1b.1**. Il turno associato all'incarico si e' gia' concluso
                 destroy Sistema
             end
         else
@@ -83,10 +83,10 @@ loop #e0e0e0
                 Chef <- Sistema: **6c.1a.1**. Il cuoco non avrebbe tempo per eseguire il nuovo incarico
                 destroy Sistema
             else
-                Chef <- Sistema: **6c.1b.1**. Il turno associato all'incarico si è già concluso
+                Chef <- Sistema: **6c.1b.1**. Il turno associato all'incarico si e' gia' concluso
                 destroy Sistema
             else
-                Chef <- Sistema: **6c.1c.1**. Il cuoco non ha dato la disponibilità per il turno
+                Chef <- Sistema: **6c.1c.1**. Il cuoco non ha dato la disponibilita' per il turno
                 destroy Sistema
             end
         else
@@ -94,7 +94,7 @@ loop #e0e0e0
             alt #f3a7c9
                 return ok
             else
-                Chef <- Sistema: **6d.1a.1**. Il turno selezionato si è già concluso
+                Chef <- Sistema: **6d.1a.1**. Il turno selezionato si e' gia' concluso
                 destroy Sistema
             end
         end
