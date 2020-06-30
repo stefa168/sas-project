@@ -16,6 +16,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -76,6 +77,11 @@ public class SummarySheetWindow extends WindowController {
                     boolean controls = !controlsEnabled;
                     addRecipeButton.setDisable(controls);
 
+                    if (newSelection == null) {
+                        contentTree.getSelectionModel().select(contentTree.getRoot().getChildren().get(0));
+                        newSelection = contentTree.getRoot().getChildren().get(0);
+                    }
+
                     TaskItemInfo selection = newSelection.getValue();
                     boolean correctSelection = controls || !(selection instanceof Task);
 
@@ -106,6 +112,7 @@ public class SummarySheetWindow extends WindowController {
     @Override
     public void showWindow() {
         initContentTree();
+        contentTree.getSelectionModel().select(contentTree.getRoot().getChildren().get(0));
         super.showWindow();
     }
 
@@ -287,6 +294,7 @@ public class SummarySheetWindow extends WindowController {
             estimatedTime.setPromptText("Tempo Stimato (minuti)");
             CheckBox toDoCheckbox = new CheckBox("Compito da farsi?");
             toDoCheckbox.setSelected(task.isToDo());
+            toDoCheckbox.setDisable(task.isToDo() && task.getJobs().size() > 0);
 
             grid.add(new Label("Quantità:"), 0, 0);
             grid.add(amount, 1, 0);
@@ -330,7 +338,7 @@ public class SummarySheetWindow extends WindowController {
 
                     contentTree.refresh();
                 } catch (UseCaseLogicException | TaskException e) {
-                    e.printStackTrace();
+                    new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
                 }
             }
 
@@ -392,8 +400,8 @@ public class SummarySheetWindow extends WindowController {
                                                Duration.ofMinutes(values.time) : null);
 
                     contentTree.refresh();
-                } catch (TaskException e) {
-                    e.printStackTrace();
+                } catch (TaskException | UseCaseLogicException e) {
+                    new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
                 }
             }
         }
@@ -445,7 +453,7 @@ public class SummarySheetWindow extends WindowController {
                             itemRow.setExpanded(true);
                             contentTree.refresh();
                         } catch (UseCaseLogicException e) {
-                            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+                            new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
                         }
                     }
 

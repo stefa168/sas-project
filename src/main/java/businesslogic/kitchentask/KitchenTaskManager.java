@@ -187,7 +187,8 @@ public class KitchenTaskManager {
                 taskToEdit.setToDo(true);
             } else {
                 if (taskToEdit.getJobs().size() > 0) {
-                    throw new TaskException();
+                    throw new TaskException("Impossibile indicare il compito come da non farsi quando sono assegnati " +
+                                            "degli incarichi");
                 }
 
                 taskToEdit.setToDo(false);
@@ -224,7 +225,8 @@ public class KitchenTaskManager {
         return task;
     }
 
-    public KitchenJob editKitchenJob(KitchenJob job, Integer newAmount, Duration newDuration) throws TaskException {
+    public KitchenJob editKitchenJob(KitchenJob job, Integer newAmount, Duration newDuration) throws TaskException,
+            UseCaseLogicException {
         KitchenTurn turn = job.getTurn();
 
         if (!turn.hasConcluded()) {
@@ -234,6 +236,8 @@ public class KitchenTaskManager {
                         turn.freeTime(job.getCook(), job.getDuration());
                         turn.takeTime(job.getCook(), newDuration);
                         job.setDuration(newDuration);
+                    } else {
+                        throw new UseCaseLogicException("Il tempo indicato sfora i limiti del Turno");
                     }
                 } else {
                     job.setDuration(newDuration);
