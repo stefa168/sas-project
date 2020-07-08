@@ -19,4 +19,8 @@ Nel repository troverai:
    
 Al momento mancano altri documenti che spero prima o poi di riuscire a caricare (testo del progetto, documenti intermedi).
 
-Buon lavoro
+Nonostante abbiamo ottenuto il punteggio massimo del progetto, esso non è esente da bug o altri errori. \
+Non forniamo alcuna garanzia. \
+Se ti fa piacere, puoi provare a risolverli e fare una pull request.
+
+Buon lavoro!
