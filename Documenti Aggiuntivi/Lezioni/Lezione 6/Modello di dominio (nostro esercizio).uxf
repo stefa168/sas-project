@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>180</x>
+      <y>260</y>
+      <w>210</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>Menù
+--
+titolo: testo
+pubblicato: sì/no
+
+necessità di cuoco: sì/no
+necessità di cucina: sì/no
+buffet: sì/no
+finger food: sì/no
+piatti caldi: sì/no</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>400</x>
+      <y>100</y>
+      <w>140</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Sezione
+-
+nome: testo</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>570</x>
+      <y>590</y>
+      <w>100</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>Ricettario
+-</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>570</x>
+      <y>330</y>
+      <w>100</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>Ricetta
+-
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>200</x>
+      <y>560</y>
+      <w>170</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>Voce
+-
+nome ricetta: testo</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>280</x>
+      <y>150</y>
+      <w>140</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=0..n
+è diviso ^</panel_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>610</x>
+      <y>470</y>
+      <w>120</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1..n
+è composto ^</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>270</x>
+      <y>460</y>
+      <w>100</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;&gt;
+m1=1..n
+m2=1
+è formato v</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>360</x>
+      <y>390</y>
+      <w>240</w>
+      <h>290</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=0..n
+fa riferimento ^</panel_attributes>
+    <additional_attributes>10.0;260.0;120.0;260.0;120.0;10.0;210.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>40</x>
+      <y>480</y>
+      <w>150</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Una voce è esclusiva
+di un solo menù: se
+il menù è copiato da
+uno chef, anche le 
+voci sono clonate
+per permettere allo
+chef di rinominare la
+voce senza applicare
+il cambiamento alla
+voce originale dell'altro
+menù
+
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>360</x>
+      <y>190</y>
+      <w>150</w>
+      <h>460</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..1
+m2=0..n
+contiene v</panel_attributes>
+    <additional_attributes>110.0;10.0;110.0;150.0;70.0;150.0;70.0;430.0;10.0;430.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>90</x>
+      <y>40</y>
+      <w>140</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Chef
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>320</x>
+      <y>40</y>
+      <w>190</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..n
+m2=0..1
+associazione &gt;</panel_attributes>
+    <additional_attributes>10.0;20.0;170.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>150</x>
+      <y>100</y>
+      <w>130</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=0..n
+progetta &gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0;90.0;80.0;90.0;160.0</additional_attributes>
+  </element>
+</diagram>
