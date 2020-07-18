@@ -16,8 +16,6 @@ Nel repository troverai:
  - L'ultima versione degli allegati tecnici che abbiamo consegnato
  - Tutta la parte di progettazione svolta durante il corso. \
    Molti dei files sono o da aprire con UMLet o con PlantUML.
-   
-Al momento mancano altri documenti che spero prima o poi di riuscire a caricare (testo del progetto, documenti intermedi).
 
 Nonostante abbiamo ottenuto il punteggio massimo del progetto, esso non è esente da bug o altri errori. \
 Non forniamo alcuna garanzia. \
